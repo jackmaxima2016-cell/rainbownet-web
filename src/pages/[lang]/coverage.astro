@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Img from '../../components/Img.astro';
 import EuropeMap from '../../components/EuropeMap.astro';
 import { UI, type Lang } from '../../content/site';
 import { COVERAGE } from '../../content/pages';
@@ -28,6 +29,11 @@ const points = (cities as any[]).map((x) => ({ slug: x.slug, city: x, lat: x.lat
         <p>{t.coverageIntro}</p>
       </div>
       <div class="reveal"><EuropeMap lang={lang} cities={points} /></div>
+      <div class="photo-band" style="margin-top:clamp(20px,2.4vw,28px)">
+        <figure><Img name="city-paris" alt={lang === 'fr' ? 'Quartier d’affaires à Paris' : 'Business district in Paris'} sizes="(max-width:780px) 50vw, 33vw" /><figcaption>Paris</figcaption></figure>
+        <figure><Img name="city-london" alt={lang === 'fr' ? 'La City à Londres' : 'The City of London'} sizes="(max-width:780px) 50vw, 33vw" /><figcaption>London</figcaption></figure>
+        <figure><Img name="city-brussels" alt={lang === 'fr' ? 'Quartier européen à Bruxelles' : 'European quarter in Brussels'} sizes="(max-width:780px) 100vw, 33vw" /><figcaption>Brussels</figcaption></figure>
+      </div>
       <div class="city-list" style="margin-top:clamp(32px,4vw,52px)">
         {(cities as any[]).map((x) => (
           <a href={L(`/locations/${x.slug}/`)}><span>{x[lang].name}</span><span class="cc">{x.countryCode}</span></a>

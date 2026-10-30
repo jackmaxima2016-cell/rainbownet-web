@@ -3,18 +3,17 @@
 const title = 'RAINBOWNET — Private Investigations & Corporate Intelligence';
 ---
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content="RAINBOWNET — investigations privées et intelligence corporate. Genève, Suisse. Private investigations and corporate intelligence, Geneva, Switzerland." />
-  <link rel="canonical" href="https://rainbownet.ch/fr/" />
+  <link rel="canonical" href="https://rainbownet.ch/en/" />
   <link rel="alternate" hreflang="fr-CH" href="https://rainbownet.ch/fr/" />
   <link rel="alternate" hreflang="en" href="https://rainbownet.ch/en/" />
-  <link rel="alternate" hreflang="x-default" href="https://rainbownet.ch/fr/" />
+  <link rel="alternate" hreflang="x-default" href="https://rainbownet.ch/en/" />
   <meta name="robots" content="noindex, follow" />
-  <meta http-equiv="refresh" content="0; url=/fr/" />
   <style>
     html,body{margin:0;height:100%;background:#101E2C;color:#F5F2E9;font-family:system-ui,sans-serif;display:grid;place-items:center}
     a{color:#D9B77A}
@@ -31,8 +30,8 @@ const title = 'RAINBOWNET — Private Investigations & Corporate Intelligence';
   </div>
   <script is:inline>
     (function () {
-      var langs = navigator.languages || [navigator.language || 'fr'];
-      var pref = (langs[0] || 'fr').toLowerCase();
+      var langs = navigator.languages || [navigator.language || 'en'];
+      var pref = (langs[0] || 'en').toLowerCase();
       var target = pref.indexOf('fr') === 0 ? '/fr/' : '/en/';
       if (location.pathname === '/') location.replace(target);
     })();

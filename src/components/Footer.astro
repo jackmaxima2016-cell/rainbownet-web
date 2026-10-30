@@ -47,6 +47,7 @@ const firm = [
         <h3>{lang === "fr" ? "Services" : "Services"}</h3>
         <ul>
           {services.map((s) => <li><a href={L(s.href)}>{lang === 'fr' ? s.fr : s.en}</a></li>)}
+          <li><a href={L('/pricing/')}>{lang === 'fr' ? 'Tarifs' : 'Pricing'}</a></li>
         </ul>
       </div>
 

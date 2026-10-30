@@ -11,6 +11,7 @@ export const GET: APIRoute = () => {
     { fr: '/fr/about/', en: '/en/about/' },
     { fr: '/fr/approach/', en: '/en/approach/' },
     { fr: '/fr/services/', en: '/en/services/' },
+    { fr: '/fr/pricing/', en: '/en/pricing/' },
     { fr: '/fr/coverage/', en: '/en/coverage/' },
     { fr: '/fr/confidentiality/', en: '/en/confidentiality/' },
     { fr: '/fr/insights/', en: '/en/insights/' },

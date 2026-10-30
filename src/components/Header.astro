@@ -1,36 +1,59 @@
 ---
 import Logo from './Logo.astro';
+import Flag from './Flag.astro';
 import { NAV, UI, type Lang } from '../content/site';
 
 interface Props { lang: Lang; slug: string }
 const { lang, slug } = Astro.props;
-const other: Lang = lang === 'fr' ? 'en' : 'fr';
 const items = NAV[lang];
 const t = UI[lang];
-const isActive = (href: string) => {
+const isActive = (href: string, children?: { href: string }[]) => {
   if (href === '/') return slug === '/';
   if (href === '/coverage/' && slug.startsWith('/locations/')) return true;
-  return slug.startsWith(href);
+  if (slug.startsWith(href)) return true;
+  return !!children?.some((c) => c.href !== href && slug.startsWith(c.href));
 };
-const otherHref = `/${other}${slug}`;
+const chevron = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 ---
 <header class="site-header" data-solid="false">
   <div class="container header-inner">
-    <a href={`/${lang}/`} aria-label="RAINBOWNET — ${lang === 'fr' ? 'accueil' : 'home'}`} style="display:flex;align-items:center">
-      <Logo withWordmark={true} size={38} />
+    <a href={`/${lang}/`} class="brand-link" aria-label="RAINBOWNET — ${lang === 'fr' ? 'accueil' : 'home'}">
+      <Logo withWordmark={true} size={36} />
     </a>
 
     <nav class="site-nav" aria-label={lang === 'fr' ? 'Navigation principale' : 'Main navigation'}>
-      {items.map((it) => (
-        <a href={`/${lang}${it.href}`} aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>
+      {items.map((it) => it.children ? (
+        <div class="nav-item has-sub" data-sub>
+          <a
+            class="nav-link"
+            href={`/${lang}${it.href}`}
+            aria-current={isActive(it.href, it.children) ? 'page' : undefined}
+            aria-expanded="false"
+            aria-haspopup="true"
+          >{it.label} <Fragment set:html={chevron} /></a>
+          <div class="submenu" role="group" aria-label={it.label}>
+            {it.children.map((c) => (
+              <a href={`/${lang}${c.href}`} aria-current={slug === c.href ? 'page' : undefined}>{c.label}</a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a
+          class="nav-link"
+          href={`/${lang}${it.href}`}
+          aria-current={isActive(it.href) ? 'page' : undefined}
+        >{it.label}</a>
       ))}
     </nav>
 
     <div class="header-actions">
       <div class="lang-switch" aria-label={t.langLabel}>
-        <a href={`/fr${slug}`} hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
-        <span aria-hidden="true">/</span>
-        <a href={`/en${slug}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+        <a href={`/fr${slug}`} hreflang="fr" lang="fr" aria-current={lang === 'fr' ? 'true' : undefined} title="Français">
+          <Flag code="fr" size={19} /><span>FR</span>
+        </a>
+        <a href={`/en${slug}`} hreflang="en" lang="en" aria-current={lang === 'en' ? 'true' : undefined} title="English">
+          <Flag code="gb" size={19} /><span>EN</span>
+        </a>
       </div>
       <a class="btn btn--ghost header-cta" href={`/${lang}/contact/`}>{t.cta}</a>
       <button class="menu-toggle" id="menu-open" aria-expanded="false" aria-controls="site-drawer" aria-label={t.menu}>
@@ -44,21 +67,61 @@ const otherHref = `/${other}${slug}`;
   <div class="drawer-backdrop" data-close></div>
   <div class="drawer-panel" role="dialog" aria-modal="true" aria-label={t.menu}>
     <div class="drawer-head">
-      <Logo size={34} />
+      <Logo withWordmark={true} size={32} />
       <button class="drawer-close" data-close aria-label={t.close}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
     <nav aria-label={lang === 'fr' ? 'Navigation mobile' : 'Mobile navigation'}>
-      {items.map((it) => <a href={`/${lang}${it.href}`} aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>)}
+      {items.map((it) => it.children ? (
+        <details class="drawer-group">
+          <summary aria-current={isActive(it.href, it.children) ? 'page' : undefined}>
+            {it.label}<span class="plus" aria-hidden="true"></span>
+          </summary>
+          <div class="drawer-sub">
+            <a href={`/${lang}${it.href}`}>{lang === 'fr' ? 'Vue d’ensemble' : 'Overview'}</a>
+            {it.children.filter((c) => c.href !== it.href).map((c) => (
+              <a href={`/${lang}${c.href}`} aria-current={slug === c.href ? 'page' : undefined}>{c.label}</a>
+            ))}
+          </div>
+        </details>
+      ) : (
+        <a href={`/${lang}${it.href}`} aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>
+      ))}
     </nav>
     <div class="drawer-foot">
       <div class="lang-switch">
-        <a href={`/fr${slug}`} hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
-        <span aria-hidden="true">/</span>
-        <a href={`/en${slug}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+        <a href={`/fr${slug}`} hreflang="fr"><Flag code="fr" size={20} /><span>Français</span></a>
+        <a href={`/en${slug}`} hreflang="en"><Flag code="gb" size={20} /><span>English</span></a>
       </div>
       <a class="btn btn--gold" href={`/${lang}/contact/`}>{t.cta}</a>
     </div>
   </div>
 </div>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('.has-sub > .nav-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        if (window.matchMedia('(hover: hover)').matches) return; // desktop: hover handles it
+        e.preventDefault();
+        var item = link.parentElement;
+        var open = item.classList.contains('is-open');
+        document.querySelectorAll('.has-sub.is-open').forEach(function (x) {
+          x.classList.remove('is-open');
+          var l = x.querySelector('.nav-link'); if (l) l.setAttribute('aria-expanded', 'false');
+        });
+        item.classList.toggle('is-open', !open);
+        link.setAttribute('aria-expanded', String(!open));
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.has-sub')) {
+        document.querySelectorAll('.has-sub.is-open').forEach(function (x) {
+          x.classList.remove('is-open');
+          var l = x.querySelector('.nav-link'); if (l) l.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  })();
+</script>

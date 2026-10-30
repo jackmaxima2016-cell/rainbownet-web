@@ -18,6 +18,14 @@ const L = (p: string) => `/${lang}${p}`;
 const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 const date = fmt.format(new Date(a.date));
 const others = (insights as any[]).filter((x) => x.slug !== slug).slice(0, 3);
+
+const strip = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, ' ').trim();
+const slugify = (s: string) => strip(s).toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const rawBody = c.body.join('');
+const toc = [...rawBody.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map((m) => ({ id: slugify(m[1]), label: strip(m[1]) }));
+const body = rawBody.replace(/<h2[^>]*>(.*?)<\/h2>/g, (_m, title) => `<h2 id="${slugify(title)}">${title}</h2>`);
 ---
 <Base lang={lang} slug={`/insights/${slug}/`} title={c.seoTitle} description={c.seoDescription} image={a.image} imageAlt={c.alt}
   schema={{ '@context': 'https://schema.org', '@type': 'Article', headline: c.title, description: c.seoDescription, datePublished: a.date, dateModified: a.date, inLanguage: lang, image: `https://rainbownet.ch/images/${a.image}-1600.webp`, author: { '@id': 'https://rainbownet.ch/#organization' }, publisher: { '@id': 'https://rainbownet.ch/#organization' }, mainEntityOfPage: `https://rainbownet.ch/${lang}/insights/${slug}/` }}>
@@ -28,16 +36,43 @@ const others = (insights as any[]).filter((x) => x.slug !== slug).slice(0, 3);
     />
     <section class="section section--ivory">
       <div class="container">
-        <div class="narrow" style="margin:0 auto">
-          <div class="article-meta" style="margin-bottom:30px">
-            <span>{t.published} {date}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span>
+        <div class="page-grid">
+          <div class="page-main">
+            <div class="article-meta" style="margin-bottom:26px">
+              <span>{t.published} {date}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span><span>·</span><span>{a.category[lang]}</span>
+            </div>
+            <p class="lead" style="margin-bottom:32px">{c.excerpt}</p>
+            <div class="prose" set:html={body} />
+            <div style="margin-top:46px;padding-top:26px;border-top:1px solid rgba(16,30,44,.12);display:flex;gap:14px;flex-wrap:wrap">
+              <a class="btn btn--navy" href={L('/contact/')}>{t.cta}</a>
+              <a class="btn btn--outline" href={L('/insights/')}>{t.allInsights}</a>
+            </div>
           </div>
-          <p class="lead" style="margin-bottom:34px">{c.excerpt}</p>
-          <div class="prose" set:html={c.body.join('')} />
-          <div style="margin-top:46px;padding-top:26px;border-top:1px solid rgba(16,30,44,.12);display:flex;gap:14px;flex-wrap:wrap">
-            <a class="btn btn--navy" href={L('/contact/')}>{t.cta}</a>
-            <a class="btn btn--outline" href={L('/insights/')}>{t.allInsights}</a>
-          </div>
+
+          <aside class="page-aside">
+            {toc.length > 1 && (
+              <div class="aside-card">
+                <h3>{lang === 'fr' ? 'Dans cet article' : 'In this article'}</h3>
+                <ul style="list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px;font-size:.86rem">
+                  {toc.map((x) => <li><a href={`#${x.id}`} style="color:var(--slate)">{x.label}</a></li>)}
+                </ul>
+              </div>
+            )}
+            <div class="aside-card aside-card--navy">
+              <h3>{lang === 'fr' ? 'Consultation confidentielle' : 'Confidential consultation'}</h3>
+              <p>{lang === 'fr' ? 'Un premier échange permet de vérifier la faisabilité et le cadre légal, sans document sensible.' : 'A first conversation establishes feasibility and the legal framework, with no sensitive documents.'}</p>
+              <a class="btn btn--gold" href={L('/contact/')} style="width:100%">{t.cta}</a>
+            </div>
+            <div class="aside-card">
+              <h3>{lang === 'fr' ? 'À lire également' : 'Further reading'}</h3>
+              <ul style="list-style:none;padding:0;margin:12px 0 0;display:grid;gap:14px;font-size:.87rem">
+                {others.map((x: any) => (
+                  <li><a href={L(`/insights/${x.slug}/`)} style="display:block">{x[lang].title}</a>
+                    <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--steel)">{x.category[lang]}</span></li>
+                ))}
+              </ul>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

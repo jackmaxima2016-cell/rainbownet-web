@@ -12,6 +12,9 @@ const t = UI[lang];
 const L = (p: string) => `/${lang}${p}`;
 const list = [...(insights as any[])].sort((a, b) => b.date.localeCompare(a.date));
 const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const categories = [...new Set(list.map((a) => a.category[lang]))];
+const featured = list[0];
+const rest = list.slice(1);
 ---
 <Base lang={lang} slug="/insights/" title={lang === 'fr' ? 'Ressources — Comprendre l’investigation privée | RAINBOWNET' : 'Insights — Understanding Private Investigation | RAINBOWNET'}
   description={lang === 'fr' ? 'Guides et analyses sur l’investigation privée, la due diligence, la confidentialité et les cadres juridiques en Suisse et en Europe.' : 'Guides and analysis on private investigation, due diligence, confidentiality and legal frameworks in Switzerland and Europe.'}
@@ -26,9 +29,26 @@ const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'n
 
   <section class="section section--ivory">
     <div class="container">
-      <div class="grid grid-3">
-        {list.map((a: any) => (
-          <a class="article-card reveal" href={L(`/insights/${a.slug}/`)}>
+      <div class="insight-feature reveal">
+        <a class="insight-feature-media" href={L(`/insights/${featured.slug}/`)} aria-hidden="true" tabindex="-1">
+          <Img name={featured.image} alt={featured[lang].alt} sizes="(max-width:900px) 100vw, 55vw" />
+        </a>
+        <div class="insight-feature-body">
+          <div class="article-meta"><span>{featured.category[lang]}</span><span>·</span><span>{featured.readingMinutes} {t.readingTime}</span></div>
+          <h2><a href={L(`/insights/${featured.slug}/`)}>{featured[lang].title}</a></h2>
+          <p>{featured[lang].excerpt}</p>
+          <a class="link-arrow" href={L(`/insights/${featured.slug}/`)}>{t.readMore} →</a>
+        </div>
+      </div>
+
+      <div class="insight-filters" role="group" aria-label={lang === 'fr' ? 'Filtrer par thème' : 'Filter by topic'}>
+        <button type="button" class="is-active" data-filter="all">{lang === 'fr' ? 'Tous les dossiers' : 'All topics'}</button>
+        {categories.map((cat) => <button type="button" data-filter={cat}>{cat}</button>)}
+      </div>
+
+      <div class="grid grid-3" id="insight-grid">
+        {rest.map((a: any) => (
+          <a class="article-card reveal" href={L(`/insights/${a.slug}/`)} data-category={a.category[lang]}>
             <div class="article-card-media"><Img name={a.image} alt={a[lang].alt} sizes="(max-width:640px) 100vw, 33vw" /></div>
             <div class="article-card-body">
               <div class="article-meta"><span>{a.category[lang]}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span></div>
@@ -39,6 +59,7 @@ const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'n
           </a>
         ))}
       </div>
+      <p class="insight-empty" id="insight-empty" hidden>{lang === 'fr' ? 'Aucun dossier dans cette catégorie.' : 'No article in this topic.'}</p>
     </div>
   </section>
 
@@ -46,3 +67,40 @@ const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'n
     text={lang === 'fr' ? 'Un premier échange confidentiel permet de vérifier la faisabilité et le cadre légal.' : 'A confidential first conversation establishes feasibility and the legal framework.'}
     buttonLabel={t.cta} buttonHref={L('/contact/')} />
 </Base>
+
+<style>
+  .insight-feature{display:grid;grid-template-columns:1.05fr .95fr;gap:0;background:var(--white);border:1px solid var(--line);margin-bottom:clamp(36px,4.5vw,56px)}
+  .insight-feature-media{position:relative;overflow:hidden;min-height:320px}
+  .insight-feature-media :global(img){position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .insight-feature-body{padding:clamp(24px,3.4vw,44px);display:flex;flex-direction:column;justify-content:center}
+  .insight-feature-body h2{font-size:clamp(1.4rem,2.4vw,2rem);margin:6px 0 12px}
+  .insight-feature-body h2 a:hover{color:var(--gold-deep)}
+  .insight-feature-body p{color:var(--muted);font-size:.95rem;margin-bottom:18px}
+  .insight-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:clamp(24px,3vw,36px)}
+  .insight-filters button{background:transparent;border:1px solid rgba(16,30,44,.15);padding:9px 16px;font-size:.8rem;cursor:pointer;color:var(--navy);transition:.2s}
+  .insight-filters button:hover{border-color:var(--gold);background:var(--gold-soft)}
+  .insight-filters button.is-active{background:var(--navy);border-color:var(--navy);color:var(--ivory)}
+  .insight-empty{color:var(--muted);font-size:.9rem}
+  @media (max-width:900px){.insight-feature{grid-template-columns:1fr}.insight-feature-media{min-height:220px}}
+</style>
+
+<script is:inline>
+  (function () {
+    var buttons = document.querySelectorAll('.insight-filters button');
+    var cards = document.querySelectorAll('#insight-grid [data-category]');
+    var empty = document.getElementById('insight-empty');
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        buttons.forEach(function (x) { x.classList.remove('is-active'); });
+        b.classList.add('is-active');
+        var f = b.dataset.filter, shown = 0;
+        cards.forEach(function (c) {
+          var ok = f === 'all' || c.dataset.category === f;
+          c.style.display = ok ? '' : 'none';
+          if (ok) shown++;
+        });
+        if (empty) empty.hidden = shown > 0;
+      });
+    });
+  })();
+</script>

@@ -23,26 +23,69 @@ export const SITE = {
 export type Lang = 'fr' | 'en';
 
 export const LANGS: Lang[] = ['fr', 'en'];
+export const DEFAULT_LANG: Lang = 'en';
 
-export const NAV: Record<Lang, { label: string; href: string }[]> = {
+export type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
+
+export const NAV: Record<Lang, NavItem[]> = {
   fr: [
     { label: 'Accueil', href: '/' },
-    { label: 'À propos', href: '/about/' },
-    { label: 'Services', href: '/services/' },
-    { label: 'Notre méthode', href: '/approach/' },
-    { label: 'Couverture européenne', href: '/coverage/' },
-    { label: 'Confidentialité', href: '/confidentiality/' },
-    { label: 'Ressources', href: '/insights/' },
+    {
+      label: 'Cabinet', href: '/about/', children: [
+        { label: 'À propos', href: '/about/' },
+        { label: 'Notre méthode', href: '/approach/' },
+        { label: 'Confidentialité', href: '/confidentiality/' },
+        { label: 'Ressources', href: '/insights/' },
+      ],
+    },
+    {
+      label: 'Services', href: '/services/', children: [
+        { label: 'Particuliers', href: '/services/individuals/' },
+        { label: 'Entreprises', href: '/services/corporates/' },
+        { label: 'Professionnels du droit', href: '/services/legal-professionals/' },
+        { label: 'International', href: '/services/international/' },
+        { label: 'Tarifs', href: '/pricing/' },
+      ],
+    },
+    {
+      label: 'Couverture', href: '/coverage/', children: [
+        { label: 'Couverture européenne', href: '/coverage/' },
+        { label: 'Genève', href: '/locations/geneva/' },
+        { label: 'Paris', href: '/locations/paris/' },
+        { label: 'Londres', href: '/locations/london/' },
+        { label: 'Bruxelles', href: '/locations/brussels/' },
+      ],
+    },
     { label: 'Contact', href: '/contact/' },
   ],
   en: [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about/' },
-    { label: 'Services', href: '/services/' },
-    { label: 'Our Approach', href: '/approach/' },
-    { label: 'European Coverage', href: '/coverage/' },
-    { label: 'Confidentiality', href: '/confidentiality/' },
-    { label: 'Insights', href: '/insights/' },
+    {
+      label: 'Firm', href: '/about/', children: [
+        { label: 'About', href: '/about/' },
+        { label: 'Our Approach', href: '/approach/' },
+        { label: 'Confidentiality', href: '/confidentiality/' },
+        { label: 'Insights', href: '/insights/' },
+      ],
+    },
+    {
+      label: 'Services', href: '/services/', children: [
+        { label: 'Individuals', href: '/services/individuals/' },
+        { label: 'Businesses', href: '/services/corporates/' },
+        { label: 'Legal professionals', href: '/services/legal-professionals/' },
+        { label: 'International', href: '/services/international/' },
+        { label: 'Pricing', href: '/pricing/' },
+      ],
+    },
+    {
+      label: 'Coverage', href: '/coverage/', children: [
+        { label: 'European coverage', href: '/coverage/' },
+        { label: 'Geneva', href: '/locations/geneva/' },
+        { label: 'Paris', href: '/locations/paris/' },
+        { label: 'London', href: '/locations/london/' },
+        { label: 'Brussels', href: '/locations/brussels/' },
+      ],
+    },
     { label: 'Contact', href: '/contact/' },
   ],
 };

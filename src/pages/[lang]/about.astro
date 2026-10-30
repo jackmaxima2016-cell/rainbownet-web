@@ -43,6 +43,16 @@ const L = (p: string) => `/${lang}${p}`;
     </div>
   </section>
 
+  <section class="section section--tight section--ivory2">
+    <div class="container">
+      <div class="photo-band reveal">
+        <figure><Img name="about-secondary" alt={lang === 'fr' ? 'Quais et architecture genevoise' : 'Geneva quays and architecture'} sizes="(max-width:780px) 50vw, 33vw" /><figcaption>{lang === 'fr' ? 'Genève, base de coordination' : 'Geneva, coordination base'}</figcaption></figure>
+        <figure><Img name="gallery-office" alt={lang === 'fr' ? 'Espace de travail discret' : 'Discreet workspace'} sizes="(max-width:780px) 50vw, 33vw" /><figcaption>{lang === 'fr' ? 'Entretiens privés' : 'Private meetings'}</figcaption></figure>
+        <figure><Img name="gallery-archive" alt={lang === 'fr' ? 'Sources et archives documentaires' : 'Documentary sources and archives'} sizes="(max-width:780px) 100vw, 33vw" /><figcaption>{lang === 'fr' ? 'Traçabilité des sources' : 'Source traceability'}</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--navy">
     <div class="container">
       <div class="section-head reveal"><p class="eyebrow">{lang === 'fr' ? 'Exigences' : 'Standards'}</p><h2>{c.valuesTitle}</h2></div>

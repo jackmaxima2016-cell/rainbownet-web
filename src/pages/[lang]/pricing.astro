@@ -1,0 +1,155 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { UI, type Lang } from '../../content/site';
+import { PRICING } from '../../content/pages';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = PRICING[lang];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug="/pricing/" title={c.metaTitle} description={c.metaDescription} image="pricing-hero"
+  imageAlt={lang === 'fr' ? 'Salle de conseil dans un bureau genevois' : 'Boardroom in a Geneva office'}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image="pricing-hero"
+    alt={lang === 'fr' ? 'Salle de conseil dans un bureau genevois' : 'Boardroom in a Geneva office'}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Services' : 'Services', href: L('/services/') }, { label: c.eyebrow }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Facturation' : 'Billing'}</p>
+        <h2>{c.introTitle}</h2>
+        <p>{c.intro}</p>
+      </div>
+      <div class="grid grid-3">
+        {c.models.map((m: any, i: number) => (
+          <div class="pillar reveal" style="border-color:rgba(16,30,44,.12)">
+            <span class="pillar-num">0{i + 1}</span>
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="pricing-grid">
+        <div class="reveal">
+          <p class="eyebrow">{lang === 'fr' ? 'Grille' : 'Rate card'}</p>
+          <h2>{c.ratesTitle}</h2>
+          <div class="table-wrap" style="margin-top:28px;overflow-x:auto">
+            <table class="rate-table">
+              <thead><tr><th>{lang === 'fr' ? 'Intervenant' : 'Role'}</th><th>{lang === 'fr' ? 'Tarif' : 'Rate'}</th></tr></thead>
+              <tbody>
+                {c.rates.map((r: any) => (<tr><td>{r.role}</td><td class="num">{r.rate}</td></tr>))}
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);margin-top:14px">{c.ratesNote}</p>
+        </div>
+        <div class="reveal">
+          <div class="aside-card aside-card--navy" style="position:static">
+            <p class="eyebrow" style="color:var(--gold)">{c.paymentTitle}</p>
+            <ul class="ticks">{c.payment.map((p: string) => <li>{p}</li>)}</ul>
+          </div>
+          <div class="aside-card" style="margin-top:20px">
+            <h3>{c.includedTitle}</h3>
+            <ul class="ticks" style="margin-top:14px">{c.included.map((p: string) => <li>{p}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Forfaits' : 'Packages'}</p>
+        <h2>{c.packagesTitle}</h2>
+        <p>{c.packagesNote}</p>
+      </div>
+      <div class="grid grid-2">
+        {c.packages.map((p: any) => (
+          <article class="price-card reveal">
+            <div class="price-card-head">
+              <h3>{p.name}</h3>
+              <p class="price">{p.price}</p>
+            </div>
+            <p class="price-delay">{p.delay}</p>
+            <p class="price-text">{p.text}</p>
+            <ul class="ticks">{p.points.map((x: string) => <li>{x}</li>)}</ul>
+            <a class="link-arrow" href={L('/contact/')}>{lang === 'fr' ? 'Demander un devis' : 'Request a quote'} →</a>
+          </article>
+        ))}
+      </div>
+      <p style="font-size:.8rem;color:var(--muted);margin-top:22px">{c.legalNote}</p>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Clientèles' : 'Clients'}</p>
+        <h2>{c.targetsTitle}</h2>
+      </div>
+      <div class="grid grid-3">
+        {c.targets.map((x: any) => (
+          <div class="pillar reveal" style="border-color:rgba(245,242,233,.16)">
+            <h3>{x.title}</h3><p>{x.text}</p>
+          </div>
+        ))}
+      </div>
+      <div style="margin-top:clamp(36px,5vw,56px)" class="reveal">
+        <p class="eyebrow" style="color:var(--gold)">{c.excludedTitle}</p>
+        <ul class="ticks" style="max-width:760px">{c.excluded.map((x: string) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{t.faqTitle}</p>
+          <h2>{lang === 'fr' ? 'Questions sur les honoraires' : 'Questions about fees'}</h2>
+          <p class="lead" style="margin-top:16px">{lang === 'fr' ? 'Une situation particulière ? Le formulaire confidentiel permet d’obtenir une réponse chiffrée.' : 'A specific situation? The confidential form gets you a costed answer.'}</p>
+          <p style="margin-top:24px"><a class="btn btn--outline" href={L('/contact/')}>{t.cta}</a></p>
+        </div>
+        <div class="reveal"><Faq items={c.faq} lang={lang} /></div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>
+
+<style>
+  .pricing-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,4vw,56px);align-items:start}
+  .rate-table{width:100%;border-collapse:collapse;font-size:.92rem}
+  @media (max-width:900px){
+    .pricing-grid{grid-template-columns:1fr}
+    .rate-table{font-size:.86rem}
+    .rate-table td{padding:12px 0}
+    .rate-table td.num{padding-left:12px}
+  }
+  .rate-table th{text-align:left;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 12px;border-bottom:1px solid rgba(16,30,44,.15)}
+  .rate-table td{padding:14px 0;border-bottom:1px solid rgba(16,30,44,.1);vertical-align:top}
+  .rate-table td.num{text-align:right;font-weight:600;white-space:nowrap;padding-left:20px}
+  .price-card{background:var(--white);border:1px solid rgba(16,30,44,.12);padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;transition:border-color .3s,transform .3s}
+  .price-card:hover{border-color:rgba(217,183,122,.65);transform:translateY(-3px)}
+  .price-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .price-card-head h3{font-size:1.08rem;margin:0}
+  .price{font-family:'Manrope',sans-serif;font-weight:600;color:var(--gold-deep);white-space:nowrap;margin:0}
+  .price-delay{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:8px 0 14px}
+  .price-text{font-size:.9rem;color:var(--muted)}
+  .price-card .ticks{flex:1}
+  .price-card .link-arrow{margin-top:20px;font-size:.84rem;align-self:flex-start}
+</style>

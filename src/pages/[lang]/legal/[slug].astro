@@ -11,26 +11,47 @@ const slug = Astro.params.slug as string;
 const t = UI[lang];
 const c = (LEGAL[lang] as any)[slug];
 const L = (p: string) => `/${lang}${p}`;
+const legalNav = [
+  { href: '/legal/legal-notice/', label: t.legal },
+  { href: '/legal/privacy/', label: t.privacy },
+  { href: '/legal/cookies/', label: t.cookies },
+];
 ---
-<Base lang={lang} slug={`/legal/${slug}/`} title={c.metaTitle} description={c.metaDescription} noindex={false}>
-  <section class="section section--ivory" style="padding-top:calc(var(--header-h) + 64px)">
+<Base lang={lang} slug={`/legal/${slug}/`} title={c.metaTitle} description={c.metaDescription}>
+  <section class="section section--ivory" style="padding-top:calc(var(--header-h) + 56px)">
     <div class="container">
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href={L('/')}>{t.breadcrumbHome}</a><span aria-hidden="true">/</span>
         <span aria-current="page">{c.title}</span>
       </nav>
-      <div class="narrow">
-        <p class="eyebrow">{lang === 'fr' ? 'Informations légales' : 'Legal information'}</p>
-        <h1 style="font-size:clamp(2rem,4vw,3rem)">{c.title}</h1>
-        <p class="lead" style="margin:18px 0 40px">{c.intro}</p>
-        <div class="prose" style="max-width:none">
+      <p class="eyebrow">{lang === 'fr' ? 'Informations légales' : 'Legal information'}</p>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);max-width:24ch">{c.title}</h1>
+      <p class="lead" style="margin:18px 0 clamp(32px,4vw,52px);max-width:62ch">{c.intro}</p>
+
+      <div class="page-grid">
+        <div class="page-main prose">
           {c.body.map((b: any) => (<><h2>{b.h2}</h2><Fragment set:html={b.html} /></>))}
         </div>
-        <div style="margin-top:44px;padding-top:22px;border-top:1px solid rgba(16,30,44,.12);display:flex;gap:22px;flex-wrap:wrap;font-size:.85rem">
-          <a class="link-arrow" href={L('/legal/legal-notice/')}>{t.legal}</a>
-          <a class="link-arrow" href={L('/legal/privacy/')}>{t.privacy}</a>
-          <a class="link-arrow" href={L('/legal/cookies/')}>{t.cookies}</a>
-        </div>
+        <aside class="page-aside">
+          <div class="aside-card">
+            <h3>{lang === 'fr' ? 'Documents légaux' : 'Legal documents'}</h3>
+            <ul style="list-style:none;padding:0;margin:10px 0 0;display:grid;gap:9px;font-size:.88rem">
+              {legalNav.map((x) => (
+                <li><a href={L(x.href)} style={x.href === `/legal/${slug}/` ? 'color:var(--gold-deep);font-weight:600' : ''}>{x.label}</a></li>
+              ))}
+              <li><a href={L('/credits/')}>{t.credits}</a></li>
+            </ul>
+          </div>
+          <div class="aside-card aside-card--navy">
+            <h3>{lang === 'fr' ? 'Une question ?' : 'A question?'}</h3>
+            <p>{lang === 'fr' ? 'Les demandes relatives aux données personnelles s’exercent via le formulaire confidentiel.' : 'Requests concerning personal data are made through the confidential form.'}</p>
+            <a class="btn btn--gold" href={L('/contact/')} style="width:100%">{t.cta}</a>
+          </div>
+          <div class="aside-card">
+            <h3>RAINBOWNET</h3>
+            <p style="margin:0">Rue Adrien-Lachenal 26<br />1207 {lang === 'fr' ? 'Genève' : 'Geneva'}, Suisse</p>
+          </div>
+        </aside>
       </div>
     </div>
   </section>

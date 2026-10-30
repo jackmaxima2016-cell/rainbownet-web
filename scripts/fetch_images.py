@@ -40,6 +40,17 @@ JOBS = {
     'insight-confidentiality': ('confidential documents folder', 'landscape', [1600, 800]),
     'insight-corporate':      ('corporate meeting boardroom', 'landscape', [1600, 800]),
     'insight-consultation':   ('lawyer consultation client office', 'landscape', [1600, 800]),
+    'pricing-hero':           ('classic office library interior wood', 'landscape', [2000, 1000]),
+    'about-secondary':        ('geneva lake promenade architecture', 'landscape', [1600, 800]),
+    'gallery-office':         ('private office interior dark wood', 'landscape', [1600, 800]),
+    'gallery-archive':        ('archive documents shelves', 'landscape', [1600, 800]),
+    'gallery-europe':         ('european city aerial view', 'landscape', [1600, 800]),
+    'insight-background':     ('job interview office documents', 'landscape', [1600, 800]),
+    'insight-assets':         ('financial charts documents desk', 'landscape', [1600, 800]),
+    'insight-fraud':          ('audit financial report calculator', 'landscape', [1600, 800]),
+    'insight-gdpr':           ('data protection privacy laptop', 'landscape', [1600, 800]),
+    'insight-familyoffice':   ('elegant office interior meeting', 'landscape', [1600, 800]),
+    'insight-witness':        ('meeting conversation office table', 'landscape', [1600, 800]),
 }
 
 def search(q, orient):

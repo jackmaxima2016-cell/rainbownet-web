@@ -67,7 +67,7 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="fr-CH" href={new URL(`/fr${slug}`, SITE.domain).href} />
   <link rel="alternate" hreflang="en" href={new URL(`/en${slug}`, SITE.domain).href} />
-  <link rel="alternate" hreflang="x-default" href={new URL(`/fr${slug}`, SITE.domain).href} />
+  <link rel="alternate" hreflang="x-default" href={new URL(`/en${slug}`, SITE.domain).href} />
   {noindex && <meta name="robots" content="noindex, follow" />}
   {!noindex && <meta name="robots" content="index, follow, max-image-preview:large" />}
 

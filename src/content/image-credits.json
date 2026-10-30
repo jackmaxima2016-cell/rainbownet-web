@@ -208,5 +208,82 @@
   "url": "https://www.pexels.com/photo/a-lawyer-talking-to-the-woman-wearing-brown-blazer-7876197/",
   "alt": "Professional discussion among lawyers in a modern office, focusing on legal matters.",
   "source": "Pexels"
+ },
+ "pricing-hero": {
+  "id": 6077091,
+  "photographer": "KATRIN  BOLOVTSOVA",
+  "url": "https://www.pexels.com/photo/justice-figurine-on-table-6077091/",
+  "alt": "A classic study room with shelves of books, a gavel, and Lady Justice figurine on a green table.",
+  "source": "Pexels"
+ },
+ "about-secondary": {
+  "id": 36102053,
+  "photographer": "Marcelo Borelli",
+  "url": "https://www.pexels.com/photo/scenic-waterfront-view-in-geneva-during-sunset-36102053/",
+  "alt": "Beautiful sunset view of a waterfront in Geneva, Switzerland, with historic buildings and boats.",
+  "source": "Pexels"
+ },
+ "gallery-office": {
+  "id": 7534217,
+  "photographer": "Max Vakhtbovych",
+  "url": "https://www.pexels.com/photo/interior-design-of-an-office-7534217/",
+  "alt": "Contemporary office interior with minimalist design and wooden furniture.",
+  "source": "Pexels"
+ },
+ "gallery-archive": {
+  "id": 5412875,
+  "photographer": "Luis F  Rodríguez Jiménez",
+  "url": "https://www.pexels.com/photo/a-man-in-black-vest-wearing-a-face-mask-5412875/",
+  "alt": "Elderly man sorts through files in an office aisle wearing a face mask.",
+  "source": "Pexels"
+ },
+ "gallery-europe": {
+  "id": 14754006,
+  "photographer": "Alex Does Pictures",
+  "url": "https://www.pexels.com/photo/golden-trees-growing-on-city-streets-14754006/",
+  "alt": "Stunning aerial view of Athens showing a vibrant cityscape with autumn colors.",
+  "source": "Pexels"
+ },
+ "insight-background": {
+  "id": 8382253,
+  "photographer": "cottonbro studio",
+  "url": "https://www.pexels.com/photo/elegant-man-in-a-suit-sitting-at-the-table-and-holding-documents-8382253/",
+  "alt": "Businessman in suit reviews documents at a desk in a modern office setting.",
+  "source": "Pexels"
+ },
+ "insight-assets": {
+  "id": 7580854,
+  "photographer": "RDNE Stock project",
+  "url": "https://www.pexels.com/photo/calculator-on-top-of-the-paper-7580854/",
+  "alt": "Calculator placed on financial graphs and reports showcasing data analysis and business documentation.",
+  "source": "Pexels"
+ },
+ "insight-fraud": {
+  "id": 13156204,
+  "photographer": "Towfiqu barbhuiya",
+  "url": "https://www.pexels.com/photo/pen-calculator-and-magnifying-glass-on-documents-13156204/",
+  "alt": "Close-up of calculator, pen, and magnifying glass on financial documents.",
+  "source": "Pexels"
+ },
+ "insight-gdpr": {
+  "id": 4973899,
+  "photographer": "Dan  Nelson",
+  "url": "https://www.pexels.com/photo/a-laptop-over-a-round-table-4973899/",
+  "alt": "Laptop displaying a security lock icon on a table with a potted plant and clock.",
+  "source": "Pexels"
+ },
+ "insight-familyoffice": {
+  "id": 20390772,
+  "photographer": "Paul Seling",
+  "url": "https://www.pexels.com/photo/furniture-in-a-minimalist-conference-room-20390772/",
+  "alt": "Sleek and modern conference room with minimalist design featuring stylish furniture and indoor plants.",
+  "source": "Pexels"
+ },
+ "insight-witness": {
+  "id": 5257003,
+  "photographer": "Thirdman",
+  "url": "https://www.pexels.com/photo/men-having-conversation-5257003/",
+  "alt": "Three diverse men engaged in a business meeting, planning and writing in an office.",
+  "source": "Pexels"
  }
 }
