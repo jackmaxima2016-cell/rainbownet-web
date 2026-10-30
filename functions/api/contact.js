@@ -1,26 +1,25 @@
 /**
  * POST /api/contact — RAINBOWNET confidential form endpoint.
  *
- * Security model:
- *  - server-side validation of every field (never trust the browser)
- *  - honeypot field + minimum time + best-effort per-IP throttling
- *  - Google reCAPTCHA Enterprise assessment (token, action, score) — fail closed
- *  - no form content in logs, only a random reference and the outcome
+ * 1. server-side validation of every field (never trust the browser)
+ * 2. honeypot + best-effort per-IP throttle
+ * 3. reCAPTCHA Enterprise assessment, server-to-server, through the VPS relay
+ *    (https://captcha.accidata.fr/verify → Google Enterprise API, service account).
+ *    Fail-closed: without valid:true, nothing is sent.
+ * 4. email relay through the cPanel SMTP server (flocon.o2switch.net, 465/TLS).
+ *    Brevo is kept as a fallback if the SMTP variables are absent.
  *
- * Required environment (Cloudflare Pages → Settings → Variables and Secrets):
- *  RECAPTCHA_PROJECT_ID   Google Cloud project id
- *  RECAPTCHA_API_KEY      API key restricted to reCAPTCHA Enterprise assessments
- *  RECAPTCHA_SITE_KEY     same key as the public build variable
- *  RECAPTCHA_MIN_SCORE    optional, default 0.5
- *  BREVO_API_KEY          Brevo API key
- *  CONTACT_TO_EMAIL       inbox receiving requests
- *  CONTACT_FROM_EMAIL     verified Brevo sender
- *  CONTACT_FROM_NAME      optional, default "RAINBOWNET"
- *  FORM_UNVERIFIED_MODE   optional: "allow" only for local testing
+ * Pages secrets: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS,
+ *                SENDER_EMAIL, SENDER_NAME, LEADS_TO,
+ *                RECAPTCHA_SITE_KEY, RECAPTCHA_MIN_SCORE,
+ *                BREVO_API_KEY (optional fallback)
  */
+import { connect } from 'cloudflare:sockets';
 
 const MAX_BODY = 24 * 1024;
 const ALLOWED_ACTIONS = new Set(['CONFIDENTIAL_CONTACT', 'CALLBACK_REQUEST']);
+const VERIFY_URL = 'https://captcha.accidata.fr/verify';
+const CRLF = '\r\n';
 
 const hits = new Map();
 const WINDOW_MS = 10 * 60 * 1000;
@@ -65,70 +64,158 @@ const LABELS = {
 };
 
 async function verifyRecaptcha(env, token, action, remoteip) {
-  const project = env.RECAPTCHA_PROJECT_ID;
-  const key = env.RECAPTCHA_API_KEY;
   const siteKey = env.RECAPTCHA_SITE_KEY;
-  if (!project || !key || !siteKey) return { ok: false, reason: 'not_configured' };
+  if (!siteKey) return { ok: false, reason: 'not_configured' };
   if (!token) return { ok: false, reason: 'missing_token' };
-
-  const url = `https://recaptchaenterprise.googleapis.com/v1/projects/${encodeURIComponent(project)}/assessments?key=${encodeURIComponent(key)}`;
-  const payload = { event: { token, siteKey, expectedAction: action } };
-  if (remoteip) payload.event.userIpAddress = remoteip;
 
   let data;
   try {
-    const res = await fetch(url, {
+    const res = await fetch(VERIFY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        token,
+        site_key: siteKey,
+        action,
+        threshold: Number(env.RECAPTCHA_MIN_SCORE || 0.5),
+        remote_ip: remoteip || undefined,
+      }),
       signal: AbortSignal.timeout(8000),
     });
-    data = await res.json();
+    data = await res.json().catch(() => ({}));
     if (!res.ok) return { ok: false, reason: 'api_error', status: res.status };
   } catch (e) {
     return { ok: false, reason: 'api_unreachable' };
   }
 
-  const tp = data.tokenProperties || {};
-  if (!tp.valid) return { ok: false, reason: 'invalid_token', invalidReason: tp.invalidReason };
-  if (tp.action && tp.action !== action) return { ok: false, reason: 'wrong_action' };
-  if (env.RECAPTCHA_EXPECTED_HOSTNAME && tp.hostname && tp.hostname !== env.RECAPTCHA_EXPECTED_HOSTNAME) {
-    return { ok: false, reason: 'wrong_hostname' };
-  }
-  const score = typeof data.riskAnalysis?.score === 'number' ? data.riskAnalysis.score : null;
-  const min = Number(env.RECAPTCHA_MIN_SCORE || 0.5);
-  if (score === null) return { ok: false, reason: 'no_score' };
-  if (score < min) return { ok: false, reason: 'low_score', score };
-  return { ok: true, score, reasons: data.riskAnalysis?.reasons || [] };
+  if (data.valid !== true) return { ok: false, reason: data.reason || 'invalid_token', score: data.score };
+  return { ok: true, score: data.score, reasons: data.reasons || [] };
 }
 
-async function sendMail(env, subject, html, text, replyTo) {
-  const apiKey = env.BREVO_API_KEY;
-  const to = env.CONTACT_TO_EMAIL;
-  const from = env.CONTACT_FROM_EMAIL;
-  if (!apiKey || !to || !from) return { ok: false, reason: 'not_configured' };
+/* ───────────────────────── SMTP (cloudflare:sockets) ───────────────────────── */
+const b64utf8 = (s) => {
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin);
+};
+const b64wrap = (s) => (b64utf8(s).match(/.{1,76}/g) || []).join(CRLF);
+const mimeHeader = (s) => (/^[\x20-\x7E]*$/.test(s) ? s : `=?UTF-8?B?${b64utf8(s)}?=`);
 
-  const body = {
-    sender: { email: from, name: env.CONTACT_FROM_NAME || 'RAINBOWNET' },
-    to: [{ email: to }],
-    subject,
-    htmlContent: html,
-    textContent: text,
-  };
-  if (replyTo && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(replyTo)) body.replyTo = { email: replyTo };
+async function smtpSend(env, { from, fromName, to, replyTo, subject, html }) {
+  const host = env.SMTP_HOST;
+  const port = Number(env.SMTP_PORT || 465);
+  const timeout = 20000;
+  const socket = connect({ hostname: host, port }, { secureTransport: 'on' });
+  const reader = socket.readable.getReader();
+  const writer = socket.writable.getWriter();
+  const dec = new TextDecoder();
+  let buf = '';
+
+  const withTimeout = (p) => Promise.race([
+    p,
+    new Promise((_, rej) => setTimeout(() => rej(new Error('SMTP timeout')), timeout)),
+  ]);
+
+  async function line() {
+    for (;;) {
+      const i = buf.indexOf(CRLF);
+      if (i >= 0) { const l = buf.slice(0, i); buf = buf.slice(i + 2); return l; }
+      const { value, done } = await withTimeout(reader.read());
+      if (done) throw new Error('SMTP: connexion fermée');
+      buf += dec.decode(value, { stream: true });
+    }
+  }
+  async function expect(codes) {
+    for (let i = 0; i < 80; i++) {
+      const l = await line();
+      if (/^\d{3} /.test(l)) {
+        const code = l.slice(0, 3);
+        if (codes.includes(code)) return l;
+        throw new Error(`SMTP ${code}: ${l.slice(0, 180)}`);
+      }
+    }
+    throw new Error('SMTP: réponse illisible');
+  }
+  async function send(s) { await withTimeout(writer.write(new TextEncoder().encode(s))); }
+  async function cmd(s, codes) { await send(s + CRLF); return expect(codes); }
 
   try {
-    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: { 'api-key': apiKey, 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(10000),
-    });
-    if (!res.ok) return { ok: false, reason: 'mail_error', status: res.status };
-    return { ok: true };
-  } catch (e) {
-    return { ok: false, reason: 'mail_unreachable' };
+    await expect(['220']);
+    await cmd('EHLO rainbownet.ch', ['250']);
+    await cmd('AUTH LOGIN', ['334']);
+    await cmd(b64utf8(env.SMTP_USER), ['334']);
+    await cmd(b64utf8(env.SMTP_PASS), ['235']);
+    await cmd(`MAIL FROM:<${from}>`, ['250']);
+    await cmd(`RCPT TO:<${to}>`, ['250', '251']);
+    await cmd('DATA', ['354']);
+
+    const message = [
+      `From: ${mimeHeader(fromName)} <${from}>`,
+      `To: <${to}>`,
+      replyTo ? `Reply-To: ${mimeHeader(replyTo.name || '')} <${replyTo.email}>` : '',
+      `Subject: ${mimeHeader(subject)}`,
+      `Date: ${new Date().toUTCString()}`,
+      `Message-ID: <${crypto.randomUUID()}@rainbownet.ch>`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=UTF-8',
+      'Content-Transfer-Encoding: base64',
+      'Auto-Submitted: auto-generated',
+      '',
+      b64wrap(html),
+    ].filter((l) => l !== '').join(CRLF);
+
+    await send(message + CRLF + '.' + CRLF);
+    const done = await expect(['250']);
+    try { await cmd('QUIT', ['221']); } catch (e) { /* la fermeture peut couper avant */ }
+    return { ok: true, detail: done.slice(0, 120) };
+  } finally {
+    try { writer.releaseLock(); } catch (e) {}
+    try { reader.releaseLock(); } catch (e) {}
+    try { await socket.close(); } catch (e) {}
   }
+}
+
+async function brevo(env, payload) {
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(15000),
+  });
+  const out = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, body: out };
+}
+
+async function sendMail(env, mail) {
+  if (env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS) {
+    try {
+      const r = await smtpSend(env, mail);
+      return { ok: true, voie: 'smtp', detail: r.detail };
+    } catch (e) {
+      const msg = String((e && e.message) || e).slice(0, 200);
+      if (!env.BREVO_API_KEY) return { ok: false, voie: 'smtp', status: 0, message: msg };
+      const secours = await brevo(env, {
+        sender: { name: mail.fromName, email: mail.from },
+        to: [{ email: mail.to }],
+        replyTo: mail.replyTo || undefined,
+        subject: mail.subject,
+        htmlContent: mail.html,
+      });
+      return { ok: secours.ok, voie: 'brevo (secours)', status: secours.status, message: msg };
+    }
+  }
+  if (env.BREVO_API_KEY) {
+    const r = await brevo(env, {
+      sender: { name: mail.fromName, email: mail.from },
+      to: [{ email: mail.to }],
+      replyTo: mail.replyTo || undefined,
+      subject: mail.subject,
+      htmlContent: mail.html,
+    });
+    return { ok: r.ok, voie: 'brevo', status: r.status, message: String((r.body && r.body.message) || '').slice(0, 200) };
+  }
+  return { ok: false, voie: 'aucune', status: 0, message: 'aucun transport configuré' };
 }
 
 export async function onRequestPost({ request, env }) {
@@ -193,22 +280,14 @@ export async function onRequestPost({ request, env }) {
   }
   if (errors.length) return json(422, { ok: false, error: 'validation_failed', fields: errors });
 
-  // Anti-robot — fail closed unless explicitly told otherwise for testing.
-  const mode = env.FORM_UNVERIFIED_MODE || '';
-  let verdict = null;
-  if (mode !== 'allow') {
-    verdict = await verifyRecaptcha(env, clean(data.recaptchaToken, 4000), action, ip);
-    if (!verdict.ok) {
-      const clientFacing = ['low_score', 'missing_token', 'invalid_token', 'wrong_action', 'no_score'].includes(verdict.reason);
-      console.log(`[contact] ref=${ref} recaptcha=reject reason=${verdict.reason} score=${verdict.score ?? '-'}`);
-      if (verdict.reason === 'not_configured') return json(503, { ok: false, error: 'verification_not_configured' });
-      if (verdict.reason === 'api_unreachable' || verdict.reason === 'api_error') return json(503, { ok: false, error: 'verification_unavailable' });
-      return json(403, { ok: false, error: clientFacing ? 'verification_failed' : 'blocked', message: lang === 'fr' ? 'Nous n’avons pas pu vérifier votre demande. Veuillez réessayer.' : 'We couldn’t verify your request. Please try again.' });
-    }
-    console.log(`[contact] ref=${ref} recaptcha=ok score=${verdict.score}`);
-  } else {
-    console.log(`[contact] ref=${ref} WARNING unverified mode (FORM_UNVERIFIED_MODE=allow)`);
+  const verdict = await verifyRecaptcha(env, String(data.recaptchaToken || ''), action, ip);
+  if (!verdict.ok) {
+    console.log(`[contact] ref=${ref} recaptcha=reject reason=${verdict.reason} score=${verdict.score ?? '-'}`);
+    if (verdict.reason === 'not_configured') return json(503, { ok: false, error: 'verification_not_configured' });
+    if (verdict.reason === 'api_unreachable' || verdict.reason === 'api_error') return json(503, { ok: false, error: 'verification_unavailable' });
+    return json(403, { ok: false, error: 'verification_failed', message: lang === 'fr' ? 'Nous n’avons pas pu vérifier votre demande. Veuillez réessayer.' : 'We couldn’t verify your request. Please try again.' });
   }
+  console.log(`[contact] ref=${ref} recaptcha=ok score=${verdict.score}`);
 
   const rows = f.form === 'callback'
     ? [['name', f.name], ['phone', f.phone], ['slot', f.slot], ['language', f.language]]
@@ -228,14 +307,22 @@ export async function onRequestPost({ request, env }) {
   </div>`;
   const text = rows.map(([k, v]) => `${L[k] || k}: ${v || '—'}`).join('\n');
 
-  const mail = await sendMail(env, subject, html, text, f.email);
-  if (!mail.ok) {
-    console.log(`[contact] ref=${ref} mail=reject reason=${mail.reason} status=${mail.status || '-'}`);
-    if (mail.reason === 'not_configured') return json(503, { ok: false, error: 'mail_not_configured' });
-    return json(502, { ok: false, error: 'mail_failed' });
+  const mail = {
+    from: env.SENDER_EMAIL || 'info@agenceweb4.ch',
+    fromName: env.SENDER_NAME || 'RAINBOWNET',
+    to: env.LEADS_TO || 'jackmaxima2016@gmail.com',
+    replyTo: f.email ? { name: f.name, email: f.email } : null,
+    subject,
+    html,
+  };
+
+  const sent = await sendMail(env, mail);
+  if (!sent.ok) {
+    console.log(`[contact] ref=${ref} mail=reject voie=${sent.voie} status=${sent.status || '-'} msg=${sent.message || ''}`);
+    return json(503, { ok: false, error: 'mail_failed' });
   }
 
-  console.log(`[contact] ref=${ref} mail=sent action=${action}`);
+  console.log(`[contact] ref=${ref} mail=sent voie=${sent.voie} action=${action}`);
   return json(200, { ok: true, ref });
 }
 

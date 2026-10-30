@@ -36,16 +36,18 @@ npm run deploy     # build + wrangler pages deploy (needs CLOUDFLARE_API_TOKEN +
 `functions/api/contact.js` handles both the six-step case assessment and the callback request:
 
 1. server-side validation, honeypot, per-IP throttle
-2. reCAPTCHA Enterprise assessment (token, action, score) — **fail closed**
-3. Brevo transactional email to `CONTACT_TO_EMAIL`
+2. reCAPTCHA Enterprise assessment through the VPS relay (`captcha.accidata.fr/verify`,
+   service account) — **fail closed**
+3. transactional email through the cPanel SMTP server `flocon.o2switch.net:465`
+   (`info@agenceweb4.ch` → `jackmaxima2016@gmail.com`), Brevo as fallback
 
-Without `RECAPTCHA_*` / `BREVO_API_KEY` / `CONTACT_*` variables the endpoint returns **503** rather than
-silently accepting unverified submissions. See `.dev.vars.example`.
+Configured values: see `.dev.vars.example`. Without `SMTP_*` or `BREVO_API_KEY`, the endpoint
+returns **503** rather than silently accepting unverified submissions.
 
 ## Before launch
 
-- [ ] fill legal identity (company name, address, UID, VAT) in `src/content/pages.ts`
-- [ ] set `CONTACT_TO_EMAIL` / `CONTACT_FROM_EMAIL` and verify the sender in Brevo
-- [ ] create the reCAPTCHA Enterprise key + API key, set all `RECAPTCHA_*` variables
-- [ ] attach `rainbownet.ch` + `www` to the Pages project (DNS A records currently point to an unreachable host)
-- [ ] remove the temporary `[à compléter]` placeholders once supplied
+- [ ] attach `rainbownet.ch` + `www` to the Pages project (the apex currently points to an
+      unreachable host and answers 522)
+- [ ] replace the "IDE / TVA en cours de création" wording in the legal notice once issued
+- [ ] add SPF/DKIM/DMARC for `rainbownet.ch` when mailboxes move to the domain
+
