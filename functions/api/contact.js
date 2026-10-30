@@ -92,6 +92,18 @@ async function verifyRecaptcha(env, token, action, remoteip) {
   return { ok: true, score: data.score, reasons: data.reasons || [] };
 }
 
+
+const SIGNATURE_HTML = `<table cellpadding="0" cellspacing="0" border="0" width="420" style="border-collapse:collapse;width:420px;margin-top:26px;font-family:Arial,Helvetica,sans-serif;color:#101E2C;font-size:12px;line-height:1.5">
+  <tr><td style="padding:18px 0 0 0;border-top:1px solid #E6E0D2">
+    <div style="font-size:16px;font-weight:700;color:#101E2C;line-height:1.2">Luc</div>
+    <div style="font-size:11px;color:#22364A;margin-top:3px">Private Investigations &amp; Corporate Intelligence</div>
+    <div style="font-size:11px;color:#5C6B79;margin-top:9px">Rue Adrien-Lachenal 26 · 1207 Genève · Suisse</div>
+    <div style="font-size:11px;color:#5C6B79;margin-top:2px"><a href="mailto:Luc@rainbownet.ch" style="color:#22364A;text-decoration:none">luc@rainbownet.ch</a> · <a href="https://rainbownet.ch" style="color:#22364A;text-decoration:none">rainbownet.ch</a></div>
+    <div style="width:36px;height:1px;background:#D9B77A;margin:14px 0 8px 0"></div>
+    <div style="font-size:9px;letter-spacing:.14em;color:#8C6B2F;text-transform:uppercase">La discrétion est notre signature.</div>
+  </td></tr>
+</table>`;
+
 /* ───────────────────────── SMTP (cloudflare:sockets) ───────────────────────── */
 const b64utf8 = (s) => {
   const bytes = new TextEncoder().encode(s);
@@ -187,7 +199,33 @@ async function brevo(env, payload) {
   return { ok: res.ok, status: res.status, body: out };
 }
 
+async function resendSend(env, mail) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: `${mail.fromName} <${mail.from}>`,
+      to: [mail.to],
+      reply_to: mail.replyTo ? mail.replyTo.email : undefined,
+      subject: mail.subject,
+      html: mail.html,
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+  const out = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, id: out.id, message: out.message };
+}
+
 async function sendMail(env, mail) {
+  if (env.RESEND_API_KEY) {
+    try {
+      const r = await resendSend(env, mail);
+      if (r.ok) return { ok: true, voie: 'resend', detail: r.id };
+      if (!env.SMTP_HOST && !env.BREVO_API_KEY) return { ok: false, voie: 'resend', status: r.status, message: r.message };
+    } catch (e) {
+      if (!env.SMTP_HOST && !env.BREVO_API_KEY) return { ok: false, voie: 'resend', status: 0, message: String(e).slice(0, 160) };
+    }
+  }
   if (env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS) {
     try {
       const r = await smtpSend(env, mail);

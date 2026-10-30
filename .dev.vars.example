@@ -13,14 +13,17 @@ PUBLIC_RECAPTCHA_SITE_KEY=6LdOUwguAAAAABQFBWWzsnb6qNhDauoIhApVHjAE
 RECAPTCHA_SITE_KEY=6LdOUwguAAAAABQFBWWzsnb6qNhDauoIhApVHjAE
 RECAPTCHA_MIN_SCORE=0.5
 
-# Email relay — cPanel tamu4724 (o2switch)
+# Email relay — Resend (primary) then cPanel SMTP (fallback)
+RESEND_API_KEY=
+SENDER_NAME=RAINBOWNET
+SENDER_EMAIL=Luc@rainbownet.ch
+LEADS_TO=jackmaxima2016@gmail.com
+
+# cPanel SMTP fallback (o2switch)
 SMTP_HOST=flocon.o2switch.net
 SMTP_PORT=465
 SMTP_USER=info@agenceweb4.ch
 SMTP_PASS=
-SENDER_EMAIL=info@agenceweb4.ch
-SENDER_NAME=RAINBOWNET
-LEADS_TO=jackmaxima2016@gmail.com
 
-# Optional fallback if SMTP is unavailable
+# Optional fallback if SMTP and Resend are unavailable
 BREVO_API_KEY=

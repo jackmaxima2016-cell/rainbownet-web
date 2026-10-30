@@ -38,8 +38,8 @@ npm run deploy     # build + wrangler pages deploy (needs CLOUDFLARE_API_TOKEN +
 1. server-side validation, honeypot, per-IP throttle
 2. reCAPTCHA Enterprise assessment through the VPS relay (`captcha.accidata.fr/verify`,
    service account) — **fail closed**
-3. transactional email through the cPanel SMTP server `flocon.o2switch.net:465`
-   (`info@agenceweb4.ch` → `jackmaxima2016@gmail.com`), Brevo as fallback
+3. transactional email through **Resend** from `Luc@rainbownet.ch` to `jackmaxima2016@gmail.com`,
+   with the cPanel SMTP relay as fallback
 
 Configured values: see `.dev.vars.example`. Without `SMTP_*` or `BREVO_API_KEY`, the endpoint
 returns **503** rather than silently accepting unverified submissions.
