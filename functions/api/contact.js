@@ -89,6 +89,7 @@ async function verifyRecaptcha(env, token, action, remoteip) {
   }
 
   if (data.valid !== true) return { ok: false, reason: data.reason || 'invalid_token', score: data.score };
+  if (data.action && data.action !== action) return { ok: false, reason: 'action_mismatch', score: data.score };
   return { ok: true, score: data.score, reasons: data.reasons || [] };
 }
 

@@ -1,5 +1,6 @@
 ---
 import Img from './Img.astro';
+import { HERO_FOCUS } from '../content/hero-focus';
 
 interface Props {
   eyebrow: string;
@@ -10,9 +11,10 @@ interface Props {
   breadcrumbs?: { label: string; href?: string }[];
 }
 const { eyebrow, title, text, image, alt, breadcrumbs = [] } = Astro.props;
+const focus = HERO_FOCUS[image] || { x: 50, y: 45 };
 ---
 <section class="page-hero">
-  <div class="hero-media">
+  <div class={`hero-media${focus.dark ? ' is-dark' : ''}`} style={`--fx:${focus.x}%;--fy:${focus.y}%`}>
     <Img name={image} alt={alt} sizes="100vw" priority={true} />
   </div>
   <div class="hero-content">

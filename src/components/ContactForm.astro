@@ -211,7 +211,7 @@ const countries = lang === 'fr'
         <span>{T.consent} <a href={`/${lang}/legal/privacy/`} target="_blank" rel="noopener" style="border-bottom:1px solid var(--gold)">{T.privacy}</a>.</span>
       </label>
       <input type="text" name="company_website" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px" />
-      <p style="font-size:.78rem;color:var(--steel);margin-top:14px">
+      <p style="font-size:.78rem;color:var(--muted);margin-top:14px">
         {lang === 'fr'
           ? 'Ce formulaire est protégé par Google reCAPTCHA Enterprise. Aucun score de risque n’est affiché.'
           : 'This form is protected by Google reCAPTCHA Enterprise. No risk score is displayed.'}
@@ -229,7 +229,7 @@ const countries = lang === 'fr'
     <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h2>{T.successTitle}</h2>
     <p>{T.successText}</p>
-    <p style="font-size:.82rem;color:var(--steel)">{T.successNote}</p>
+    <p style="font-size:.82rem;color:var(--muted)">{T.successNote}</p>
     <a class="btn btn--outline" href={`/${lang}/`}>{lang === 'fr' ? 'Retour à l’accueil' : 'Back to home'}</a>
   </div>
 </div>

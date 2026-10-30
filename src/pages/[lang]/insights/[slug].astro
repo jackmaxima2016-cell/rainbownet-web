@@ -68,7 +68,7 @@ const body = rawBody.replace(/<h2[^>]*>(.*?)<\/h2>/g, (_m, title) => `<h2 id="${
               <ul style="list-style:none;padding:0;margin:12px 0 0;display:grid;gap:14px;font-size:.87rem">
                 {others.map((x: any) => (
                   <li><a href={L(`/insights/${x.slug}/`)} style="display:block">{x[lang].title}</a>
-                    <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--steel)">{x.category[lang]}</span></li>
+                    <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">{x.category[lang]}</span></li>
                 ))}
               </ul>
             </div>

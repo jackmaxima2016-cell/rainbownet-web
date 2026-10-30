@@ -1,6 +1,7 @@
 ---
 import Img from './Img.astro';
 import type { Lang } from '../content/site';
+import { HERO_FOCUS } from '../content/hero-focus';
 
 interface Props {
   lang: Lang;
@@ -16,13 +17,14 @@ interface Props {
   meta?: string[];
 }
 const { lang, eyebrow, title, text, cta1Label, cta1Href, cta2Label, cta2Href, image, alt, meta = [] } = Astro.props;
+const focus = HERO_FOCUS[image] || { x: 50, y: 45 };
 const idx = title.lastIndexOf('. ');
 const head = idx > 0 ? title.slice(0, idx + 1) : '';
 const tail = idx > 0 ? title.slice(idx + 2) : title;
 const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
 ---
 <section class="hero">
-  <div class="hero-media">
+  <div class={`hero-media${focus.dark ? ' is-dark' : ''}`} style={`--fx:${focus.x}%;--fy:${focus.y}%`}>
     <Img name={image} alt={alt} sizes="100vw" priority={true} />
   </div>
   <div class="hero-content">

@@ -26,7 +26,7 @@ const L = (p: string) => `/${lang}${p}`;
           <h2 style="font-size:clamp(1.5rem,2.4vw,2rem)">{c.formTitle}</h2>
           <p class="lead" style="margin:12px 0 28px">{c.formIntro}</p>
           <ContactForm lang={lang} />
-          <p style="font-size:.76rem;color:var(--steel);margin-top:14px">{t.formNote}</p>
+          <p style="font-size:.76rem;color:var(--muted);margin-top:14px">{t.formNote}</p>
         </div>
         <aside class="reveal" style="display:grid;gap:22px">
           <div style="background:var(--white);border:1px solid rgba(16,30,44,.12);padding:clamp(22px,2.6vw,30px)">
@@ -34,7 +34,7 @@ const L = (p: string) => `/${lang}${p}`;
             <ol style="margin:16px 0 0;padding-left:1.1em;color:var(--muted);font-size:.9rem">
               {c.aside.steps.map((s: string) => <li style="margin-bottom:10px">{s}</li>)}
             </ol>
-            <p style="font-size:.82rem;color:var(--steel);margin-top:16px;padding-top:16px;border-top:1px solid rgba(16,30,44,.1)">{c.aside.note}</p>
+            <p style="font-size:.82rem;color:var(--muted);margin-top:16px;padding-top:16px;border-top:1px solid rgba(16,30,44,.1)">{c.aside.note}</p>
           </div>
           <div style="background:var(--navy);color:var(--ivory);padding:clamp(22px,2.6vw,30px)">
             <p class="eyebrow" style="color:var(--gold)">{lang === 'fr' ? 'Discrétion' : 'Discretion'}</p>
@@ -56,7 +56,7 @@ const L = (p: string) => `/${lang}${p}`;
           <p class="eyebrow">{lang === 'fr' ? 'Rappel' : 'Call back'}</p>
           <h2 style="font-size:clamp(1.4rem,2.2vw,1.9rem)">{c.callbackTitle}</h2>
           <p class="lead" style="margin-top:14px">{c.callbackText}</p>
-          <p style="font-size:.82rem;color:var(--steel);margin-top:18px">
+          <p style="font-size:.82rem;color:var(--muted);margin-top:18px">
             {lang === 'fr'
               ? 'Le rappel est effectué depuis un numéro suisse. Aucun message commercial ne vous sera adressé.'
               : 'Call backs are made from a Swiss number. No commercial messages will be sent to you.'}
