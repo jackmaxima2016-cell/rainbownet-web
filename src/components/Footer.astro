@@ -1,0 +1,84 @@
+---
+import Logo from './Logo.astro';
+import { UI, type Lang } from '../content/site';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const y = new Date().getFullYear();
+const L = (p: string) => `/${lang}${p}`;
+const services = [
+  { fr: 'Particuliers', en: 'Individuals', href: '/services/individuals/' },
+  { fr: 'Entreprises', en: 'Businesses', href: '/services/corporates/' },
+  { fr: 'Professionnels du droit', en: 'Legal professionals', href: '/services/legal-professionals/' },
+  { fr: 'International', en: 'International', href: '/services/international/' },
+];
+const firm = [
+  { fr: 'À propos', en: 'About', href: '/about/' },
+  { fr: 'Notre méthode', en: 'Our approach', href: '/approach/' },
+  { fr: 'Couverture européenne', en: 'European coverage', href: '/coverage/' },
+  { fr: 'Confidentialité', en: 'Confidentiality', href: '/confidentiality/' },
+  { fr: 'Ressources', en: 'Insights', href: '/insights/' },
+];
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href={L('/')} class="footer-brand" aria-label="RAINBOWNET">
+          <Logo size={40} />
+          <span>
+            <span class="brand-name">RAINBOWNET</span>
+            <span class="brand-tag">Private Investigations · Geneva</span>
+          </span>
+        </a>
+        <p class="footer-signature">{lang === 'fr' ? 'La discrétion est notre signature.' : 'Discretion Is Our Signature.'}</p>
+        <p class="footer-about">
+          {lang === 'fr'
+            ? 'Investigations privées et intelligence corporate. Genève, Suisse — interventions en Europe dans le respect du droit local.'
+            : 'Private investigations and corporate intelligence. Geneva, Switzerland — work across Europe in compliance with local law.'}
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>{lang === "fr" ? "Services" : "Services"}</h3>
+        <ul>
+          {services.map((s) => <li><a href={L(s.href)}>{lang === 'fr' ? s.fr : s.en}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{lang === "fr" ? "Le cabinet" : "The firm"}</h3>
+        <ul>
+          {firm.map((s) => <li><a href={L(s.href)}>{lang === 'fr' ? s.fr : s.en}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{lang === "fr" ? "Contact" : "Contact"}</h3>
+        <ul>
+          <li><a href={L('/contact/')}>{t.cta}</a></li>
+          <li><a href={L('/contact/#callback')}>{lang === 'fr' ? 'Demander un rappel' : 'Request a call back'}</a></li>
+          <li><a href={L('/legal/legal-notice/')}>{t.legal}</a></li>
+          <li><a href={L('/legal/privacy/')}>{t.privacy}</a></li>
+          <li><a href={L('/legal/cookies/')}>{t.cookies}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {y} RAINBOWNET. {t.rights} {lang === 'fr' ? 'Genève, Suisse.' : 'Geneva, Switzerland.'}</span>
+      <nav aria-label={lang === 'fr' ? 'Liens légaux' : 'Legal links'}>
+        <a href={L('/legal/legal-notice/')}>{t.legal}</a>
+        <a href={L('/legal/privacy/')}>{t.privacy}</a>
+        <a href={L('/legal/cookies/')}>{t.cookies}</a>
+        <a href={L('/credits/')}>{t.credits}</a>
+      </nav>
+    </div>
+    <p class="footer-note">
+      {lang === 'fr'
+        ? 'RAINBOWNET intervient exclusivement dans le cadre légal applicable. Aucune prestation illégale n’est proposée ni réalisée.'
+        : 'RAINBOWNET operates exclusively within applicable law. No unlawful service is offered or performed.'}
+    </p>
+  </div>
+</footer>

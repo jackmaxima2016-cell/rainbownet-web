@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import CallbackForm from '../../components/CallbackForm.astro';
+import { UI, type Lang } from '../../content/site';
+import { CONTACT } from '../../content/pages';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = CONTACT[lang];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug="/contact/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: t.cta }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(28px,4vw,56px);align-items:start" class="contact-grid">
+        <div class="reveal">
+          <p class="eyebrow">{lang === 'fr' ? 'Formulaire sécurisé' : 'Secure form'}</p>
+          <h2 style="font-size:clamp(1.5rem,2.4vw,2rem)">{c.formTitle}</h2>
+          <p class="lead" style="margin:12px 0 28px">{c.formIntro}</p>
+          <ContactForm lang={lang} />
+          <p style="font-size:.76rem;color:var(--steel);margin-top:14px">{t.formNote}</p>
+        </div>
+        <aside class="reveal" style="display:grid;gap:22px">
+          <div style="background:var(--white);border:1px solid rgba(16,30,44,.12);padding:clamp(22px,2.6vw,30px)">
+            <h3 style="font-size:1.1rem">{c.aside.title}</h3>
+            <ol style="margin:16px 0 0;padding-left:1.1em;color:var(--muted);font-size:.9rem">
+              {c.aside.steps.map((s: string) => <li style="margin-bottom:10px">{s}</li>)}
+            </ol>
+            <p style="font-size:.82rem;color:var(--steel);margin-top:16px;padding-top:16px;border-top:1px solid rgba(16,30,44,.1)">{c.aside.note}</p>
+          </div>
+          <div style="background:var(--navy);color:var(--ivory);padding:clamp(22px,2.6vw,30px)">
+            <p class="eyebrow" style="color:var(--gold)">{lang === 'fr' ? 'Discrétion' : 'Discretion'}</p>
+            <p style="font-size:.9rem;color:rgba(245,242,233,.76);margin:0">
+              {lang === 'fr'
+                ? 'Aucune adresse e-mail publique. Les demandes passent exclusivement par ce formulaire, afin d’éviter la collecte automatisée et les sollicitations non qualifiées.'
+                : 'No public email address. Requests go exclusively through this form, to prevent automated collection and unqualified solicitations.'}
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white section--tight">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:start" class="callback-grid">
+        <div class="reveal">
+          <p class="eyebrow">{lang === 'fr' ? 'Rappel' : 'Call back'}</p>
+          <h2 style="font-size:clamp(1.4rem,2.2vw,1.9rem)">{c.callbackTitle}</h2>
+          <p class="lead" style="margin-top:14px">{c.callbackText}</p>
+          <p style="font-size:.82rem;color:var(--steel);margin-top:18px">
+            {lang === 'fr'
+              ? 'Le rappel est effectué depuis un numéro suisse. Aucun message commercial ne vous sera adressé.'
+              : 'Call backs are made from a Swiss number. No commercial messages will be sent to you.'}
+          </p>
+        </div>
+        <div class="reveal"><CallbackForm lang={lang} /></div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  @media (max-width: 900px) {
+    .contact-grid, .callback-grid { grid-template-columns: 1fr !important; }
+  }
+</style>

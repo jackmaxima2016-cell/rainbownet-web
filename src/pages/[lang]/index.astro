@@ -1,0 +1,224 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Img from '../../components/Img.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import EuropeMap from '../../components/EuropeMap.astro';
+import { HOME, PILLARS, CLIENTELE, PROCESS, HOME_FAQ, SERVICE_SUMMARIES, UI, SITE, type Lang } from '../../content/site';
+import services from '../../content/services.json';
+import cities from '../../content/cities.json';
+import insights from '../../content/insights.json';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }];
+}
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const h = HOME[lang];
+const L = (p: string) => `/${lang}${p}`;
+const title = lang === 'fr'
+  ? 'Détective privé à Genève — RAINBOWNET'
+  : 'Private Investigator in Geneva — RAINBOWNET';
+const description = lang === 'fr'
+  ? 'Agence de détectives privés à Genève : investigations privées et corporate, due diligence et coordination européenne. Consultation confidentielle.'
+  : 'Private investigation and corporate intelligence firm in Geneva: due diligence, corporate investigations and European coordination. Confidential consultation.';
+const latest = [...(insights as any[])].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+const cityPoints = (cities as any[]).map((c) => ({ slug: c.slug, city: c, lat: c.lat, lng: c.lng }));
+const svc = SERVICE_SUMMARIES[lang];
+const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
+---
+<Base lang={lang} slug="/" title={title} description={description} image="hero-geneva" imageAlt={h.hero.alt}>
+  <Hero
+    lang={lang}
+    eyebrow={h.hero.eyebrow}
+    title={h.hero.title}
+    text={h.hero.text}
+    cta1Label={h.hero.cta1}
+    cta1Href={L('/contact/')}
+    cta2Label={h.hero.cta2}
+    cta2Href={L('/services/')}
+    image={h.hero.image}
+    alt={h.hero.alt}
+    meta={lang === 'fr' ? ['Genève', 'Suisse & Europe', 'Cadre strictement légal'] : ['Geneva', 'Switzerland & Europe', 'Strictly lawful framework']}
+  />
+
+  <!-- Positioning -->
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split split--wide">
+        <div class="reveal">
+          <p class="eyebrow">{h.intro.eyebrow}</p>
+          <h2>{h.intro.title}</h2>
+          {h.intro.text.map((p) => <p class="lead" style="margin-top:18px">{p}</p>)}
+          <p style="margin-top:28px"><a class="link-arrow" href={L('/about/')}>{h.intro.link} <Fragment set:html={arrow} /></a></p>
+        </div>
+        <div class="split-media reveal">
+          <Img name="about-geneva" alt={lang === 'fr' ? 'Architecture genevoise contemporaine et quartier institutionnel' : 'Contemporary Geneva architecture and institutional district'} sizes="(max-width:900px) 100vw, 45vw" />
+        </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-top:clamp(48px,6vw,80px)">
+        {PILLARS[lang].map((p, i) => (
+          <div class="pillar reveal">
+            <span class="pillar-num">0{i + 1}</span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{h.services.eyebrow}</p>
+        <h2>{h.services.title}</h2>
+        <p>{h.services.text}</p>
+      </div>
+      <div class="grid grid-4">
+        {svc.map((s) => (
+          <a class="service-card reveal" href={L(`/services/${s.slug}/`)}>
+            <div class="service-card-media"><Img name={s.image} alt={s.title} sizes="(max-width:640px) 100vw, (max-width:900px) 50vw, 25vw" /></div>
+            <div class="service-card-body">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <span class="link-arrow">{t.readMore} <Fragment set:html={arrow} /></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Confidentiality -->
+  <section class="section section--navy">
+    <div class="container">
+      <div class="split">
+        <div class="reveal">
+          <p class="eyebrow">{h.confidentiality.eyebrow}</p>
+          <h2>{h.confidentiality.title}</h2>
+          {h.confidentiality.text.map((p) => <p style="color:rgba(245,242,233,.78);margin-top:18px">{p}</p>)}
+          <ul class="ticks">
+            {h.confidentiality.points.map((p) => <li>{p}</li>)}
+          </ul>
+          <p style="margin-top:30px"><a class="link-arrow" href={L('/confidentiality/')}>{h.confidentiality.link} <Fragment set:html={arrow} /></a></p>
+        </div>
+        <div class="split-media reveal">
+          <Img name="confidentiality" alt={lang === 'fr' ? 'Salle de réunion privée dans un bureau genevois' : 'Private meeting room in a Geneva office'} sizes="(max-width:900px) 100vw, 45vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{h.approach.eyebrow}</p>
+        <h2>{h.approach.title}</h2>
+      </div>
+      <div class="process reveal">
+        {PROCESS[lang].map((s) => (
+          <div class="process-step">
+            <span class="process-num">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        ))}
+      </div>
+      <p style="margin-top:34px"><a class="link-arrow" href={L('/approach/')}>{h.approach.link} <Fragment set:html={arrow} /></a></p>
+    </div>
+  </section>
+
+  <!-- Coverage -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{h.coverage.eyebrow}</p>
+          <h2>{h.coverage.title}</h2>
+          <p class="lead" style="margin-top:18px">{h.coverage.text}</p>
+          <p style="margin-top:26px"><a class="link-arrow" href={L('/coverage/')}>{h.coverage.link} <Fragment set:html={arrow} /></a></p>
+          <div class="map-legend" style="margin-top:28px">
+            <span><i class="gold"></i>{lang === 'fr' ? 'Genève — coordination' : 'Geneva — coordination'}</span>
+            <span><i></i>{lang === 'fr' ? 'Capitales couvertes' : 'Covered capitals'}</span>
+          </div>
+        </div>
+        <div class="reveal"><EuropeMap lang={lang} cities={cityPoints} compact={false} /></div>
+      </div>
+      <div class="city-list" style="margin-top:clamp(36px,4vw,56px)">
+        {(cities as any[]).map((c) => (
+          <a href={L(`/locations/${c.slug}/`)}>
+            <span>{c[lang].name}</span>
+            <span class="cc">{c.countryCode}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Clientele -->
+  <section class="section section--ivory2">
+    <div class="container">
+      <div class="section-head center reveal">
+        <p class="eyebrow">{h.clients.eyebrow}</p>
+        <h2>{h.clients.title}</h2>
+        <p>{h.clients.text}</p>
+      </div>
+      <ul class="chips reveal" style="justify-content:center">
+        {CLIENTELE[lang].map((c) => <li class="chip">{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Insights -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Ressources' : 'Insights'}</p>
+        <h2>{lang === 'fr' ? 'Comprendre avant d’agir' : 'Understanding before acting'}</h2>
+      </div>
+      <div class="grid grid-3">
+        {latest.map((a: any) => (
+          <a class="article-card reveal" href={L(`/insights/${a.slug}/`)}>
+            <div class="article-card-media"><Img name={a.image} alt={a[lang].title} sizes="(max-width:640px) 100vw, 33vw" /></div>
+            <div class="article-card-body">
+              <div class="article-meta"><span>{a[lang].category}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span></div>
+              <h3>{a[lang].title}</h3>
+              <p>{a[lang].excerpt}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:34px"><a class="link-arrow" href={L('/insights/')}>{t.allInsights} <Fragment set:html={arrow} /></a></p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{h.faq.eyebrow}</p>
+          <h2>{h.faq.title}</h2>
+          <p class="lead" style="margin-top:18px">{lang === 'fr' ? 'Une question qui n’apparaît pas ici ? Le formulaire confidentiel permet d’obtenir une réponse adaptée à votre situation.' : 'A question not answered here? The confidential form lets us respond to your specific situation.'}</p>
+          <p style="margin-top:26px"><a class="btn btn--outline" href={L('/contact/')}>{t.cta}</a></p>
+        </div>
+        <div class="reveal"><Faq items={HOME_FAQ[lang]} lang={lang} /></div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    lang={lang}
+    title={h.cta.title}
+    text={h.cta.text}
+    buttonLabel={h.cta.button}
+    buttonHref={L('/contact/')}
+    secondaryLabel={h.cta.secondary}
+    secondaryHref={L('/contact/#callback')}
+  />
+</Base>

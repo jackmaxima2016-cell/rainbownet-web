@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Img from '../../components/Img.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { ABOUT, PILLARS, CLIENTELE, PROCESS, UI, type Lang } from '../../content/site';
+import { ABOUT as A } from '../../content/pages';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = A[lang];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug="/about/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'À propos' : 'About' }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="prose reveal">
+          {c.sections.slice(0, 2).map((s: any) => (
+            <><h2>{s.h2}</h2>{s.body.map((p: string) => <p>{p}</p>)}</>
+          ))}
+        </div>
+        <div class="reveal">
+          <Img name="geneva-city" alt={lang === 'fr' ? 'Vue des toits de la vieille ville de Genève' : 'Rooftops of Geneva old town'} sizes="(max-width:900px) 100vw, 45vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="prose reveal" style="max-width:820px">
+        {c.sections.slice(2).map((s: any) => (
+          <><h2>{s.h2}</h2>{s.body.map((p: string) => <p>{p}</p>)}</>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">{lang === 'fr' ? 'Exigences' : 'Standards'}</p><h2>{c.valuesTitle}</h2></div>
+      <div class="grid grid-4">
+        {PILLARS[lang].map((p, i) => (
+          <div class="pillar reveal" style="border-color:rgba(245,242,233,.16)">
+            <span class="pillar-num">0{i + 1}</span><h3>{p.title}</h3><p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{lang === 'fr' ? 'Méthode' : 'Method'}</p>
+          <h2>{lang === 'fr' ? 'Comment un mandat se déroule' : 'How a mandate unfolds'}</h2>
+          <p class="lead" style="margin-top:16px">{lang === 'fr' ? 'Quatre étapes, un cadre écrit, une restitution factuelle.' : 'Four stages, a written framework, factual reporting.'}</p>
+          <p style="margin-top:24px"><a class="link-arrow" href={L('/approach/')}>{lang === 'fr' ? 'Notre méthode en détail' : 'Our approach in detail'} →</a></p>
+        </div>
+        <div class="reveal">
+          {PROCESS[lang].map((s) => (
+            <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid rgba(16,30,44,.12)">
+              <span style="font-family:Manrope,sans-serif;color:var(--gold-deep);font-size:.85rem;font-weight:600;padding-top:2px">{s.n}</span>
+              <div><h3 style="font-size:1rem;margin-bottom:6px">{s.title}</h3><p style="font-size:.9rem;color:var(--muted);margin:0">{s.text}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style="margin-top:clamp(48px,6vw,76px)">
+        <p class="eyebrow">{lang === 'fr' ? 'Clientèles' : 'Clients'}</p>
+        <ul class="chips">{CLIENTELE[lang].map((x) => <li class="chip">{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

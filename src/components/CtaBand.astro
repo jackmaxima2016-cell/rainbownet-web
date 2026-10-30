@@ -1,0 +1,29 @@
+---
+interface Props {
+  lang: 'fr' | 'en';
+  title: string;
+  text: string;
+  buttonLabel: string;
+  buttonHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+const { lang, title, text, buttonLabel, buttonHref, secondaryLabel, secondaryHref } = Astro.props;
+---
+<section class="cta-band">
+  <div class="container">
+    <div class="cta-grid">
+      <div class="reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Prochaine étape' : 'Next step'}</p>
+        <h2>{title}</h2>
+        <p>{text}</p>
+      </div>
+      <div class="cta-actions reveal">
+        <a class="btn btn--gold" href={buttonHref}>{buttonLabel}</a>
+        {secondaryLabel && secondaryHref && (
+          <a class="btn btn--ghost" href={secondaryHref}>{secondaryLabel}</a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

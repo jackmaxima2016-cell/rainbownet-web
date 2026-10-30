@@ -1,0 +1,26 @@
+# Cloudflare Pages — build & runtime variables
+# Copy to `.dev.vars` for local `wrangler pages dev`, and set the same values
+# in the Pages project (Settings → Variables and Secrets).
+
+# --- Build-time (public, inlined into the HTML) ---
+# Google reCAPTCHA Enterprise site key (public). Empty = integration dormant.
+PUBLIC_RECAPTCHA_SITE_KEY=
+
+# --- Runtime (encrypted secrets) ---
+RECAPTCHA_PROJECT_ID=
+# API key restricted to "reCAPTCHA Enterprise API — create assessment"
+RECAPTCHA_API_KEY=
+# Must equal PUBLIC_RECAPTCHA_SITE_KEY
+RECAPTCHA_SITE_KEY=
+# Optional: reject tokens from other hostnames
+RECAPTCHA_EXPECTED_HOSTNAME=
+# Default 0.5
+RECAPTCHA_MIN_SCORE=0.5
+
+BREVO_API_KEY=
+CONTACT_TO_EMAIL=
+CONTACT_FROM_EMAIL=
+CONTACT_FROM_NAME=RAINBOWNET
+
+# Local testing ONLY: "allow" disables server-side verification. Never in production.
+FORM_UNVERIFIED_MODE=

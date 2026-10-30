@@ -1,0 +1,32 @@
+---
+import images from '../content/images.json';
+
+interface Props {
+  name: string;
+  alt: string;
+  sizes?: string;
+  class?: string;
+  priority?: boolean;
+  aspect?: string;
+  width?: number;
+}
+const { name, alt, sizes = '100vw', class: cls = '', priority = false, aspect } = Astro.props;
+const entry = (images as Record<string, { variants: Record<string, { w: number; h: number }>; widths: number[] }>)[name];
+const widths = entry ? entry.widths : [];
+const largest = widths.length ? entry.variants[String(widths[widths.length - 1])] : { w: 1600, h: 1000 };
+const srcset = widths.map((w) => `/images/${name}-${w}.webp ${w}w`).join(', ');
+const src = widths.length ? `/images/${name}-${Math.min(...widths)}.webp` : `/images/${name}.webp`;
+---
+<img
+  src={src}
+  srcset={srcset}
+  sizes={sizes}
+  width={largest.w}
+  height={largest.h}
+  alt={alt}
+  class={cls}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  style={aspect ? `aspect-ratio:${aspect};object-fit:cover;` : undefined}
+/>

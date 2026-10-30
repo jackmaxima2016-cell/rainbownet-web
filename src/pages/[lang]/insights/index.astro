@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Img from '../../../components/Img.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { UI, type Lang } from '../../../content/site';
+import insights from '../../../content/insights.json';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const L = (p: string) => `/${lang}${p}`;
+const list = [...(insights as any[])].sort((a, b) => b.date.localeCompare(a.date));
+const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base lang={lang} slug="/insights/" title={lang === 'fr' ? 'Ressources — Comprendre l’investigation privée | RAINBOWNET' : 'Insights — Understanding Private Investigation | RAINBOWNET'}
+  description={lang === 'fr' ? 'Guides et analyses sur l’investigation privée, la due diligence, la confidentialité et les cadres juridiques en Suisse et en Europe.' : 'Guides and analysis on private investigation, due diligence, confidentiality and legal frameworks in Switzerland and Europe.'}
+  image="insight-choosing">
+  <PageHero
+    eyebrow={lang === 'fr' ? 'Ressources' : 'Insights'}
+    title={lang === 'fr' ? 'Comprendre avant d’agir' : 'Understanding before acting'}
+    text={lang === 'fr' ? 'Des textes courts et précis sur les méthodes, les cadres juridiques et les décisions que l’investigation privée permet d’éclairer.' : 'Short, precise pieces on methods, legal frameworks and the decisions private investigation can inform.'}
+    image="insight-choosing" alt={lang === 'fr' ? 'Vue de Genève et de son lac' : 'View of Geneva and its lake'}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Ressources' : 'Insights' }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="grid grid-3">
+        {list.map((a: any) => (
+          <a class="article-card reveal" href={L(`/insights/${a.slug}/`)}>
+            <div class="article-card-media"><Img name={a.image} alt={a[lang].alt} sizes="(max-width:640px) 100vw, 33vw" /></div>
+            <div class="article-card-body">
+              <div class="article-meta"><span>{a.category[lang]}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span></div>
+              <h3>{a[lang].title}</h3>
+              <p>{a[lang].excerpt}</p>
+              <div class="article-meta" style="margin:16px 0 0"><span>{fmt.format(new Date(a.date))}</span></div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={lang === 'fr' ? 'Une question qui demande une réponse adaptée ?' : 'A question that needs a tailored answer?'}
+    text={lang === 'fr' ? 'Un premier échange confidentiel permet de vérifier la faisabilité et le cadre légal.' : 'A confidential first conversation establishes feasibility and the legal framework.'}
+    buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

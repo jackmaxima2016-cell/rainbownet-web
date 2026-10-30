@@ -1,0 +1,29 @@
+---
+interface Props {
+  variant?: 'light' | 'dark';
+  withWordmark?: boolean;
+  size?: number;
+  class?: string;
+}
+const { variant = 'light', withWordmark = false, size = 40, class: cls = '' } = Astro.props;
+const ink = variant === 'light' ? '#F5F2E9' : '#101E2C';
+const gold = '#D9B77A';
+---
+<span class={`brand ${cls}`} style={`gap:13px`}>
+  <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
+    <path d="M13.5 39V9.5H27.2C33.4 9.5 38 13.9 38 19.9C38 25.9 33.4 30.3 27.2 30.3H13.5" stroke={ink} stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M26.8 30.3L38 39" stroke={ink} stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M13.5 9.5L38 19.9" stroke={gold} stroke-width=".9" stroke-linecap="round" opacity=".55"/>
+    <path d="M13.5 30.3L33 9.8" stroke={gold} stroke-width=".9" stroke-linecap="round" opacity=".3"/>
+    <circle cx="13.5" cy="9.5" r="2.1" fill={gold}/>
+    <circle cx="38" cy="19.9" r="2.1" fill={gold}/>
+    <circle cx="13.5" cy="39" r="1.6" fill={ink}/>
+    <circle cx="26.8" cy="30.3" r="1.6" fill={gold}/>
+  </svg>
+  {withWordmark && (
+    <span>
+      <span class="brand-name" style={`color:${ink}`}>RAINBOWNET</span>
+      <span class="brand-tag">Private Investigations · Geneva</span>
+    </span>
+  )}
+</span>

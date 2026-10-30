@@ -1,0 +1,56 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Img from '../../../components/Img.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { UI, PROCESS, type Lang } from '../../../content/site';
+import { SERVICES_INDEX } from '../../../content/pages';
+import services from '../../../content/services.json';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = SERVICES_INDEX[lang];
+const L = (p: string) => `/${lang}${p}`;
+const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
+---
+<Base lang={lang} slug="/services/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: 'Services' }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="grid grid-2">
+        {(services as any[]).map((s) => (
+          <a class="service-card reveal" href={L(`/services/${s.slug}/`)}>
+            <div class="service-card-media"><Img name={s.image} alt={s[lang].alt} sizes="(max-width:640px) 100vw, 50vw" /></div>
+            <div class="service-card-body">
+              <p class="eyebrow" style="margin-bottom:10px">{s[lang].eyebrow}</p>
+              <h3>{s[lang].title}</h3>
+              <p>{s[lang].intro}</p>
+              <span class="link-arrow">{t.readMore} <Fragment set:html={arrow} /></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Méthode' : 'Method'}</p>
+        <h2>{lang === 'fr' ? 'Un mandat commence par un cadre, pas par une recherche' : 'A mandate begins with a framework, not a search'}</h2>
+      </div>
+      <div class="process">
+        {PROCESS[lang].map((s) => (
+          <div class="process-step"><span class="process-num">{s.n}</span><h3>{s.title}</h3><p>{s.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

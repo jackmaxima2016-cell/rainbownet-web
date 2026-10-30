@@ -1,0 +1,75 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Img from '../../../components/Img.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import Faq from '../../../components/Faq.astro';
+import { UI, type Lang } from '../../../content/site';
+import cities from '../../../content/cities.json';
+
+export function getStaticPaths() {
+  return ['fr', 'en'].flatMap((lang) => (cities as any[]).map((c) => ({ params: { lang, slug: c.slug } })));
+}
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const t = UI[lang];
+const city = (cities as any[]).find((c) => c.slug === slug)!;
+const c = city[lang];
+const L = (p: string) => `/${lang}${p}`;
+const others = (cities as any[]).filter((x) => x.slug !== slug).slice(0, 6);
+---
+<Base lang={lang} slug={`/locations/${slug}/`} title={c.seoTitle} description={c.seoDescription} image={city.image} imageAlt={c.alt}
+  schema={{ '@context': 'https://schema.org', '@type': 'Service', name: c.title, description: c.seoDescription, areaServed: { '@type': 'City', name: c.name }, provider: { '@id': 'https://rainbownet.ch/#organization' }, url: `https://rainbownet.ch/${lang}/locations/${slug}/` }}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.intro} image={city.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: t.coverageTitle, href: L('/coverage/') }, { label: c.name }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="prose reveal">
+          {c.sections.map((s: any) => (<><h2>{s.h2}</h2>{s.body.map((p: string) => <p>{p}</p>)}</>))}
+          <h2>{lang === 'fr' ? 'Cadre juridique local' : 'Local legal framework'}</h2>
+          <p>{c.legal}</p>
+        </div>
+        <aside class="reveal" style="display:grid;gap:24px">
+          <div style="background:var(--white);border:1px solid rgba(16,30,44,.12);padding:28px">
+            <h3 style="font-size:1.05rem">{lang === 'fr' ? 'Services disponibles' : 'Available services'}</h3>
+            <ul class="ticks">{c.services.map((s: string) => <li>{s}</li>)}</ul>
+            <p style="margin-top:20px;font-size:.9rem">{c.cta}</p>
+            <a class="btn btn--gold" href={L('/contact/')} style="margin-top:12px">{t.cta}</a>
+          </div>
+          <div style="background:var(--navy);color:var(--ivory);padding:28px">
+            <p class="eyebrow" style="color:var(--gold)">{lang === 'fr' ? 'Coordination' : 'Coordination'}</p>
+            <p style="font-size:.92rem;color:rgba(245,242,233,.76);margin:0">
+              {lang === 'fr'
+                ? 'Mandats coordonnés depuis Genève. Aucun bureau local n’est revendiqué : les interventions sont structurées selon la réglementation applicable.'
+                : 'Mandates coordinated from Geneva. No local office is claimed: work is structured under applicable regulation.'}
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">{t.faqTitle}</p><h2>{lang === 'fr' ? `Investigation privée à ${c.name}` : `Private investigation in ${c.name}`}</h2></div>
+      <div class="reveal"><Faq items={c.faq} lang={lang} /></div>
+    </div>
+  </section>
+
+  <section class="section section--ivory section--tight">
+    <div class="container">
+      <p class="eyebrow">{t.coverageTitle}</p>
+      <div class="city-list">
+        {others.map((x: any) => <a href={L(`/locations/${x.slug}/`)}><span>{x[lang].name}</span><span class="cc">{x.countryCode}</span></a>)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={lang === 'fr' ? `Un besoin d’investigation à ${c.name} ?` : `An investigation need in ${c.name}?`}
+    text={lang === 'fr' ? 'Décrivez votre situation : nous préciserons la faisabilité, le cadre légal local et la méthode.' : 'Describe your situation: we will set out feasibility, the local legal framework and the method.'}
+    buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

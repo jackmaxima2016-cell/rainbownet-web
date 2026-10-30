@@ -1,0 +1,449 @@
+---
+import type { Lang } from '../content/site';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const siteKey = (import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '').trim();
+const T = {
+  fr: {
+    step: 'Étape', of: 'sur', next: 'Continuer', prev: 'Précédent', submit: 'Envoyer ma demande',
+    required: 'Ce champ est requis.', chooseOne: 'Veuillez sélectionner une option.',
+    invalidEmail: 'Veuillez saisir une adresse e-mail valide.',
+    consent: 'J’ai pris connaissance de la politique de confidentialité et j’accepte que mes informations soient utilisées pour l’examen de ma demande.',
+    consentError: 'Veuillez confirmer la prise de connaissance de la politique de confidentialité.',
+    summary: 'Vérifiez votre demande', edit: 'Modifier',
+    err: 'Nous n’avons pas pu vérifier votre demande. Veuillez réessayer.',
+    net: 'La transmission a échoué. Vérifiez votre connexion et réessayez.',
+    sending: 'Envoi en cours…', successTitle: 'Votre demande a été transmise.',
+    successText: 'Nous revenons vers vous par le moyen de contact indiqué, dans les meilleurs délais. Aucun document complémentaire n’est nécessaire à ce stade.',
+    successNote: 'Pour votre sécurité, ne transmettez pas de documents sensibles avant qu’un canal sécurisé ne vous ait été proposé.',
+    privacy: 'politique de confidentialité', stepLabels: ['Type de client','Nature de la demande','Localisation','Description','Contact','Validation'],
+    recapEmpty: '—',
+  },
+  en: {
+    step: 'Step', of: 'of', next: 'Continue', prev: 'Back', submit: 'Send my request',
+    required: 'This field is required.', chooseOne: 'Please select an option.',
+    invalidEmail: 'Please enter a valid email address.',
+    consent: 'I have read the privacy policy and agree that my information may be used to assess my request.',
+    consentError: 'Please confirm that you have read the privacy policy.',
+    summary: 'Review your request', edit: 'Edit',
+    err: 'We couldn’t verify your request. Please try again.',
+    net: 'Submission failed. Check your connection and try again.',
+    sending: 'Sending…', successTitle: 'Your request has been sent.',
+    successText: 'We will reply through the contact channel you indicated as soon as possible. No additional document is needed at this stage.',
+    successNote: 'For your security, please do not send sensitive documents before a secure channel has been proposed.',
+    privacy: 'privacy policy', stepLabels: ['Client type','Nature of request','Location','Description','Contact','Review'],
+    recapEmpty: '—',
+  },
+}[lang];
+const opts = {
+  fr: {
+    client: [['individual','Particulier'],['company','Entreprise'],['lawfirm','Cabinet d’avocats'],['institution','Institution'],['other','Autre']],
+    request: [['private','Investigation privée'],['corporate','Investigation entreprise'],['duediligence','Due diligence'],['verification','Recherche et vérification'],['international','Investigation internationale'],['other','Autre']],
+    urgency: [['routine','Sans urgence particulière'],['soon','Dans les prochaines semaines'],['urgent','Urgent']],
+    budget: [['unspecified','Non précisé'],['lt5','Moins de 5 000 CHF'],['5to15','5 000 – 15 000 CHF'],['15to50','15 000 – 50 000 CHF'],['gt50','Plus de 50 000 CHF']],
+    pref: [['email','E-mail'],['phone','Téléphone']],
+    language: [['fr','Français'],['en','Anglais'],['other','Autre']],
+  },
+  en: {
+    client: [['individual','Individual'],['company','Business'],['lawfirm','Law firm'],['institution','Institution'],['other','Other']],
+    request: [['private','Private investigation'],['corporate','Corporate investigation'],['duediligence','Due diligence'],['verification','Research and verification'],['international','International investigation'],['other','Other']],
+    urgency: [['routine','No particular urgency'],['soon','Within the next weeks'],['urgent','Urgent']],
+    budget: [['unspecified','Not specified'],['lt5','Under CHF 5,000'],['5to15','CHF 5,000 – 15,000'],['15to50','CHF 15,000 – 50,000'],['gt50','Over CHF 50,000']],
+    pref: [['email','Email'],['phone','Phone']],
+    language: [['fr','French'],['en','English'],['other','Other']],
+  },
+}[lang];
+const countries = lang === 'fr'
+  ? [['CH','Suisse'],['FR','France'],['GB','Royaume-Uni'],['BE','Belgique'],['DE','Allemagne'],['IT','Italie'],['ES','Espagne'],['LU','Luxembourg'],['NL','Pays-Bas'],['AT','Autriche'],['PT','Portugal'],['other','Autre / plusieurs pays']]
+  : [['CH','Switzerland'],['FR','France'],['GB','United Kingdom'],['BE','Belgium'],['DE','Germany'],['IT','Italy'],['ES','Spain'],['LU','Luxembourg'],['NL','Netherlands'],['AT','Austria'],['PT','Portugal'],['other','Other / several countries']];
+---
+<div class="form-shell" id="confidential-form">
+  <div class="form-progress" aria-hidden="true">
+    {[1,2,3,4,5,6].map((i) => <i data-bar={i}></i>)}
+  </div>
+  <p class="form-step-label" id="step-label">{T.step} 1 {T.of} 6 — {T.stepLabels[0]}</p>
+
+  <div class="form-error" id="form-error" role="alert"></div>
+
+  <form id="case-form" novalidate>
+    <!-- Step 1 -->
+    <section class="form-step is-active" data-step="1" aria-labelledby="s1-title">
+      <h2 id="s1-title">{lang === 'fr' ? 'Quel est votre profil ?' : 'Who are you?'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Cette information nous permet d’adapter le cadre de notre réponse.' : 'This helps us frame our response appropriately.'}</p>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend class="field-label">{lang === 'fr' ? 'Type de client' : 'Client type'}<span aria-hidden="true"> *</span></legend>
+        <div class="choices">
+          {opts.client.map(([v, l]) => (
+            <label class="choice"><input type="radio" name="clientType" value={v} required /><span class="dot" aria-hidden="true"></span><span>{l}</span></label>
+          ))}
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="form-step" data-step="2" aria-labelledby="s2-title">
+      <h2 id="s2-title">{lang === 'fr' ? 'Quelle est la nature de votre demande ?' : 'What is the nature of your request?'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Choisissez la catégorie la plus proche. Nous affinerons ensemble.' : 'Choose the closest category. We will refine it together.'}</p>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend class="field-label">{lang === 'fr' ? 'Nature de la demande' : 'Nature of the request'}<span aria-hidden="true"> *</span></legend>
+        <div class="choices">
+          {opts.request.map(([v, l]) => (
+            <label class="choice"><input type="radio" name="requestType" value={v} required /><span class="dot" aria-hidden="true"></span><span>{l}</span></label>
+          ))}
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- Step 3 -->
+    <section class="form-step" data-step="3" aria-labelledby="s3-title">
+      <h2 id="s3-title">{lang === 'fr' ? 'Où se situe votre besoin ?' : 'Where is your need located?'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Indiquez les territoires concernés, même de manière approximative.' : 'Indicate the territories involved, even approximately.'}</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="country">{lang === 'fr' ? 'Pays principal' : 'Main country'}<span aria-hidden="true"> *</span></label>
+          <select id="country" name="country" required>
+            <option value="">{lang === 'fr' ? 'Sélectionner' : 'Select'}</option>
+            {countries.map(([v, l]) => <option value={v}>{l}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="city">{lang === 'fr' ? 'Ville ou région' : 'City or region'}<span aria-hidden="true"> *</span></label>
+          <input type="text" id="city" name="city" autocomplete="address-level2" required maxlength="120" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="area">{lang === 'fr' ? 'Zone d’intervention' : 'Area of work'}</label>
+        <input type="text" id="area" name="area" maxlength="200" placeholder={lang === 'fr' ? 'Ex. : Genève et Vaud' : 'e.g. Geneva and Vaud'} />
+      </div>
+      <label class="check-line" style="margin-top:4px">
+        <input type="checkbox" id="multi" name="multi" value="yes" />
+        <span>{lang === 'fr' ? 'Le dossier concerne plusieurs pays' : 'The matter involves several countries'}</span>
+      </label>
+      <div class="field" id="multi-wrap" hidden>
+        <label for="multiCountries">{lang === 'fr' ? 'Pays concernés' : 'Countries involved'}</label>
+        <input type="text" id="multiCountries" name="multiCountries" maxlength="240" placeholder={lang === 'fr' ? 'Ex. : Suisse, France, Luxembourg' : 'e.g. Switzerland, France, Luxembourg'} />
+      </div>
+    </section>
+
+    <!-- Step 4 -->
+    <section class="form-step" data-step="4" aria-labelledby="s4-title">
+      <h2 id="s4-title">{lang === 'fr' ? 'Décrivez votre besoin' : 'Describe your need'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Restez général à ce stade. Ne transmettez ni document, ni donnée particulièrement sensible.' : 'Keep it general at this stage. Do not send documents or particularly sensitive data.'}</p>
+      <div class="field" style="background:#FBF7EE;border-left:2px solid var(--gold);padding:12px 14px;font-size:.85rem;color:var(--muted)">
+        {lang === 'fr' ? 'Nous vous déconseillons de transmettre des documents ou des données très sensibles lors de ce premier contact.' : 'We advise against sending documents or highly sensitive data at this first contact.'}
+      </div>
+      <div class="field">
+        <label for="description">{lang === 'fr' ? 'Nature générale du besoin' : 'General nature of the need'}<span aria-hidden="true"> *</span></label>
+        <textarea id="description" name="description" required minlength="30" maxlength="2000" placeholder={lang === 'fr' ? 'Contexte, question à laquelle vous cherchez une réponse, décision à éclairer…' : 'Context, the question you need answered, the decision to inform…'}></textarea>
+        <p class="hint">{lang === 'fr' ? '30 à 2 000 caractères.' : '30 to 2,000 characters.'}</p>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="urgency">{lang === 'fr' ? 'Niveau d’urgence' : 'Urgency level'}<span aria-hidden="true"> *</span></label>
+          <select id="urgency" name="urgency" required>
+            <option value="">{lang === 'fr' ? 'Sélectionner' : 'Select'}</option>
+            {opts.urgency.map(([v, l]) => <option value={v}>{l}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="timeframe">{lang === 'fr' ? 'Délai souhaité' : 'Desired timeframe'}</label>
+          <input type="text" id="timeframe" name="timeframe" maxlength="120" placeholder={lang === 'fr' ? 'Ex. : avant fin novembre' : 'e.g. before end of November'} />
+        </div>
+      </div>
+      <div class="field">
+        <label for="budget">{lang === 'fr' ? 'Budget indicatif (facultatif)' : 'Indicative budget (optional)'}</label>
+        <select id="budget" name="budget">
+          {opts.budget.map(([v, l]) => <option value={v}>{l}</option>)}
+        </select>
+      </div>
+    </section>
+
+    <!-- Step 5 -->
+    <section class="form-step" data-step="5" aria-labelledby="s5-title">
+      <h2 id="s5-title">{lang === 'fr' ? 'Comment pouvons-nous vous joindre ?' : 'How can we reach you?'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Un nom ou un pseudonyme suffit pour le premier échange.' : 'A name or pseudonym is enough for the first exchange.'}</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="name">{lang === 'fr' ? 'Nom ou pseudonyme' : 'Name or pseudonym'}<span aria-hidden="true"> *</span></label>
+          <input type="text" id="name" name="name" autocomplete="name" required maxlength="120" />
+        </div>
+        <div class="field">
+          <label for="email">{lang === 'fr' ? 'E-mail' : 'Email'}<span aria-hidden="true"> *</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" required maxlength="180" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="phone">{lang === 'fr' ? 'Téléphone (facultatif)' : 'Phone (optional)'}</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="40" />
+        </div>
+        <div class="field">
+          <label for="contactPref">{lang === 'fr' ? 'Moyen de contact préféré' : 'Preferred contact method'}</label>
+          <select id="contactPref" name="contactPref">
+            {opts.pref.map(([v, l]) => <option value={v}>{l}</option>)}
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="language">{lang === 'fr' ? 'Langue souhaitée' : 'Preferred language'}</label>
+        <select id="language" name="language">
+          {opts.language.map(([v, l]) => <option value={v}>{l}</option>)}
+        </select>
+      </div>
+    </section>
+
+    <!-- Step 6 -->
+    <section class="form-step" data-step="6" aria-labelledby="s6-title">
+      <h2 id="s6-title">{lang === 'fr' ? 'Vérifiez votre demande' : 'Review your request'}</h2>
+      <p class="step-intro">{lang === 'fr' ? 'Vous pouvez modifier chaque partie avant l’envoi.' : 'You can edit any part before sending.'}</p>
+      <div class="summary" id="summary"></div>
+      <div class="summary-edit" id="summary-edit">
+        <span>{lang === 'fr' ? 'Modifier :' : 'Edit:'}</span>
+        <button type="button" data-goto="1">{lang === 'fr' ? 'profil' : 'profile'}</button>
+        <button type="button" data-goto="2">{lang === 'fr' ? 'demande' : 'request'}</button>
+        <button type="button" data-goto="3">{lang === 'fr' ? 'localisation' : 'location'}</button>
+        <button type="button" data-goto="4">{lang === 'fr' ? 'description' : 'description'}</button>
+        <button type="button" data-goto="5">{lang === 'fr' ? 'contact' : 'contact'}</button>
+      </div>
+      <label class="check-line">
+        <input type="checkbox" id="consent" name="consent" required />
+        <span>{T.consent} <a href={`/${lang}/legal/privacy/`} target="_blank" rel="noopener" style="border-bottom:1px solid var(--gold)">{T.privacy}</a>.</span>
+      </label>
+      <input type="text" name="company_website" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px" />
+      <p style="font-size:.78rem;color:var(--steel);margin-top:14px">
+        {lang === 'fr'
+          ? 'Ce formulaire est protégé par Google reCAPTCHA Enterprise. Aucun score de risque n’est affiché.'
+          : 'This form is protected by Google reCAPTCHA Enterprise. No risk score is displayed.'}
+      </p>
+    </section>
+
+    <div class="form-nav">
+      <button type="button" class="btn btn--outline" id="btn-prev" hidden>{T.prev}</button>
+      <button type="button" class="btn btn--gold" id="btn-next">{T.next}</button>
+      <button type="submit" class="btn btn--gold" id="btn-submit" hidden>{T.submit}</button>
+    </div>
+  </form>
+
+  <div class="form-success" id="form-success" hidden>
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h2>{T.successTitle}</h2>
+    <p>{T.successText}</p>
+    <p style="font-size:.82rem;color:var(--steel)">{T.successNote}</p>
+    <a class="btn btn--outline" href={`/${lang}/`}>{lang === 'fr' ? 'Retour à l’accueil' : 'Back to home'}</a>
+  </div>
+</div>
+
+<script type="application/json" id="form-i18n" set:html={JSON.stringify(T)}></script>
+<script type="application/json" id="form-opts" set:html={JSON.stringify(opts)}></script>
+<script is:inline define:vars={{ SITE_KEY: siteKey, LANG: lang, ACTIONS: { contact: 'CONFIDENTIAL_CONTACT', callback: 'CALLBACK_REQUEST' } }}>
+  (function () {
+    var form = document.getElementById('case-form');
+    if (!form) return;
+    var T = JSON.parse(document.getElementById('form-i18n').textContent);
+    var OPTS = JSON.parse(document.getElementById('form-opts').textContent);
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.form-step'));
+    var bars = Array.prototype.slice.call(document.querySelectorAll('[data-bar]'));
+    var label = document.getElementById('step-label');
+    var btnPrev = document.getElementById('btn-prev');
+    var btnNext = document.getElementById('btn-next');
+    var btnSubmit = document.getElementById('btn-submit');
+    var errBox = document.getElementById('form-error');
+    var summary = document.getElementById('summary');
+    var current = 1;
+    var STORE = 'rainbownet_case_v1';
+
+    function showError(msg) { errBox.textContent = msg; errBox.classList.add('is-visible'); errBox.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    function clearError() { errBox.textContent = ''; errBox.classList.remove('is-visible'); }
+
+    function go(n) {
+      if (n < 1 || n > steps.length) return;
+      if (n > current && !validate(current)) return;
+      current = n;
+      steps.forEach(function (s) { s.classList.toggle('is-active', Number(s.dataset.step) === n); });
+      bars.forEach(function (b, i) { b.classList.toggle('done', i < n); });
+      label.textContent = T.step + ' ' + n + ' ' + T.of + ' ' + steps.length + ' — ' + T.stepLabels[n - 1];
+      btnPrev.hidden = n === 1;
+      btnNext.hidden = n === steps.length;
+      btnSubmit.hidden = n !== steps.length;
+      if (n === steps.length) buildSummary();
+      clearError();
+      var h = steps[n - 1].querySelector('h2');
+      if (h) h.focus({ preventScroll: true });
+      window.scrollTo({ top: document.getElementById('confidential-form').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function fieldError(el, msg) {
+      el.setAttribute('aria-invalid', 'true');
+      if (typeof el.reportValidity === 'function' && !el.checkValidity()) { el.reportValidity(); }
+      showError(msg);
+      el.focus({ preventScroll: false });
+      return false;
+    }
+
+    function validate(n) {
+      var step = steps[n - 1];
+      var ok = true;
+      var req = step.querySelectorAll('[required]');
+      req.forEach(function (el) {
+        if (el.type === 'radio') {
+          var group = step.querySelectorAll('input[name="' + el.name + '"]');
+          var checked = Array.prototype.some.call(group, function (r) { return r.checked; });
+          if (!checked) { ok = fieldError(el, T.chooseOne); }
+        } else if (el.type === 'checkbox') {
+          if (!el.checked) { ok = fieldError(el, T.consentError); }
+        } else if (!el.value.trim()) {
+          ok = fieldError(el, T.required);
+        } else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim())) {
+          ok = fieldError(el, T.invalidEmail);
+        } else if (el.id === 'description' && el.value.trim().length < 30) {
+          ok = fieldError(el, LANG === 'fr' ? 'Merci de préciser votre besoin (30 caractères minimum).' : 'Please describe your need (at least 30 characters).');
+        } else {
+          el.removeAttribute('aria-invalid');
+        }
+        return ok;
+      });
+      return ok;
+    }
+
+    function val(name) {
+      var el = form.elements[name];
+      if (!el) return '';
+      if (el.length && el[0] && el[0].type === 'radio') {
+        for (var i = 0; i < el.length; i++) if (el[i].checked) return el[i].value;
+        return '';
+      }
+      if (el.type === 'checkbox') return el.checked ? (el.value || 'yes') : '';
+      return el.value ? el.value.trim() : '';
+    }
+    function labelFor(list, v) { for (var i = 0; i < list.length; i++) if (list[i][0] === v) return list[i][1]; return v || T.recapEmpty; }
+
+    function buildSummary() {
+      var rows = [
+        [LANG === 'fr' ? 'Type de client' : 'Client type', labelFor(OPTS.client, val('clientType'))],
+        [LANG === 'fr' ? 'Nature' : 'Nature', labelFor(OPTS.request, val('requestType'))],
+        [LANG === 'fr' ? 'Pays' : 'Country', labelFor([['CH','Suisse / Switzerland'],['FR','France'],['GB','United Kingdom'],['BE','Belgium'],['DE','Germany'],['IT','Italy'],['ES','Spain'],['LU','Luxembourg'],['NL','Netherlands'],['AT','Austria'],['PT','Portugal'],['other', LANG === 'fr' ? 'Autre / plusieurs pays' : 'Other / several countries']], val('country'))],
+        [LANG === 'fr' ? 'Ville / région' : 'City / region', val('city')],
+        [LANG === 'fr' ? 'Zone' : 'Area', val('area')],
+        [LANG === 'fr' ? 'Plusieurs pays' : 'Several countries', val('multi') ? (val('multiCountries') || (LANG === 'fr' ? 'Oui' : 'Yes')) : (LANG === 'fr' ? 'Non' : 'No')],
+        [LANG === 'fr' ? 'Urgence' : 'Urgency', labelFor(OPTS.urgency, val('urgency'))],
+        [LANG === 'fr' ? 'Délai' : 'Timeframe', val('timeframe')],
+        [LANG === 'fr' ? 'Budget' : 'Budget', labelFor(OPTS.budget, val('budget'))],
+        [LANG === 'fr' ? 'Nom' : 'Name', val('name')],
+        ['E-mail', val('email')],
+        [LANG === 'fr' ? 'Téléphone' : 'Phone', val('phone')],
+        [LANG === 'fr' ? 'Contact préféré' : 'Preferred contact', labelFor(OPTS.pref, val('contactPref'))],
+        [LANG === 'fr' ? 'Langue' : 'Language', labelFor(OPTS.language, val('language'))]
+      ];
+      var html = '<dl>' + rows.map(function (r) {
+        return '<dt>' + r[0] + '</dt><dd>' + (String(r[1] || T.recapEmpty).replace(/[<>&]/g, '')) + '</dd>';
+      }).join('') + '<dt>' + (LANG === 'fr' ? 'Description' : 'Description') + '</dt><dd>' + (String(val('description')).replace(/[<>&]/g, '')) + '</dd></dl>';
+      summary.innerHTML = html;
+    }
+
+    function collect() {
+      return {
+        form: 'case_assessment',
+        lang: LANG,
+        clientType: val('clientType'), requestType: val('requestType'),
+        country: val('country'), city: val('city'), area: val('area'),
+        multi: !!val('multi'), multiCountries: val('multiCountries'),
+        description: val('description'), urgency: val('urgency'), timeframe: val('timeframe'), budget: val('budget'),
+        name: val('name'), email: val('email'), phone: val('phone'),
+        contactPref: val('contactPref'), language: val('language'),
+        company_website: document.getElementById('hp').value
+      };
+    }
+
+    function saveDraft() {
+      try {
+        var data = collect(); delete data.company_website;
+        sessionStorage.setItem(STORE, JSON.stringify({ data: data, step: current, at: Date.now() }));
+      } catch (e) {}
+    }
+    function restoreDraft() {
+      try {
+        var raw = sessionStorage.getItem(STORE); if (!raw) return;
+        var d = JSON.parse(raw);
+        if (!d || Date.now() - d.at > 1000 * 60 * 60 * 6) { sessionStorage.removeItem(STORE); return; }
+        Object.keys(d.data).forEach(function (k) {
+          var els = form.querySelectorAll('[name="' + k + '"]');
+          if (!els.length) return;
+          if (els[0].type === 'radio') { els.forEach(function (e) { e.checked = e.value === d.data[k]; }); }
+          else if (els[0].type === 'checkbox') { els[0].checked = !!d.data[k]; }
+          else { els[0].value = d.data[k] || ''; }
+        });
+        var multi = document.getElementById('multi');
+        document.getElementById('multi-wrap').hidden = !(multi && multi.checked);
+        if (d.step > 1 && d.step <= steps.length) go(2);
+      } catch (e) {}
+    }
+
+    form.addEventListener('input', saveDraft);
+    form.addEventListener('change', function (e) {
+      if (e.target && e.target.id === 'multi') document.getElementById('multi-wrap').hidden = !e.target.checked;
+      saveDraft();
+    });
+    btnNext.addEventListener('click', function () { go(current + 1); });
+    btnPrev.addEventListener('click', function () { go(current - 1); });
+    document.querySelectorAll('#summary-edit [data-goto]').forEach(function (b) {
+      b.addEventListener('click', function () { go(Number(b.dataset.goto)); });
+    });
+    form.addEventListener('submit', function (e) { e.preventDefault(); submit(); });
+
+    async function getToken() {
+      if (!SITE_KEY || !window.grecaptcha || !window.grecaptcha.enterprise) return '';
+      try {
+        await new Promise(function (res) { window.grecaptcha.enterprise.ready(res); });
+        return await window.grecaptcha.enterprise.execute(SITE_KEY, { action: ACTIONS.contact });
+      } catch (err) { return ''; }
+    }
+
+    async function submit() {
+      if (!validate(steps.length)) return;
+      clearError();
+      btnSubmit.disabled = true;
+      var original = btnSubmit.textContent;
+      btnSubmit.textContent = T.sending;
+      try {
+        var token = await getToken();
+        var payload = collect();
+        payload.recaptchaToken = token;
+        payload.action = ACTIONS.contact;
+        payload.consent = document.getElementById('consent').checked;
+        var res = await fetch('/api/contact', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        var data = await res.json().catch(function () { return {}; });
+        if (res.ok && data.ok) {
+          form.hidden = true;
+          document.getElementById('form-success').hidden = false;
+          try { sessionStorage.removeItem(STORE); } catch (e) {}
+          window.scrollTo({ top: document.getElementById('confidential-form').offsetTop - 100, behavior: 'smooth' });
+          return;
+        }
+        if (res.status === 403 || res.status === 429) showError(T.err);
+        else if (res.status === 503) showError(LANG === 'fr' ? 'Le service de contact est momentanément indisponible. Veuillez réessayer plus tard.' : 'The contact service is temporarily unavailable. Please try again later.');
+        else showError(T.net);
+      } catch (err) {
+        showError(T.net);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = original;
+      }
+    }
+
+    restoreDraft();
+    bars[0].classList.add('done');
+  })();
+</script>
+
+<script is:inline define:vars={{ SITE_KEY: siteKey }}>
+  (function () {
+    if (!SITE_KEY) return;
+    var s = document.createElement('script');
+    s.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(SITE_KEY);
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  })();
+</script>

@@ -1,0 +1,37 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { UI, type Lang } from '../../../content/site';
+import { LEGAL } from '../../../content/pages';
+
+export function getStaticPaths() {
+  return ['fr', 'en'].flatMap((lang) => ['legal-notice', 'privacy', 'cookies'].map((slug) => ({ params: { lang, slug } })));
+}
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const t = UI[lang];
+const c = (LEGAL[lang] as any)[slug];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug={`/legal/${slug}/`} title={c.metaTitle} description={c.metaDescription} noindex={false}>
+  <section class="section section--ivory" style="padding-top:calc(var(--header-h) + 64px)">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={L('/')}>{t.breadcrumbHome}</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{c.title}</span>
+      </nav>
+      <div class="narrow">
+        <p class="eyebrow">{lang === 'fr' ? 'Informations légales' : 'Legal information'}</p>
+        <h1 style="font-size:clamp(2rem,4vw,3rem)">{c.title}</h1>
+        <p class="lead" style="margin:18px 0 40px">{c.intro}</p>
+        <div class="prose" style="max-width:none">
+          {c.body.map((b: any) => (<><h2>{b.h2}</h2><Fragment set:html={b.html} /></>))}
+        </div>
+        <div style="margin-top:44px;padding-top:22px;border-top:1px solid rgba(16,30,44,.12);display:flex;gap:22px;flex-wrap:wrap;font-size:.85rem">
+          <a class="link-arrow" href={L('/legal/legal-notice/')}>{t.legal}</a>
+          <a class="link-arrow" href={L('/legal/privacy/')}>{t.privacy}</a>
+          <a class="link-arrow" href={L('/legal/cookies/')}>{t.cookies}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

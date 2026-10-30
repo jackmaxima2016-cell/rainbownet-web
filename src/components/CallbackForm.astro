@@ -1,0 +1,104 @@
+---
+import type { Lang } from '../content/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const siteKey = (import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '').trim();
+const T = lang === 'fr' ? {
+  sending: 'Envoi…', ok: 'Votre demande de rappel a été transmise. Nous vous appellerons avec discrétion.',
+  err: 'Nous n’avons pas pu vérifier votre demande. Veuillez réessayer.',
+  net: 'La transmission a échoué. Vérifiez votre connexion et réessayez.',
+  consentErr: 'Veuillez accepter le traitement de vos données pour être rappelé.',
+  required: 'Ce champ est requis.', invalidPhone: 'Veuillez saisir un numéro valide.',
+  labels: { name: 'Nom ou pseudonyme', phone: 'Téléphone', slot: 'Créneau souhaité', lang: 'Langue souhaitée', when: 'Quand pouvons-nous vous appeler ?', morning: 'Matin (9h–12h)', afternoon: 'Après-midi (14h–18h)', evening: 'Fin de journée (18h–20h)', any: 'Peu importe' },
+  consent: 'J’accepte d’être contacté par téléphone au sujet de ma demande et j’ai pris connaissance de la politique de confidentialité.',
+  submit: 'Demander un rappel'
+} : {
+  sending: 'Sending…', ok: 'Your call back request has been sent. We will call you discreetly.',
+  err: 'We couldn’t verify your request. Please try again.',
+  net: 'Submission failed. Check your connection and try again.',
+  consentErr: 'Please agree to the processing of your details so we can call you back.',
+  required: 'This field is required.', invalidPhone: 'Please enter a valid phone number.',
+  labels: { name: 'Name or pseudonym', phone: 'Phone', slot: 'Preferred time', lang: 'Preferred language', when: 'When can we call you?', morning: 'Morning (9–12)', afternoon: 'Afternoon (14–18)', evening: 'End of day (18–20)', any: 'Any time' },
+  consent: 'I agree to be contacted by phone about my request and have read the privacy policy.',
+  submit: 'Request a call back'
+};
+---
+<div class="callback" id="callback">
+  <h3>{lang === 'fr' ? 'Demander un rappel confidentiel' : 'Request a confidential call back'}</h3>
+  <p>{lang === 'fr' ? 'Si vous préférez un échange oral, indiquez un numéro et un créneau. Nous vous rappelons avec discrétion.' : 'If you prefer to speak, give us a number and a time window. We call back discreetly.'}</p>
+  <div class="form-error" id="cb-error" role="alert"></div>
+  <form id="callback-form" novalidate>
+    <div class="field-row">
+      <div class="field">
+        <label for="cb-name">{T.labels.name}<span aria-hidden="true"> *</span></label>
+        <input type="text" id="cb-name" name="name" required maxlength="120" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="cb-phone">{T.labels.phone}<span aria-hidden="true"> *</span></label>
+        <input type="tel" id="cb-phone" name="phone" required maxlength="40" autocomplete="tel" />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="cb-slot">{T.labels.when}</label>
+        <select id="cb-slot" name="slot">
+          <option value="any">{T.labels.any}</option>
+          <option value="morning">{T.labels.morning}</option>
+          <option value="afternoon">{T.labels.afternoon}</option>
+          <option value="evening">{T.labels.evening}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="cb-lang">{T.labels.lang}</label>
+        <select id="cb-lang" name="language">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="other">{lang === 'fr' ? 'Autre' : 'Other'}</option>
+        </select>
+      </div>
+    </div>
+    <label class="check-line">
+      <input type="checkbox" id="cb-consent" required />
+      <span>{T.consent}</span>
+    </label>
+    <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px" />
+    <button type="submit" class="btn btn--navy" id="cb-submit" style="width:100%">{T.submit}</button>
+  </form>
+  <div id="cb-success" hidden style="margin-top:14px;padding:14px 16px;background:#EFF4EC;border:1px solid #BFD3B2;font-size:.88rem;color:#2F4A26">{T.ok}</div>
+</div>
+
+<script is:inline define:vars={{ SITE_KEY: siteKey, LANG: lang, ACTION: 'CALLBACK_REQUEST', MSG: T }}>
+  (function () {
+    var form = document.getElementById('callback-form');
+    if (!form) return;
+    var errBox = document.getElementById('cb-error');
+    function err(m) { errBox.textContent = m; errBox.classList.add('is-visible'); }
+    function clear() { errBox.textContent = ''; errBox.classList.remove('is-visible'); }
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); clear();
+      var name = document.getElementById('cb-name'), phone = document.getElementById('cb-phone'), consent = document.getElementById('cb-consent');
+      if (!name.value.trim()) { err(MSG.required); name.focus(); return; }
+      if (!phone.value.trim() || phone.value.replace(/[^\d+]/g, '').length < 7) { err(MSG.invalidPhone); phone.focus(); return; }
+      if (!consent.checked) { err(MSG.consentErr); consent.focus(); return; }
+      var btn = document.getElementById('cb-submit'); var orig = btn.textContent;
+      btn.disabled = true; btn.textContent = MSG.sending;
+      try {
+        var token = '';
+        if (SITE_KEY && window.grecaptcha && window.grecaptcha.enterprise) {
+          await new Promise(function (res) { window.grecaptcha.enterprise.ready(res); });
+          token = await window.grecaptcha.enterprise.execute(SITE_KEY, { action: ACTION });
+        }
+        var res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          form: 'callback', lang: LANG, name: name.value.trim(), phone: phone.value.trim(),
+          slot: document.getElementById('cb-slot').value, language: document.getElementById('cb-lang').value,
+          consent: consent.checked, recaptchaToken: token, action: ACTION,
+          company_website: form.elements['company_website'].value
+        }) });
+        var data = await res.json().catch(function () { return {}; });
+        if (res.ok && data.ok) { form.hidden = true; document.getElementById('cb-success').hidden = false; return; }
+        err(res.status === 403 || res.status === 429 ? MSG.err : (res.status === 503 ? (LANG === 'fr' ? 'Service momentanément indisponible. Réessayez plus tard.' : 'Service temporarily unavailable. Please try again later.') : MSG.net));
+      } catch (e2) { err(MSG.net); }
+      finally { btn.disabled = false; btn.textContent = orig; }
+    });
+  })();
+</script>

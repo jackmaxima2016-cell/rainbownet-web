@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Img from '../../components/Img.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { UI, type Lang } from '../../content/site';
+import { APPROACH } from '../../content/pages';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = APPROACH[lang];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug="/approach/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Notre méthode' : 'Our approach' }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="process reveal" style="border-color:rgba(16,30,44,.12)">
+        {c.steps.map((s: any) => (
+          <div class="process-step">
+            <span class="process-num">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Principes' : 'Principles'}</p>
+        <h2>{c.principlesTitle}</h2>
+      </div>
+      <div class="grid grid-4">
+        {c.principles.map((p: any) => (
+          <div class="pillar reveal" style="border-color:rgba(16,30,44,.12)">
+            <h3>{p.title}</h3><p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{lang === 'fr' ? 'Cadre' : 'Framework'}</p>
+          <h2>{c.legalTitle}</h2>
+          <div class="split-media" style="margin-top:34px">
+            <Img name="confidentiality" alt={lang === 'fr' ? 'Espace de travail discret' : 'Discreet workspace'} sizes="(max-width:900px) 100vw, 45vw" />
+          </div>
+        </div>
+        <div class="reveal" style="color:rgba(245,242,233,.78)">
+          {c.legalText.map((p: string) => <p style="margin-bottom:1.1em">{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

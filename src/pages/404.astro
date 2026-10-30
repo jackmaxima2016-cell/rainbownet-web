@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+const lang = 'fr';
+---
+<Base lang="fr" slug="/" title="Page introuvable — RAINBOWNET" description="La page demandée n’existe pas ou a été déplacée." noindex={true}>
+  <section class="section section--navy" style="min-height:80vh;display:flex;align-items:center;padding-top:calc(var(--header-h) + 60px)">
+    <div class="container">
+      <p class="eyebrow">Erreur 404</p>
+      <h1 style="max-width:18ch">Cette page n’existe pas ou a été déplacée.</h1>
+      <p class="lead" style="max-width:52ch;margin:20px 0 30px">Vous pouvez revenir à l’accueil, consulter nos services ou nous contacter de manière confidentielle.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--gold" href="/fr/">Accueil</a>
+        <a class="btn btn--ghost" href="/fr/services/">Services</a>
+        <a class="btn btn--ghost" href="/fr/contact/">Consultation confidentielle</a>
+      </div>
+    </div>
+  </section>
+</Base>

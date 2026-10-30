@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import EuropeMap from '../../components/EuropeMap.astro';
+import { UI, type Lang } from '../../content/site';
+import { COVERAGE } from '../../content/pages';
+import cities from '../../content/cities.json';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = COVERAGE[lang];
+const L = (p: string) => `/${lang}${p}`;
+const points = (cities as any[]).map((x) => ({ slug: x.slug, city: x, lat: x.lat, lng: x.lng }));
+---
+<Base lang={lang} slug="/coverage/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: t.coverageTitle }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Carte' : 'Map'}</p>
+        <h2>{lang === 'fr' ? 'Genève au centre, les capitales en réseau' : 'Geneva at the centre, capitals in a network'}</h2>
+        <p>{t.coverageIntro}</p>
+      </div>
+      <div class="reveal"><EuropeMap lang={lang} cities={points} /></div>
+      <div class="city-list" style="margin-top:clamp(32px,4vw,52px)">
+        {(cities as any[]).map((x) => (
+          <a href={L(`/locations/${x.slug}/`)}><span>{x[lang].name}</span><span class="cc">{x.countryCode}</span></a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="prose reveal" style="max-width:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(24px,4vw,56px)">
+        {c.sections.map((s: any) => (
+          <div><h2>{s.h2}</h2>{s.body.map((p: string) => <p>{p}</p>)}</div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

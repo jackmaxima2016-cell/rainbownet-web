@@ -1,0 +1,53 @@
+---
+import map from '../content/europe-map.json';
+
+interface City { slug: string; city: Record<string, string> | string; lat: number; lng: number }
+interface Props { lang: 'fr' | 'en'; cities: City[]; compact?: boolean }
+const { lang, cities, compact = false } = Astro.props;
+
+const { width: W, height: H, bbox } = map as any;
+const merc = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (Math.max(-85, Math.min(85, lat)) * Math.PI) / 360) * 2) / 2;
+
+// Same Mercator projection as scripts/build_map.py
+function mercY(lat: number) {
+  const l = Math.max(-85, Math.min(85, lat));
+  return Math.log(Math.tan(Math.PI / 4 + (l * Math.PI) / 180 / 2));
+}
+const Y0 = mercY(bbox.lat0);
+const Y1 = mercY(bbox.lat1);
+function project(lon: number, lat: number) {
+  const x = ((lon - bbox.lon0) / (bbox.lon1 - bbox.lon0)) * W;
+  const y = ((Y1 - mercY(lat)) / (Y1 - Y0)) * H;
+  return [x, y];
+}
+const points = cities.map((c) => {
+  const [x, y] = project(c.lng, c.lat);
+  return { ...c, x, y };
+});
+const geneva = points.find((p) => p.slug === 'geneva');
+---
+<div class="map-wrap">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={lang === 'fr' ? 'Carte de la couverture européenne de RAINBOWNET' : 'Map of RAINBOWNET European coverage'}>
+    <g>
+      {(map as any).countries.map((c: any) => (
+        <path class="map-country" d={c.d}><title>{c.name}</title></path>
+      ))}
+    </g>
+    {geneva && (
+      <g>
+        <circle cx={geneva.x} cy={geneva.y} r="12" fill="none" stroke="#D9B77A" stroke-width="1" opacity=".45" />
+        <circle cx={geneva.x} cy={geneva.y} r="5" fill="#D9B77A" stroke="#0B1621" stroke-width="1.4" />
+        <text x={geneva.x + 10} y={geneva.y + 4} class="map-label" fill="#F5F2E9" font-weight="600">Genève</text>
+      </g>
+    )}
+    {!compact && points.filter((p) => p.slug !== 'geneva').map((p) => (
+      <a class="map-link" href={`/${lang}/locations/${p.slug}/`}>
+        <g>
+          <circle cx={p.x} cy={p.y} r="8" fill="transparent" />
+          <circle class="map-node" cx={p.x} cy={p.y} r="4.2" />
+          <title>{lang === 'fr' ? (p.city as any).fr?.name : (p.city as any).en?.name}</title>
+        </g>
+      </a>
+    ))}
+  </svg>
+</div>

@@ -1,0 +1,35 @@
+---
+import Img from './Img.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  text?: string;
+  image: string;
+  alt: string;
+  breadcrumbs?: { label: string; href?: string }[];
+}
+const { eyebrow, title, text, image, alt, breadcrumbs = [] } = Astro.props;
+---
+<section class="page-hero">
+  <div class="hero-media">
+    <Img name={image} alt={alt} sizes="100vw" priority={true} />
+  </div>
+  <div class="hero-content">
+    <div class="container">
+      {breadcrumbs.length > 0 && (
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          {breadcrumbs.map((b, i) => (
+            <>
+              {b.href ? <a href={b.href}>{b.label}</a> : <span aria-current="page">{b.label}</span>}
+              {i < breadcrumbs.length - 1 && <span aria-hidden="true">/</span>}
+            </>
+          ))}
+        </nav>
+      )}
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      {text && <p class="hero-text">{text}</p>}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,66 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Img from '../../../components/Img.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { UI, type Lang } from '../../../content/site';
+import insights from '../../../content/insights.json';
+
+export function getStaticPaths() {
+  return ['fr', 'en'].flatMap((lang) => (insights as any[]).map((a) => ({ params: { lang, slug: a.slug } })));
+}
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const t = UI[lang];
+const a = (insights as any[]).find((x) => x.slug === slug)!;
+const c = a[lang];
+const L = (p: string) => `/${lang}${p}`;
+const fmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CH' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const date = fmt.format(new Date(a.date));
+const others = (insights as any[]).filter((x) => x.slug !== slug).slice(0, 3);
+---
+<Base lang={lang} slug={`/insights/${slug}/`} title={c.seoTitle} description={c.seoDescription} image={a.image} imageAlt={c.alt}
+  schema={{ '@context': 'https://schema.org', '@type': 'Article', headline: c.title, description: c.seoDescription, datePublished: a.date, dateModified: a.date, inLanguage: lang, image: `https://rainbownet.ch/images/${a.image}-1600.webp`, author: { '@id': 'https://rainbownet.ch/#organization' }, publisher: { '@id': 'https://rainbownet.ch/#organization' }, mainEntityOfPage: `https://rainbownet.ch/${lang}/insights/${slug}/` }}>
+  <article>
+    <PageHero
+      eyebrow={a.category[lang]} title={c.title} text="" image={a.image} alt={c.alt}
+      breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Ressources' : 'Insights', href: L('/insights/') }, { label: a.category[lang] }]}
+    />
+    <section class="section section--ivory">
+      <div class="container">
+        <div class="narrow" style="margin:0 auto">
+          <div class="article-meta" style="margin-bottom:30px">
+            <span>{t.published} {date}</span><span>·</span><span>{a.readingMinutes} {t.readingTime}</span>
+          </div>
+          <p class="lead" style="margin-bottom:34px">{c.excerpt}</p>
+          <div class="prose" set:html={c.body.join('')} />
+          <div style="margin-top:46px;padding-top:26px;border-top:1px solid rgba(16,30,44,.12);display:flex;gap:14px;flex-wrap:wrap">
+            <a class="btn btn--navy" href={L('/contact/')}>{t.cta}</a>
+            <a class="btn btn--outline" href={L('/insights/')}>{t.allInsights}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <section class="section section--white section--tight">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">{lang === 'fr' ? 'À lire également' : 'Further reading'}</p><h2>{t.allInsights}</h2></div>
+      <div class="grid grid-3">
+        {others.map((x: any) => (
+          <a class="article-card reveal" href={L(`/insights/${x.slug}/`)}>
+            <div class="article-card-media"><Img name={x.image} alt={x[lang].alt} sizes="(max-width:640px) 100vw, 33vw" /></div>
+            <div class="article-card-body">
+              <div class="article-meta"><span>{x.category[lang]}</span></div>
+              <h3>{x[lang].title}</h3><p>{x[lang].excerpt}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={lang === 'fr' ? 'Une situation concrète à examiner ?' : 'A specific situation to review?'}
+    text={lang === 'fr' ? 'Le formulaire confidentiel permet de décrire votre besoin en quelques étapes, sans document sensible.' : 'The confidential form lets you describe your need in a few steps, with no sensitive documents.'}
+    buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

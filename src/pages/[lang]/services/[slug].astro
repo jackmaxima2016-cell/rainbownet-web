@@ -1,0 +1,98 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Img from '../../../components/Img.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import Faq from '../../../components/Faq.astro';
+import { UI, type Lang } from '../../../content/site';
+import services from '../../../content/services.json';
+
+export function getStaticPaths() {
+  return ['fr', 'en'].flatMap((lang) => (services as any[]).map((s) => ({ params: { lang, slug: s.slug } })));
+}
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const t = UI[lang];
+const svc = (services as any[]).find((s) => s.slug === slug)!;
+const c = svc[lang];
+const L = (p: string) => `/${lang}${p}`;
+const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
+const related = (services as any[]).filter((s) => s.slug !== slug);
+---
+<Base lang={lang} slug={`/services/${slug}/`} title={c.seoTitle} description={c.seoDescription} image={svc.image} imageAlt={c.alt}
+  schema={{ '@context': 'https://schema.org', '@type': 'Service', name: c.title, description: c.seoDescription, serviceType: c.title, areaServed: 'CH', provider: { '@id': 'https://rainbownet.ch/#organization' }, url: `https://rainbownet.ch/${lang}/services/${slug}/` }}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.intro} image={svc.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: 'Services', href: L('/services/') }, { label: c.nav }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="prose reveal">
+          {c.sections.map((s: any) => (<><h2>{s.h2}</h2>{s.body.map((p: string) => <p>{p}</p>)}</>))}
+        </div>
+        <aside class="reveal" style="display:grid;gap:24px">
+          <div style="background:var(--white);border:1px solid rgba(16,30,44,.12);padding:28px">
+            <h3 style="font-size:1.05rem">{lang === 'fr' ? 'Situations d’intervention' : 'Typical situations'}</h3>
+            <ul class="ticks">{c.situations.map((s: string) => <li>{s}</li>)}</ul>
+          </div>
+          <div style="background:var(--navy);color:var(--ivory);padding:28px">
+            <h3 style="color:var(--ivory);font-size:1.05rem">{lang === 'fr' ? 'Bénéfices attendus' : 'What you can expect'}</h3>
+            <ul class="ticks">{c.benefits.map((s: string) => <li>{s}</li>)}</ul>
+          </div>
+          <div style="background:var(--white);border:1px solid rgba(16,30,44,.12);padding:28px">
+            <h3 style="font-size:1.05rem">{lang === 'fr' ? 'Cadre légal' : 'Legal framework'}</h3>
+            <p style="font-size:.9rem;color:var(--muted);margin-bottom:0">{c.legal}</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">{lang === 'fr' ? 'Déroulement' : 'Process'}</p><h2>{lang === 'fr' ? 'Comment nous travaillons sur ce type de mandat' : 'How we handle this type of mandate'}</h2></div>
+      <div class="grid grid-4">
+        {c.method.map((m: any, i: number) => (
+          <div class="pillar reveal" style="border-color:rgba(16,30,44,.12)">
+            <span class="pillar-num">0{i + 1}</span><h3>{m.title}</h3><p>{m.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal">
+          <p class="eyebrow">{t.faqTitle}</p>
+          <h2>{lang === 'fr' ? 'Questions fréquentes' : 'Frequently asked questions'}</h2>
+          <p class="lead" style="margin-top:16px">{lang === 'fr' ? 'Une question spécifique à votre situation ? Le formulaire confidentiel permet d’obtenir une réponse adaptée.' : 'A question specific to your situation? The confidential form lets us answer precisely.'}</p>
+          <p style="margin-top:24px"><a class="btn btn--outline" href={L('/contact/')}>{t.cta}</a></p>
+        </div>
+        <div class="reveal"><Faq items={c.faq} lang={lang} /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white section--tight">
+    <div class="container">
+      <p class="eyebrow">{t.relatedServices}</p>
+      <div class="grid grid-3">
+        {related.map((s) => (
+          <a class="article-card reveal" href={L(`/services/${s.slug}/`)} style="padding:26px">
+            <h3 style="font-size:1.05rem;margin-bottom:8px">{s[lang].nav}</h3>
+            <p style="margin:0;font-size:.9rem">{s[lang].seoDescription}</p>
+            <span class="link-arrow" style="margin-top:16px">{t.readMore} <Fragment set:html={arrow} /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={lang === 'fr' ? 'Exposez-nous votre situation en toute confidentialité.' : 'Set out your situation in complete confidence.'}
+    text={lang === 'fr' ? 'Un premier échange permet de vérifier la faisabilité, le cadre légal et la méthode adaptée.' : 'A first conversation establishes feasibility, the legal framework and the right method.'}
+    buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

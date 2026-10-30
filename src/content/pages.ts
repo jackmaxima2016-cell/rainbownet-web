@@ -1,0 +1,441 @@
+import type { Lang } from './site';
+
+export const ABOUT = {
+  fr: {
+    metaTitle: 'À propos — Cabinet d’investigation privée à Genève | RAINBOWNET',
+    metaDescription: 'RAINBOWNET est une agence d’investigation privée et d’intelligence corporate basée à Genève, au service des particuliers, entreprises et professionnels du droit.',
+    eyebrow: 'Le cabinet',
+    title: 'Une agence d’investigation privée établie à Genève',
+    heroText: 'RAINBOWNET accompagne des clients exigeants qui ont besoin de faits vérifiés, d’une lecture claire d’une situation et d’une discrétion sans compromis.',
+    image: 'about-geneva',
+    alt: 'Architecture genevoise contemporaine et quartier institutionnel',
+    sections: [
+      { h2: 'Notre positionnement', body: [
+        'RAINBOWNET est une agence d’investigation privée et d’intelligence corporate établie à Genève. Nous travaillons pour des particuliers, des entreprises, des cabinets d’avocats, des family offices, des dirigeants, des institutions et des organisations internationales.',
+        'Notre approche repose sur une idée simple : une décision importante mérite des faits vérifiés, présentés avec précision et retenue. Nous ne cherchons ni l’effet, ni la visibilité. Nous cherchons la solidité de l’information.',
+      ]},
+      { h2: 'Une méthode, pas une promesse', body: [
+        'Chaque mandat commence par un examen de faisabilité et de conformité. Nous définissons ensuite un périmètre écrit, des sources identifiées et un mode de restitution adapté à votre situation.',
+        'Nos restitutions distinguent systématiquement ce qui est établi, ce qui est probable et ce qui reste incertain. Cette discipline est ce qui rend un rapport utilisable — en interne, devant un conseil d’administration ou dans le cadre d’une procédure.',
+      ]},
+      { h2: 'Ce que nous ne faisons pas', body: [
+        'Nous n’acceptons aucun mandat dont l’objet ou les méthodes seraient contraires au droit applicable. Nous n’accédons pas illicitement à des données, nous n’interceptons pas de communications, nous ne surveillons pas de lieux privés et nous n’obtenons pas de documents par des moyens trompeurs ou illégaux.',
+        'Cette exigence n’est pas une précaution de communication : elle conditionne la valeur de nos conclusions. Une preuve obtenue illégalement est une preuve fragile, et un mandat mal cadré expose notre client autant que nous.',
+      ]},
+      { h2: 'Genève, et l’Europe', body: [
+        'Genève est notre base et notre centre de coordination. Sa position, son tissu institutionnel et sa culture de la confidentialité en font un point d’ancrage naturel pour des mandats sensibles.',
+        'Depuis Genève, nous structurons des interventions dans plusieurs juridictions européennes, en tenant compte des règles locales, des autorisations éventuellement requises et des limites propres à chaque pays.',
+      ]},
+    ],
+    valuesTitle: 'Quatre exigences, sans exception',
+    ctaTitle: 'Un premier échange suffit pour savoir si nous pouvons vous aider.',
+    ctaText: 'Nous vous indiquons rapidement si votre demande relève de notre champ d’intervention, et sous quelles conditions.',
+  },
+  en: {
+    metaTitle: 'About — Private Investigation Firm in Geneva | RAINBOWNET',
+    metaDescription: 'RAINBOWNET is a private investigation and corporate intelligence firm based in Geneva, serving individuals, businesses and legal professionals.',
+    eyebrow: 'The firm',
+    title: 'A private investigation firm established in Geneva',
+    heroText: 'RAINBOWNET supports demanding clients who need verified facts, a clear reading of a situation and uncompromising discretion.',
+    image: 'about-geneva',
+    alt: 'Contemporary Geneva architecture and institutional district',
+    sections: [
+      { h2: 'Our positioning', body: [
+        'RAINBOWNET is a private investigation and corporate intelligence firm established in Geneva. We work for individuals, companies, law firms, family offices, executives, institutions and international organisations.',
+        'Our approach rests on a simple idea: an important decision deserves verified facts, presented with precision and restraint. We seek neither effect nor visibility. We seek the solidity of information.',
+      ]},
+      { h2: 'A method, not a promise', body: [
+        'Every mandate begins with a feasibility and compliance review. We then define a written scope, identified sources and a reporting format suited to your situation.',
+        'Our reports systematically distinguish what is established, what is probable and what remains uncertain. That discipline is what makes a report usable — internally, before a board, or within proceedings.',
+      ]},
+      { h2: 'What we do not do', body: [
+        'We accept no mandate whose purpose or methods would be contrary to applicable law. We do not access data unlawfully, intercept communications, monitor private premises or obtain documents through deceptive or illegal means.',
+        'This requirement is not a communications precaution: it conditions the value of our conclusions. Evidence obtained unlawfully is fragile, and a poorly framed mandate exposes our client as much as ourselves.',
+      ]},
+      { h2: 'Geneva, and Europe', body: [
+        'Geneva is our base and our coordination hub. Its position, institutional fabric and culture of confidentiality make it a natural anchor for sensitive mandates.',
+        'From Geneva, we structure work across several European jurisdictions, taking into account local rules, any authorisations required and the limits specific to each country.',
+      ]},
+    ],
+    valuesTitle: 'Four requirements, without exception',
+    ctaTitle: 'One conversation is enough to know whether we can help.',
+    ctaText: 'We tell you quickly whether your request falls within our scope, and under which conditions.',
+  },
+};
+
+export const APPROACH = {
+  fr: {
+    metaTitle: 'Notre méthode — Investigation structurée et documentée | RAINBOWNET',
+    metaDescription: 'Une méthode d’investigation en quatre étapes : premier échange, cadre légal, mandat écrit, restitution factuelle. Genève, Suisse et Europe.',
+    eyebrow: 'Notre méthode',
+    title: 'Un cadre clair, une exécution mesurée',
+    heroText: 'La qualité d’une investigation ne tient pas à la quantité d’informations collectées, mais à la solidité de ce qui est établi.',
+    image: 'approach-desk',
+    alt: 'Documents de travail et notes sur un bureau, sans donnée confidentielle',
+    steps: [
+      { n: '01', title: 'Premier échange confidentiel', text: 'Nous écoutons votre situation, identifions la décision à éclairer et vérifions qu’une investigation est pertinente. Aucun document sensible n’est requis à ce stade.' },
+      { n: '02', title: 'Examen de conformité', text: 'Nous analysons la juridiction, le fondement légal, les limites applicables et les autorisations éventuelles. Un mandat non conforme est refusé, même s’il est techniquement réalisable.' },
+      { n: '03', title: 'Mandat et méthode', text: 'Le périmètre, les questions auxquelles répondre, les sources mobilisables, le calendrier et les livrables sont fixés par écrit avant le début des travaux.' },
+      { n: '04', title: 'Restitution et suite', text: 'Nous remettons un rapport factuel et sourcé, distinguant faits établis, hypothèses et zones d’incertitude, puis restons disponibles pour en discuter les implications.' },
+    ],
+    principlesTitle: 'Principes de travail',
+    principles: [
+      { title: 'Proportionnalité', text: 'Chaque vérification doit être nécessaire au mandat. Nous n’élargissons pas le périmètre sans raison documentée.' },
+      { title: 'Traçabilité', text: 'Les sources sont identifiées et datées. Une conclusion non étayée n’est pas présentée comme un fait.' },
+      { title: 'Minimisation', text: 'Nous ne collectons pas d’informations au-delà de ce qui est utile, en particulier lorsqu’il s’agit de données personnelles.' },
+      { title: 'Retenue', text: 'Aucune communication publique, aucun référencement de client, aucune utilisation de votre dossier à des fins commerciales.' },
+    ],
+    legalTitle: 'Cadre légal et déontologie',
+    legalText: [
+      'L’activité d’investigation privée est encadrée différemment selon les pays. En Suisse, elle s’exerce dans le respect du droit fédéral et cantonal applicable, notamment en matière de protection des données. Dans l’Union européenne, le RGPD et les réglementations nationales encadrent les traitements de données personnelles.',
+      'Certaines méthodes sont interdites partout : accès non autorisé à des systèmes, interception de communications, géolocalisation de personnes sans base légale, surveillance de lieux privés. Nous ne les pratiquons pas et nous ne les sous-traitons pas.',
+      'Lorsque la loi locale exige un opérateur titulaire d’une autorisation, le mandat est structuré en conséquence. Nous vous indiquons clairement, avant tout engagement, ce qui est possible et ce qui ne l’est pas.',
+    ],
+    ctaTitle: 'Vous souhaitez comprendre comment nous traiterions votre situation ?',
+    ctaText: 'Le premier échange permet de définir un périmètre réaliste, un calendrier et un budget indicatif.',
+  },
+  en: {
+    metaTitle: 'Our Approach — Structured, Documented Investigation | RAINBOWNET',
+    metaDescription: 'A four-step investigation method: confidential first contact, legal review, written mandate, factual reporting. Geneva, Switzerland and Europe.',
+    eyebrow: 'Our approach',
+    title: 'A clear framework, measured execution',
+    heroText: 'The quality of an investigation lies not in the volume of information gathered, but in the solidity of what is established.',
+    image: 'approach-desk',
+    alt: 'Working documents and notes on a desk, with no confidential data',
+    steps: [
+      { n: '01', title: 'Confidential first contact', text: 'We listen to your situation, identify the decision to be informed and check whether an investigation is relevant. No sensitive document is required at this stage.' },
+      { n: '02', title: 'Compliance review', text: 'We examine the jurisdiction, legal basis, applicable limits and any authorisations required. A non-compliant mandate is declined, even if technically feasible.' },
+      { n: '03', title: 'Mandate and method', text: 'Scope, questions to be answered, available sources, timeline and deliverables are agreed in writing before work begins.' },
+      { n: '04', title: 'Reporting and follow-up', text: 'We deliver a factual, sourced report distinguishing established facts, hypotheses and areas of uncertainty, and remain available to discuss the implications.' },
+    ],
+    principlesTitle: 'Working principles',
+    principles: [
+      { title: 'Proportionality', text: 'Every verification must be necessary to the mandate. We do not widen the scope without documented reason.' },
+      { title: 'Traceability', text: 'Sources are identified and dated. An unsupported conclusion is never presented as fact.' },
+      { title: 'Minimisation', text: 'We do not collect information beyond what is useful, particularly where personal data is concerned.' },
+      { title: 'Restraint', text: 'No public communication, no client references, no use of your matter for commercial purposes.' },
+    ],
+    legalTitle: 'Legal framework and ethics',
+    legalText: [
+      'Private investigation activity is regulated differently from country to country. In Switzerland it is carried out in compliance with applicable federal and cantonal law, in particular data protection rules. In the European Union, the GDPR and national regulations govern the processing of personal data.',
+      'Some methods are prohibited everywhere: unauthorised access to systems, interception of communications, tracking individuals without a legal basis, and surveillance of private premises. We neither practise nor subcontract them.',
+      'Where local law requires a licensed operator, the mandate is structured accordingly. Before any engagement, we tell you clearly what is possible and what is not.',
+    ],
+    ctaTitle: 'Would you like to understand how we would handle your situation?',
+    ctaText: 'The first conversation establishes a realistic scope, a timeline and an indicative budget.',
+  },
+};
+
+export const CONFIDENTIALITY = {
+  fr: {
+    metaTitle: 'Confidentialité et protection des données | RAINBOWNET',
+    metaDescription: 'Nos engagements de confidentialité : échanges restreints, accès limité aux dossiers, collecte minimale, conservation maîtrisée. Genève, Suisse.',
+    eyebrow: 'Confidentialité',
+    title: 'La discrétion est une méthode, pas un argument',
+    heroText: 'Confidentialité des échanges, accès restreint aux dossiers, collecte minimale et restitution réservée : ce que nous mettons réellement en place.',
+    image: 'confidentiality',
+    alt: 'Salle de réunion privée dans un bureau contemporain',
+    blocks: [
+      { h2: 'Ce que nous protégeons', body: [
+        'Votre identité, l’objet de votre demande, les informations que vous nous transmettez et les conclusions de nos travaux. Ces éléments ne sont communiqués à aucun tiers, sauf obligation légale ou accord écrit de votre part.',
+        'Nous ne publions ni liste de clients, ni études de cas, ni références nominatives. Un dossier traité par RAINBOWNET ne devient jamais un exemple commercial.',
+      ]},
+      { h2: 'Ce que nous mettons en œuvre', body: [
+        'Les accès aux dossiers sont limités aux intervenants du mandat. Les échanges sensibles se font par des canaux convenus avec vous. Les documents sont conservés de manière maîtrisée, avec une durée définie au moment du mandat.',
+        'Nous pratiquons la minimisation : seules les informations nécessaires à la finalité du mandat sont collectées et conservées. Les données qui ne servent plus sont supprimées selon la politique convenue.',
+      ]},
+      { h2: 'Ce que nous ne promettons pas', body: [
+        'Aucun système n’est inviolable et aucun service ne peut garantir un anonymat absolu. Nous ne prétendons pas proposer un chiffrement de bout en bout non vérifié, ni une sécurité absolue.',
+        'En revanche, nous nous engageons sur des mesures concrètes, proportionnées et vérifiables, et nous vous expliquons leurs limites avant le début du mandat.',
+      ]},
+      { h2: 'Protection des données', body: [
+        'Le traitement des données personnelles est encadré par la loi suisse sur la protection des données (LPD) et, lorsque applicable, par le règlement général sur la protection des données (RGPD).',
+        'Notre politique de confidentialité détaille les finalités, les bases légales, les durées de conservation et vos droits. Elle est accessible à tout moment depuis le pied de page du site.',
+      ]},
+    ],
+    pointsTitle: 'Engagements opérationnels',
+    points: [
+      'Un interlocuteur unique et identifié pour votre dossier',
+      'Accès aux documents limité aux personnes travaillant sur le mandat',
+      'Aucune sous-traitance non encadrée par des obligations de confidentialité',
+      'Durée de conservation définie et documentée',
+      'Suppression des données devenues inutiles',
+      'Aucune utilisation de votre dossier à des fins de communication',
+    ],
+    noticeTitle: 'Formulaire de contact et vérification anti-robot',
+    noticeText: 'Le formulaire de contact est protégé par Google reCAPTCHA Enterprise, utilisé uniquement pour distinguer les envois légitimes des soumissions automatisées. Son fonctionnement implique un traitement technique par Google, décrit dans notre politique de confidentialité. Les réponses aux champs du formulaire ne sont utilisées que pour l’examen de votre demande.',
+    ctaTitle: 'Une question sur la confidentialité de votre demande ?',
+    ctaText: 'Vous pouvez nous interroger avant de transmettre la moindre information sur votre situation.',
+  },
+  en: {
+    metaTitle: 'Confidentiality and Data Protection | RAINBOWNET',
+    metaDescription: 'Our confidentiality commitments: restricted communications, limited file access, minimal collection, controlled retention. Geneva, Switzerland.',
+    eyebrow: 'Confidentiality',
+    title: 'Discretion is a method, not an argument',
+    heroText: 'Confidential communications, restricted file access, minimal collection and reserved reporting: what we actually implement.',
+    image: 'confidentiality',
+    alt: 'Private meeting room in a contemporary office',
+    blocks: [
+      { h2: 'What we protect', body: [
+        'Your identity, the purpose of your request, the information you provide and the conclusions of our work. These are disclosed to no third party, except where legally required or with your written agreement.',
+        'We publish no client list, no case studies and no named references. A matter handled by RAINBOWNET never becomes a commercial example.',
+      ]},
+      { h2: 'What we implement', body: [
+        'Access to files is limited to those working on the mandate. Sensitive exchanges use channels agreed with you. Documents are retained in a controlled manner, for a period defined when the mandate is set.',
+        'We apply minimisation: only information necessary for the purpose of the mandate is collected and retained. Data no longer needed is deleted according to the agreed policy.',
+      ]},
+      { h2: 'What we do not promise', body: [
+        'No system is unbreakable and no service can guarantee absolute anonymity. We do not claim unverified end-to-end encryption or absolute security.',
+        'We do commit to concrete, proportionate and verifiable measures, and we explain their limits before the mandate begins.',
+      ]},
+      { h2: 'Data protection', body: [
+        'The processing of personal data is governed by the Swiss Federal Act on Data Protection (FADP) and, where applicable, by the General Data Protection Regulation (GDPR).',
+        'Our privacy policy sets out purposes, legal bases, retention periods and your rights. It is accessible at all times from the site footer.',
+      ]},
+    ],
+    pointsTitle: 'Operational commitments',
+    points: [
+      'A single, identified point of contact for your matter',
+      'Document access limited to those working on the mandate',
+      'No subcontracting without binding confidentiality obligations',
+      'A defined and documented retention period',
+      'Deletion of data that is no longer needed',
+      'No use of your matter for communications purposes',
+    ],
+    noticeTitle: 'Contact form and anti-robot verification',
+    noticeText: 'The contact form is protected by Google reCAPTCHA Enterprise, used solely to distinguish legitimate submissions from automated ones. It involves technical processing by Google, described in our privacy policy. Form responses are used only to assess your request.',
+    ctaTitle: 'A question about the confidentiality of your request?',
+    ctaText: 'You can ask us before providing any information about your situation.',
+  },
+};
+
+export const COVERAGE = {
+  fr: {
+    metaTitle: 'Couverture européenne — Investigations transfrontalières | RAINBOWNET',
+    metaDescription: 'Coordination depuis Genève et interventions dans les capitales européennes, dans le respect du droit local : Paris, Londres, Bruxelles, Berlin, Madrid, Luxembourg.',
+    eyebrow: 'Couverture européenne',
+    title: 'Un centre de coordination à Genève, une exécution conforme au droit local',
+    heroText: 'Les mandats transfrontaliers exigent plus qu’un réseau : une méthode constante, une lecture exacte des règles locales et un interlocuteur unique.',
+    image: 'europe-coverage',
+    alt: 'Quartier d’affaires européen, immeubles contemporains',
+    sections: [
+      { h2: 'Comment nous structurons un mandat européen', body: [
+        'Nous commençons par cartographier les juridictions concernées, les informations recherchées et les contraintes légales propres à chaque pays. Cette étape détermine ce qui est réalisable, dans quel ordre et avec quelles précautions.',
+        'Un interlocuteur unique à Genève coordonne l’ensemble, vous tient informé et garantit la cohérence de la restitution, quelle que soit la diversité des territoires couverts.',
+      ]},
+      { h2: 'Ce que signifie « couverture »', body: [
+        'Nous ne revendiquons pas des bureaux locaux que nous n’avons pas. La couverture européenne signifie que nous sommes en mesure d’organiser et de superviser des vérifications dans plusieurs pays, en conformité avec la réglementation applicable et, lorsque cela est requis, avec des opérateurs locaux habilités.',
+        'Cette transparence est volontaire : elle vous permet de savoir exactement qui intervient, sous quelle responsabilité et dans quel cadre.',
+      ]},
+      { h2: 'Limites et faisabilité', body: [
+        'Toutes les demandes ne sont pas réalisables dans tous les pays. Certaines vérifications supposent une base légale, une autorisation ou l’intervention d’un professionnel local. D’autres sont simplement interdites.',
+        'Nous vous indiquons ces limites avant tout engagement, avec une estimation de faisabilité et, le cas échéant, des alternatives licites.',
+      ]},
+    ],
+    ctaTitle: 'Votre situation implique plusieurs pays ?',
+    ctaText: 'Décrivez-nous le contexte et les juridictions concernées : nous vous indiquerons ce qui est réalisable et sous quelles conditions.',
+  },
+  en: {
+    metaTitle: 'European Coverage — Cross-Border Investigations | RAINBOWNET',
+    metaDescription: 'Coordinated from Geneva and delivered in European capitals in compliance with local law: Paris, London, Brussels, Berlin, Madrid, Luxembourg.',
+    eyebrow: 'European coverage',
+    title: 'A coordination hub in Geneva, execution under local law',
+    heroText: 'Cross-border mandates require more than a network: a consistent method, an accurate reading of local rules and a single point of contact.',
+    image: 'europe-coverage',
+    alt: 'European business district with contemporary buildings',
+    sections: [
+      { h2: 'How we structure a European mandate', body: [
+        'We begin by mapping the jurisdictions involved, the information sought and the legal constraints specific to each country. This stage determines what is feasible, in which order and with which precautions.',
+        'A single point of contact in Geneva coordinates the whole, keeps you informed and ensures consistency of reporting, whatever the diversity of the territories covered.',
+      ]},
+      { h2: 'What “coverage” means', body: [
+        'We do not claim local offices we do not have. European coverage means we are able to organise and supervise verifications in several countries, in compliance with applicable regulations and, where required, with licensed local operators.',
+        'This transparency is deliberate: it tells you exactly who is involved, under whose responsibility and within which framework.',
+      ]},
+      { h2: 'Limits and feasibility', body: [
+        'Not every request is feasible in every country. Some verifications require a legal basis, an authorisation or the involvement of a local professional. Others are simply prohibited.',
+        'We set out these limits before any engagement, with a feasibility assessment and, where relevant, lawful alternatives.',
+      ]},
+    ],
+    ctaTitle: 'Does your situation involve several countries?',
+    ctaText: 'Describe the context and the jurisdictions involved: we will tell you what is feasible and under which conditions.',
+  },
+};
+
+export const SERVICES_INDEX = {
+  fr: {
+    metaTitle: 'Services — Investigations privées et corporate | RAINBOWNET',
+    metaDescription: 'Quatre domaines d’intervention : particuliers, entreprises, professionnels du droit et mandats internationaux. Méthode documentée, cadre légal strict.',
+    eyebrow: 'Services',
+    title: 'Quatre domaines, une même exigence de rigueur',
+    heroText: 'Chaque mission est cadrée par écrit, exécutée dans le respect du droit applicable et restituée de manière factuelle.',
+    image: 'corporate-investigations',
+    alt: 'Quartier d’affaires avec immeubles de bureaux contemporains',
+    ctaTitle: 'Vous ne savez pas quel cadre correspond à votre situation ?',
+    ctaText: 'Le formulaire confidentiel permet de décrire votre besoin sans avoir à choisir une catégorie.',
+  },
+  en: {
+    metaTitle: 'Services — Private and Corporate Investigations | RAINBOWNET',
+    metaDescription: 'Four areas of work: individuals, businesses, legal professionals and international mandates. Documented method, strict legal framework.',
+    eyebrow: 'Services',
+    title: 'Four areas, one standard of rigour',
+    heroText: 'Every assignment is scoped in writing, carried out in compliance with applicable law and reported factually.',
+    image: 'corporate-investigations',
+    alt: 'Business district with contemporary office buildings',
+    ctaTitle: 'Not sure which framework fits your situation?',
+    ctaText: 'The confidential form lets you describe your need without choosing a category.',
+  },
+};
+
+export const CONTACT = {
+  fr: {
+    metaTitle: 'Consultation confidentielle — Contact | RAINBOWNET',
+    metaDescription: 'Contactez RAINBOWNET de manière confidentielle. Évaluation de votre demande en six étapes, sans document sensible au premier contact.',
+    eyebrow: 'Consultation confidentielle',
+    title: 'Exposez votre situation. Nous vous répondons avec discrétion.',
+    heroText: 'Quelques informations suffisent pour un premier examen. Ne transmettez pas de documents sensibles à ce stade.',
+    image: 'contact-office',
+    alt: 'Bureau privé minimaliste avec vue, espace de consultation discret',
+    aside: {
+      title: 'Ce qui se passe ensuite',
+      steps: [
+        'Nous examinons votre demande et vérifions sa faisabilité.',
+        'Nous revenons vers vous par le moyen de contact choisi.',
+        'Un premier échange permet de préciser le périmètre et le cadre légal.',
+        'Vous recevez une proposition de méthode, de calendrier et de budget.',
+      ],
+      note: 'Aucune information n’est transmise à un tiers. Aucun document confidentiel n’est requis au premier contact.',
+    },
+    callbackTitle: 'Demander un rappel confidentiel',
+    callbackText: 'Si vous préférez un échange oral, indiquez un numéro et un créneau. Nous vous rappelons avec discrétion.',
+    formTitle: 'Évaluation confidentielle de votre demande',
+    formIntro: 'Six étapes, environ deux minutes. Vous pouvez revenir en arrière à tout moment.',
+  },
+  en: {
+    metaTitle: 'Confidential Consultation — Contact | RAINBOWNET',
+    metaDescription: 'Contact RAINBOWNET confidentially. A six-step assessment of your request, with no sensitive documents required at first contact.',
+    eyebrow: 'Confidential consultation',
+    title: 'Set out your situation. We reply with discretion.',
+    heroText: 'A few details are enough for an initial review. Please do not send sensitive documents at this stage.',
+    image: 'contact-office',
+    alt: 'Minimalist private office with a view, discreet consultation space',
+    aside: {
+      title: 'What happens next',
+      steps: [
+        'We review your request and assess feasibility.',
+        'We reply through your preferred contact channel.',
+        'A first conversation clarifies scope and the legal framework.',
+        'You receive a proposed method, timeline and budget.',
+      ],
+      note: 'No information is passed to a third party. No confidential document is required at first contact.',
+    },
+    callbackTitle: 'Request a confidential call back',
+    callbackText: 'If you prefer a conversation, give us a number and a time window. We call back discreetly.',
+    formTitle: 'Confidential case assessment',
+    formIntro: 'Six steps, about two minutes. You can go back at any time.',
+  },
+};
+
+export const LEGAL = {
+  fr: {
+    'legal-notice': {
+      metaTitle: 'Mentions légales | RAINBOWNET',
+      metaDescription: 'Mentions légales du site RAINBOWNET : éditeur, hébergement, propriété intellectuelle et limitation de responsabilité.',
+      title: 'Mentions légales',
+      intro: 'Informations relatives à l’éditeur du site et aux conditions d’utilisation.',
+      body: [
+        { h2: 'Éditeur du site', html: '<p>Le site rainbownet.ch est édité par RAINBOWNET, Genève, Suisse.</p><p><strong>Informations à compléter avant mise en ligne :</strong> raison sociale exacte, adresse du siège, numéro d’identification des entreprises (IDE) et, le cas échéant, numéro de TVA. Ces informations n’ont pas été inventées et doivent être fournies par l’éditeur.</p><p>Contact : exclusivement via le formulaire confidentiel du site.</p>' },
+        { h2: 'Hébergement', html: '<p>Le site est hébergé par Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis, via le service Cloudflare Pages. Les données techniques de connexion sont traitées par cet hébergeur.</p>' },
+        { h2: 'Propriété intellectuelle', html: '<p>Les textes, la charte graphique, le logo et les éléments visuels propres à RAINBOWNET sont protégés. Toute reproduction non autorisée est interdite. Les photographies utilisées sont sous licence et créditées sur la page dédiée.</p>' },
+        { h2: 'Responsabilité', html: '<p>Les informations publiées ont un caractère général et ne constituent ni un conseil juridique, ni un engagement contractuel. Une relation contractuelle ne naît que d’un mandat écrit et signé.</p><p>RAINBOWNET met en œuvre des moyens raisonnables pour assurer l’exactitude des contenus, sans garantir l’absence d’erreur ou d’interruption du service.</p>' },
+        { h2: 'Droit applicable', html: '<p>Le site est soumis au droit suisse. Le for est à Genève, sous réserve des dispositions impératives applicables.</p><p>Dernière mise à jour : octobre 2026.</p>' },
+      ],
+    },
+    privacy: {
+      metaTitle: 'Politique de confidentialité | RAINBOWNET',
+      metaDescription: 'Traitement des données personnelles chez RAINBOWNET : finalités, bases légales, destinataires, durées de conservation et droits des personnes.',
+      title: 'Politique de confidentialité',
+      intro: 'Cette politique décrit les données traitées via ce site et dans le cadre d’une demande de consultation.',
+      body: [
+        { h2: 'Responsable du traitement', html: '<p>RAINBOWNET, Genève, Suisse. Les coordonnées complètes du responsable seront publiées avant la mise en ligne du site.</p>' },
+        { h2: 'Données collectées', html: '<p>Via le formulaire : type de client, nature de la demande, localisation, description générale, niveau d’urgence, coordonnées et préférences de contact. Ces informations sont fournies volontairement par vous.</p><p>Données techniques : adresse IP, horodatage et résultat de la vérification anti-robot, journaux nécessaires à la sécurité du service.</p>' },
+        { h2: 'Finalités et bases légales', html: '<p>Les données sont traitées pour examiner votre demande, répondre à votre sollicitation, prévenir les abus et respecter nos obligations légales. Les bases légales sont, selon le cas, l’exécution de mesures précontractuelles, notre intérêt légitime à sécuriser le service et le consentement lorsque celui-ci est requis.</p>' },
+        { h2: 'Destinataires et transferts', html: '<p>Les données sont accessibles aux seules personnes concernées par le traitement de votre demande. Le site et le formulaire reposent sur des prestataires techniques (hébergement Cloudflare, envoi d’e-mails, vérification reCAPTCHA Enterprise par Google). Ces prestataires peuvent traiter des données hors de Suisse et de l’Union européenne, sur la base de garanties contractuelles appropriées.</p>' },
+        { h2: 'Durées de conservation', html: '<p>Les demandes non suivies d’un mandat sont conservées pour une durée limitée, nécessaire à leur examen, puis supprimées. Les dossiers de mandat sont conservés selon la durée définie au contrat et les obligations légales applicables.</p>' },
+        { h2: 'Vos droits', html: '<p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation et d’opposition, ainsi que du droit de retirer votre consentement lorsque celui-ci constitue la base du traitement. Ces droits s’exercent via le formulaire de contact.</p>' },
+        { h2: 'Sécurité', html: '<p>Nous mettons en œuvre des mesures techniques et organisationnelles proportionnées : accès restreint, contrôle des accès, minimisation, journalisation limitée et suppression des données devenues inutiles. Aucune mesure ne peut toutefois garantir une sécurité absolue.</p>' },
+        { h2: 'Cookies', html: '<p>Ce site ne dépose pas de cookie publicitaire ni de traceur d’audience. Voir la page Cookies pour le détail des stockages techniques.</p>' },
+      ],
+    },
+    cookies: {
+      metaTitle: 'Cookies et stockages techniques | RAINBOWNET',
+      metaDescription: 'Ce site n’utilise pas de cookies publicitaires. Détail des stockages techniques et des services tiers sollicités lors d’une soumission de formulaire.',
+      title: 'Cookies et stockages techniques',
+      intro: 'Ce site a été conçu pour limiter au strict nécessaire les stockages côté navigateur.',
+      body: [
+        { h2: 'Aucun traceur d’audience', html: '<p>Ce site ne charge aucun outil de mesure d’audience, aucun pixel publicitaire et aucun réseau social de suivi. Aucun consentement n’est donc requis pour la simple consultation des pages.</p>' },
+        { h2: 'Stockages techniques', html: '<p>Le formulaire peut conserver temporairement vos réponses dans votre navigateur afin de vous éviter de les ressaisir en cas d’erreur. Ces données restent sur votre appareil et ne sont pas transmises tant que vous ne validez pas l’envoi.</p>' },
+        { h2: 'Services tiers', html: '<p>Lors de la soumission du formulaire, Google reCAPTCHA Enterprise est sollicité pour vérifier que la demande n’est pas automatisée. Ce service peut déposer des stockages techniques et traiter votre adresse IP. Aucun autre service tiers n’est chargé lors de la navigation.</p>' },
+        { h2: 'Gérer vos préférences', html: '<p>Vous pouvez supprimer à tout moment les stockages du site via les réglages de votre navigateur. La suppression n’empêche pas l’utilisation du site, mais peut vous obliger à ressaisir vos réponses en cas d’erreur de formulaire.</p>' },
+      ],
+    },
+  },
+  en: {
+    'legal-notice': {
+      metaTitle: 'Legal Notice | RAINBOWNET',
+      metaDescription: 'Legal notice for the RAINBOWNET website: publisher, hosting, intellectual property and limitation of liability.',
+      title: 'Legal notice',
+      intro: 'Information about the publisher of this site and the terms of use.',
+      body: [
+        { h2: 'Publisher', html: '<p>The website rainbownet.ch is published by RAINBOWNET, Geneva, Switzerland.</p><p><strong>To be completed before launch:</strong> exact legal name, registered address, company registration number (UID) and, where applicable, VAT number. This information has not been invented and must be supplied by the publisher.</p><p>Contact: exclusively through the site’s confidential form.</p>' },
+        { h2: 'Hosting', html: '<p>The site is hosted by Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, United States, through Cloudflare Pages. Technical connection data is processed by this host.</p>' },
+        { h2: 'Intellectual property', html: '<p>RAINBOWNET’s texts, visual identity, logo and original visual elements are protected. Unauthorised reproduction is prohibited. Photographs are licensed and credited on the dedicated page.</p>' },
+        { h2: 'Liability', html: '<p>Published information is general in nature and constitutes neither legal advice nor a contractual commitment. A contractual relationship arises only from a written, signed mandate.</p><p>RAINBOWNET takes reasonable steps to ensure the accuracy of content but does not guarantee freedom from error or uninterrupted service.</p>' },
+        { h2: 'Governing law', html: '<p>This site is governed by Swiss law. The place of jurisdiction is Geneva, subject to mandatory provisions.</p><p>Last updated: October 2026.</p>' },
+      ],
+    },
+    privacy: {
+      metaTitle: 'Privacy Policy | RAINBOWNET',
+      metaDescription: 'How RAINBOWNET processes personal data: purposes, legal bases, recipients, retention periods and data subject rights.',
+      title: 'Privacy policy',
+      intro: 'This policy describes the data processed through this site and in the context of a consultation request.',
+      body: [
+        { h2: 'Data controller', html: '<p>RAINBOWNET, Geneva, Switzerland. Full controller details will be published before the site goes live.</p>' },
+        { h2: 'Data collected', html: '<p>Through the form: client type, nature of the request, location, general description, urgency level, contact details and contact preferences. This information is provided voluntarily by you.</p><p>Technical data: IP address, timestamp and result of the anti-robot verification, and logs required for service security.</p>' },
+        { h2: 'Purposes and legal bases', html: '<p>Data is processed to assess your request, respond to you, prevent abuse and meet our legal obligations. Legal bases are, as applicable, pre-contractual measures, our legitimate interest in securing the service, and consent where required.</p>' },
+        { h2: 'Recipients and transfers', html: '<p>Data is accessible only to those involved in handling your request. The site and form rely on technical providers (Cloudflare hosting, email delivery, reCAPTCHA Enterprise verification by Google). These providers may process data outside Switzerland and the European Union, under appropriate contractual safeguards.</p>' },
+        { h2: 'Retention', html: '<p>Requests that do not lead to a mandate are retained for a limited period necessary for their review, then deleted. Mandate files are retained for the duration set out in the contract and under applicable legal obligations.</p>' },
+        { h2: 'Your rights', html: '<p>You have the right to access, rectify, erase, restrict and object, and to withdraw consent where consent is the basis for processing. These rights can be exercised through the contact form.</p>' },
+        { h2: 'Security', html: '<p>We implement proportionate technical and organisational measures: restricted access, access control, minimisation, limited logging and deletion of data no longer needed. No measure can guarantee absolute security.</p>' },
+        { h2: 'Cookies', html: '<p>This site sets no advertising cookies and no audience trackers. See the Cookies page for technical storage details.</p>' },
+      ],
+    },
+    cookies: {
+      metaTitle: 'Cookies and Technical Storage | RAINBOWNET',
+      metaDescription: 'This site uses no advertising cookies. Details of technical storage and third-party services used when a form is submitted.',
+      title: 'Cookies and technical storage',
+      intro: 'This site is designed to keep browser-side storage to the strict minimum.',
+      body: [
+        { h2: 'No audience tracking', html: '<p>This site loads no analytics tool, no advertising pixel and no social tracking. No consent is therefore required to browse the pages.</p>' },
+        { h2: 'Technical storage', html: '<p>The form may temporarily keep your answers in your browser so you do not have to re-enter them after an error. This data stays on your device and is not transmitted until you confirm submission.</p>' },
+        { h2: 'Third-party services', html: '<p>When the form is submitted, Google reCAPTCHA Enterprise is called to verify that the request is not automated. This service may set technical storage and process your IP address. No other third-party service is loaded while browsing.</p>' },
+        { h2: 'Managing preferences', html: '<p>You can delete the site’s storage at any time through your browser settings. Deletion does not prevent use of the site but may require you to re-enter your answers after a form error.</p>' },
+      ],
+    },
+  },
+} satisfies Record<Lang, Record<string, any>>;
+
+export const CREDITS = {
+  fr: {
+    metaTitle: 'Crédits photographiques | RAINBOWNET',
+    metaDescription: 'Crédits des photographies utilisées sur le site RAINBOWNET, sous licence Pexels.',
+    title: 'Crédits photographiques',
+    intro: 'Les photographies de ce site sont utilisées sous licence Pexels. Elles illustrent des environnements et des villes ; elles ne représentent ni des collaborateurs, ni des bureaux de RAINBOWNET.',
+  },
+  en: {
+    metaTitle: 'Photo Credits | RAINBOWNET',
+    metaDescription: 'Credits for the photographs used on the RAINBOWNET website, under Pexels licence.',
+    title: 'Photo credits',
+    intro: 'Photographs on this site are used under the Pexels licence. They illustrate environments and cities; they do not depict RAINBOWNET staff or offices.',
+  },
+};

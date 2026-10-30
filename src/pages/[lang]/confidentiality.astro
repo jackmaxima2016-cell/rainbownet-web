@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Img from '../../components/Img.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { UI, type Lang } from '../../content/site';
+import { CONFIDENTIALITY } from '../../content/pages';
+
+export function getStaticPaths() { return [{ params: { lang: 'fr' } }, { params: { lang: 'en' } }]; }
+const lang = Astro.params.lang as Lang;
+const t = UI[lang];
+const c = CONFIDENTIALITY[lang];
+const L = (p: string) => `/${lang}${p}`;
+---
+<Base lang={lang} slug="/confidentiality/" title={c.metaTitle} description={c.metaDescription} image={c.image} imageAlt={c.alt}>
+  <PageHero
+    eyebrow={c.eyebrow} title={c.title} text={c.heroText} image={c.image} alt={c.alt}
+    breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Confidentialité' : 'Confidentiality' }]}
+  />
+
+  <section class="section section--ivory">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="prose reveal">
+          {c.blocks.slice(0, 2).map((b: any) => (<><h2>{b.h2}</h2>{b.body.map((p: string) => <p>{p}</p>)}</>))}
+        </div>
+        <div class="reveal">
+          <div style="background:var(--navy);color:var(--ivory);padding:clamp(26px,3.4vw,40px)">
+            <h3 style="color:var(--ivory);margin-bottom:18px">{c.pointsTitle}</h3>
+            <ul class="ticks">{c.points.map((p: string) => <li>{p}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="split" style="align-items:start">
+        <div class="reveal"><Img name="approach-desk" alt={lang === 'fr' ? 'Documents professionnels anonymisés sur un bureau' : 'Anonymised professional documents on a desk'} sizes="(max-width:900px) 100vw, 45vw" /></div>
+        <div class="prose reveal">
+          {c.blocks.slice(2).map((b: any) => (<><h2>{b.h2}</h2>{b.body.map((p: string) => <p>{p}</p>)}</>))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ivory2 section--tight">
+    <div class="container">
+      <div class="narrow reveal">
+        <p class="eyebrow">{lang === 'fr' ? 'Information' : 'Notice'}</p>
+        <h3>{c.noticeTitle}</h3>
+        <p style="color:var(--muted)">{c.noticeText}</p>
+        <p style="margin-top:18px"><a class="link-arrow" href={L('/legal/privacy/')}>{t.privacy} →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={c.ctaTitle} text={c.ctaText} buttonLabel={t.cta} buttonHref={L('/contact/')} />
+</Base>

@@ -1,0 +1,64 @@
+---
+import Logo from './Logo.astro';
+import { NAV, UI, type Lang } from '../content/site';
+
+interface Props { lang: Lang; slug: string }
+const { lang, slug } = Astro.props;
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const items = NAV[lang];
+const t = UI[lang];
+const isActive = (href: string) => {
+  if (href === '/') return slug === '/';
+  if (href === '/coverage/' && slug.startsWith('/locations/')) return true;
+  return slug.startsWith(href);
+};
+const otherHref = `/${other}${slug}`;
+---
+<header class="site-header" data-solid="false">
+  <div class="container header-inner">
+    <a href={`/${lang}/`} aria-label="RAINBOWNET — ${lang === 'fr' ? 'accueil' : 'home'}`} style="display:flex;align-items:center">
+      <Logo withWordmark={true} size={38} />
+    </a>
+
+    <nav class="site-nav" aria-label={lang === 'fr' ? 'Navigation principale' : 'Main navigation'}>
+      {items.map((it) => (
+        <a href={`/${lang}${it.href}`} aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-switch" aria-label={t.langLabel}>
+        <a href={`/fr${slug}`} hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/en${slug}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+      </div>
+      <a class="btn btn--ghost header-cta" href={`/${lang}/contact/`}>{t.cta}</a>
+      <button class="menu-toggle" id="menu-open" aria-expanded="false" aria-controls="site-drawer" aria-label={t.menu}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="site-drawer" aria-hidden="true">
+  <div class="drawer-backdrop" data-close></div>
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-label={t.menu}>
+    <div class="drawer-head">
+      <Logo size={34} />
+      <button class="drawer-close" data-close aria-label={t.close}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <nav aria-label={lang === 'fr' ? 'Navigation mobile' : 'Mobile navigation'}>
+      {items.map((it) => <a href={`/${lang}${it.href}`}>{it.label}</a>)}
+    </nav>
+    <div class="drawer-foot">
+      <div class="lang-switch">
+        <a href={`/fr${slug}`} hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/en${slug}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+      </div>
+      <a class="btn btn--gold" href={`/${lang}/contact/`}>{t.cta}</a>
+    </div>
+  </div>
+</div>

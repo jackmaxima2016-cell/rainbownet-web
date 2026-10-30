@@ -1,0 +1,144 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, type Lang } from '../content/site';
+import imageMeta from '../content/images.json';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  lang, slug, title, description,
+  image = 'hero-geneva', imageAlt = 'Geneva, Switzerland',
+  noindex = false, schema, bodyClass = '',
+} = Astro.props;
+
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const canonical = new URL(`/${lang}${slug}`, SITE.domain).href;
+const altHref = new URL(`/${other}${slug}`, SITE.domain).href;
+const variants = (imageMeta as Record<string, { widths: number[] }>)[image]?.widths ?? [1600];
+const ogWidth = [1600, 2000, 1200, 2400, 1000, 800].find((w) => variants.includes(w)) ?? variants[variants.length - 1];
+const ogImageFinal = new URL(`/images/${image}-${ogWidth}.webp`, SITE.domain).href;
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${SITE.domain}/#organization`,
+  name: 'RAINBOWNET',
+  description: lang === 'fr'
+    ? 'Agence d’investigation privée et d’intelligence corporate basée à Genève, intervenant en Suisse et en Europe.'
+    : 'Private investigation and corporate intelligence firm based in Geneva, operating in Switzerland and Europe.',
+  url: SITE.domain,
+  logo: `${SITE.domain}/brand/rainbownet-logo.svg`,
+  image: `${SITE.domain}/images/hero-geneva-1200.webp`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Genève', addressCountry: 'CH' },
+  areaServed: ['CH', 'FR', 'GB', 'BE', 'DE', 'IT', 'ES', 'LU', 'NL', 'AT', 'PT'],
+  knowsAbout: lang === 'fr'
+    ? ['Investigation privée', 'Due diligence', 'Intelligence corporate', 'Vérification factuelle']
+    : ['Private investigation', 'Due diligence', 'Corporate intelligence', 'Factual verification'],
+  knowsLanguage: ['fr', 'en'],
+};
+const webSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'RAINBOWNET',
+  url: SITE.domain,
+  inLanguage: ['fr', 'en'],
+};
+const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [schema] : [])];
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="fr-CH" href={new URL(`/fr${slug}`, SITE.domain).href} />
+  <link rel="alternate" hreflang="en" href={new URL(`/en${slug}`, SITE.domain).href} />
+  <link rel="alternate" hreflang="x-default" href={new URL(`/fr${slug}`, SITE.domain).href} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  {!noindex && <meta name="robots" content="index, follow, max-image-preview:large" />}
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="RAINBOWNET" />
+  <meta property="og:locale" content={lang === 'fr' ? 'fr_CH' : 'en_GB'} />
+  <meta property="og:locale:alternate" content={lang === 'fr' ? 'en_GB' : 'fr_CH'} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImageFinal} />
+  <meta property="og:image:alt" content={imageAlt} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageFinal} />
+
+  <meta name="theme-color" content="#101E2C" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/manrope-500-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="sitemap" href="/sitemap.xml" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json" set:html={JSON.stringify(allSchema)} />
+</head>
+<body class={bodyClass}>
+  <a class="skip-link" href="#main">{lang === 'fr' ? 'Aller au contenu principal' : 'Skip to main content'}</a>
+  <Header lang={lang} slug={slug} />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer lang={lang} />
+
+  <script is:inline>
+    (function () {
+      var h = document.querySelector('.site-header');
+      var onScroll = function () {
+        if (!h) return;
+        if (h.dataset.solid === 'true') h.classList.add('is-scrolled');
+        else h.classList.toggle('is-scrolled', window.scrollY > 24);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      var drawer = document.getElementById('site-drawer');
+      var open = document.getElementById('menu-open');
+      var closeEls = drawer ? drawer.querySelectorAll('[data-close]') : [];
+      function setDrawer(state) {
+        if (!drawer) return;
+        drawer.classList.toggle('is-open', state);
+        drawer.setAttribute('aria-hidden', state ? 'false' : 'true');
+        document.body.style.overflow = state ? 'hidden' : '';
+        if (open) open.setAttribute('aria-expanded', state ? 'true' : 'false');
+        if (state) { var f = drawer.querySelector('a, button'); if (f) f.focus(); }
+      }
+      if (open) open.addEventListener('click', function () { setDrawer(true); });
+      closeEls.forEach(function (el) { el.addEventListener('click', function () { setDrawer(false); }); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDrawer(false); });
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+      } else {
+        document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
+      }
+    })();
+  </script>
+</body>
+</html>

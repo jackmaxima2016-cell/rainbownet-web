@@ -1,0 +1,41 @@
+---
+// Root: language landing. Redirects to /fr/ (default) unless the browser prefers English.
+const title = 'RAINBOWNET — Private Investigations & Corporate Intelligence';
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content="RAINBOWNET — investigations privées et intelligence corporate. Genève, Suisse. Private investigations and corporate intelligence, Geneva, Switzerland." />
+  <link rel="canonical" href="https://rainbownet.ch/fr/" />
+  <link rel="alternate" hreflang="fr-CH" href="https://rainbownet.ch/fr/" />
+  <link rel="alternate" hreflang="en" href="https://rainbownet.ch/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://rainbownet.ch/fr/" />
+  <meta name="robots" content="noindex, follow" />
+  <meta http-equiv="refresh" content="0; url=/fr/" />
+  <style>
+    html,body{margin:0;height:100%;background:#101E2C;color:#F5F2E9;font-family:system-ui,sans-serif;display:grid;place-items:center}
+    a{color:#D9B77A}
+    .wrap{text-align:center;padding:24px}
+    .mark{letter-spacing:.34em;font-size:14px;color:#8C9BAA;margin-bottom:18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 style="font-size:1rem;letter-spacing:.3em;font-weight:600;color:#F5F2E9">RAINBOWNET</h1>
+    <div class="mark">RAINBOWNET</div>
+    <p>Choisissez votre langue · Choose your language</p>
+    <p><a href="/fr/">Français</a> · <a href="/en/">English</a></p>
+  </div>
+  <script is:inline>
+    (function () {
+      var langs = navigator.languages || [navigator.language || 'fr'];
+      var pref = (langs[0] || 'fr').toLowerCase();
+      var target = pref.indexOf('fr') === 0 ? '/fr/' : '/en/';
+      if (location.pathname === '/') location.replace(target);
+    })();
+  </script>
+</body>
+</html>
