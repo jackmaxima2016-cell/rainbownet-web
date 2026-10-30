@@ -50,7 +50,7 @@ const otherHref = `/${other}${slug}`;
       </button>
     </div>
     <nav aria-label={lang === 'fr' ? 'Navigation mobile' : 'Mobile navigation'}>
-      {items.map((it) => <a href={`/${lang}${it.href}`}>{it.label}</a>)}
+      {items.map((it) => <a href={`/${lang}${it.href}`} aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>)}
     </nav>
     <div class="drawer-foot">
       <div class="lang-switch">

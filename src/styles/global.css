@@ -126,7 +126,7 @@ li{margin-bottom:.45em}
 .drawer-panel{
   position:absolute;top:0;right:0;height:100%;width:min(88vw,400px);
   background:var(--navy-900);border-left:1px solid rgba(217,183,122,.2);
-  padding:28px 28px 40px;display:flex;flex-direction:column;gap:8px;
+  padding:28px 28px calc(36px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;
   transform:translateX(100%);transition:transform .38s var(--ease);overflow-y:auto;
 }
 .drawer.is-open{visibility:visible;pointer-events:auto}
@@ -138,6 +138,7 @@ li{margin-bottom:.45em}
 .drawer nav{display:flex;flex-direction:column}
 .drawer nav a{font-family:'Manrope',sans-serif;font-size:1.22rem;padding:14px 0;border-bottom:1px solid rgba(245,242,233,.08);color:var(--ivory)}
 .drawer nav a:hover{color:var(--gold)}
+.drawer nav a[aria-current="page"]{color:var(--gold)}
 .drawer-foot{margin-top:auto;padding-top:28px;display:flex;flex-direction:column;gap:16px}
 
 /* ---------- hero ---------- */
