@@ -119,24 +119,43 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
       window.addEventListener('scroll', onScroll, { passive: true });
 
       var drawer = document.getElementById('site-drawer');
+      var drawerPanel = drawer ? drawer.querySelector('.drawer-panel') : null;
       var open = document.getElementById('menu-open');
       var closeEls = drawer ? drawer.querySelectorAll('[data-close]') : [];
-      var lastFocus = null;
+      var lastFocus = null, busy = false, savedY = 0;
+
       function setDrawer(state) {
-        if (!drawer) return;
+        if (!drawer || busy) return;
         if (drawer.classList.contains('is-open') === state) return;
+        busy = true;
+
         drawer.classList.toggle('is-open', state);
         drawer.setAttribute('aria-hidden', state ? 'false' : 'true');
-        document.documentElement.style.overflow = state ? 'hidden' : '';
-        document.body.style.overflow = state ? 'hidden' : '';
+        if ('inert' in drawer) drawer.inert = !state;
         if (open) open.setAttribute('aria-expanded', state ? 'true' : 'false');
+
         if (state) {
           lastFocus = document.activeElement;
-          var f = drawer.querySelector('.drawer-close, a, button');
-          if (f) f.focus();
-        } else if (lastFocus && lastFocus.focus) {
-          lastFocus.focus();
+          savedY = window.scrollY || window.pageYOffset || 0;
+          var sbw = window.innerWidth - document.documentElement.clientWidth;
+          document.body.style.top = -savedY + 'px';
+          if (sbw > 0) document.body.style.paddingRight = sbw + 'px';
+          document.body.classList.add('drawer-open');
+          var f = drawer.querySelector('.drawer-close');
+          if (f) f.focus({ preventScroll: true });
+        } else {
+          document.body.classList.remove('drawer-open');
+          document.body.style.top = '';
+          document.body.style.paddingRight = '';
+          window.scrollTo(0, savedY);
+          if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
         }
+        window.setTimeout(function () { busy = false; }, 340);
+      }
+
+      if (drawer) {
+        drawer.classList.add('is-ready');
+        if ('inert' in drawer) drawer.inert = true;
       }
       if (open) open.addEventListener('click', function () { setDrawer(true); });
       closeEls.forEach(function (el) { el.addEventListener('click', function () { setDrawer(false); }); });
@@ -149,6 +168,11 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       });
+      if (drawerPanel) {
+        drawerPanel.addEventListener('transitionend', function (e) {
+          if (e.propertyName === 'transform') busy = false;
+        });
+      }
 
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
