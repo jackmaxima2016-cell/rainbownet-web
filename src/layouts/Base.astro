@@ -121,17 +121,34 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
       var drawer = document.getElementById('site-drawer');
       var open = document.getElementById('menu-open');
       var closeEls = drawer ? drawer.querySelectorAll('[data-close]') : [];
+      var lastFocus = null;
       function setDrawer(state) {
         if (!drawer) return;
+        if (drawer.classList.contains('is-open') === state) return;
         drawer.classList.toggle('is-open', state);
         drawer.setAttribute('aria-hidden', state ? 'false' : 'true');
+        document.documentElement.style.overflow = state ? 'hidden' : '';
         document.body.style.overflow = state ? 'hidden' : '';
         if (open) open.setAttribute('aria-expanded', state ? 'true' : 'false');
-        if (state) { var f = drawer.querySelector('a, button'); if (f) f.focus(); }
+        if (state) {
+          lastFocus = document.activeElement;
+          var f = drawer.querySelector('.drawer-close, a, button');
+          if (f) f.focus();
+        } else if (lastFocus && lastFocus.focus) {
+          lastFocus.focus();
+        }
       }
       if (open) open.addEventListener('click', function () { setDrawer(true); });
       closeEls.forEach(function (el) { el.addEventListener('click', function () { setDrawer(false); }); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDrawer(false); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { setDrawer(false); return; }
+        if (e.key !== 'Tab' || !drawer || !drawer.classList.contains('is-open')) return;
+        var f = drawer.querySelectorAll('a[href], button:not([disabled]), summary, input, select, textarea');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      });
 
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {

@@ -188,7 +188,7 @@ const countries = lang === 'fr'
       <div class="field">
         <label for="language">{lang === 'fr' ? 'Langue souhaitée' : 'Preferred language'}</label>
         <select id="language" name="language">
-          {opts.language.map(([v, l]) => <option value={v}>{l}</option>)}
+          {opts.language.map(([v, l]) => <option value={v} selected={v === lang}>{l}</option>)}
         </select>
       </div>
     </section>
@@ -266,6 +266,7 @@ const countries = lang === 'fr'
       btnPrev.hidden = n === 1;
       btnNext.hidden = n === steps.length;
       btnSubmit.hidden = n !== steps.length;
+      btnSubmit.disabled = n !== steps.length;
       if (n === steps.length) buildSummary();
       clearError();
       var h = steps[n - 1].querySelector('h2');
@@ -400,8 +401,11 @@ const countries = lang === 'fr'
     }
 
     async function submit() {
+      if (current !== steps.length) return;
+      if (btnSubmit.dataset.busy === '1') return;
       if (!validate(steps.length)) return;
       clearError();
+      btnSubmit.dataset.busy = '1';
       btnSubmit.disabled = true;
       var original = btnSubmit.textContent;
       btnSubmit.textContent = T.sending;
@@ -438,11 +442,11 @@ const countries = lang === 'fr'
   })();
 </script>
 
-<script is:inline define:vars={{ SITE_KEY: siteKey }}>
+<script is:inline define:vars={{ SITE_KEY: siteKey, LANG: lang }}>
   (function () {
     if (!SITE_KEY) return;
     var s = document.createElement('script');
-    s.src = 'https://www.google.com/recaptcha/enterprise.js?render=' + encodeURIComponent(SITE_KEY);
+    s.src = 'https://www.google.com/recaptcha/enterprise.js?render=' + encodeURIComponent(SITE_KEY) + '&hl=' + LANG;
     s.async = true; s.defer = true;
     document.head.appendChild(s);
   })();
