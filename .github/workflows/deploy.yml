@@ -1,20 +1,14 @@
-name: Deploy to Cloudflare Pages
+name: Build
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
-concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,8 +20,21 @@ jobs:
         run: npm run build
         env:
           PUBLIC_RECAPTCHA_SITE_KEY: ${{ vars.PUBLIC_RECAPTCHA_SITE_KEY }}
-      - name: Deploy
-        run: npx wrangler pages deploy dist --project-name rainbownet-web --branch main
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Sanity checks
+        run: |
+          test -f dist/fr/index.html
+          test -f dist/en/index.html
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
+          ! grep -rIl "localhost" dist --include=*.html
+          echo "pages: $(find dist -name '*.html' | wc -l)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+# Deployment is run from the operations host, not from GitHub Actions:
+#   npm run deploy
+# The Cloudflare API token in use is IP-restricted (Cloudflare error 9109 from
+# GitHub runners), so CI only validates the build.
