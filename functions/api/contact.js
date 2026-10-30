@@ -95,7 +95,7 @@ async function verifyRecaptcha(env, token, action, remoteip) {
 
 const SIGNATURE_HTML = `<table cellpadding="0" cellspacing="0" border="0" width="420" style="border-collapse:collapse;width:420px;margin-top:26px;font-family:Arial,Helvetica,sans-serif;color:#101E2C;font-size:12px;line-height:1.5">
   <tr><td style="padding:18px 0 0 0;border-top:1px solid #E6E0D2">
-    <div style="font-size:16px;font-weight:700;color:#101E2C;line-height:1.2">Luc</div>
+    <div style="font-size:15px;font-weight:700;color:#101E2C;line-height:1.2">Luc - RAINBOWNET</div>
     <div style="font-size:11px;color:#22364A;margin-top:3px">Private Investigations &amp; Corporate Intelligence</div>
     <div style="font-size:11px;color:#5C6B79;margin-top:9px">Rue Adrien-Lachenal 26 · 1207 Genève · Suisse</div>
     <div style="font-size:11px;color:#5C6B79;margin-top:2px"><a href="mailto:Luc@rainbownet.ch" style="color:#22364A;text-decoration:none">luc@rainbownet.ch</a> · <a href="https://rainbownet.ch" style="color:#22364A;text-decoration:none">rainbownet.ch</a></div>
@@ -209,6 +209,7 @@ async function resendSend(env, mail) {
       reply_to: mail.replyTo ? mail.replyTo.email : undefined,
       subject: mail.subject,
       html: mail.html,
+      text: mail.text || undefined,
     }),
     signal: AbortSignal.timeout(15000),
   });
@@ -352,6 +353,7 @@ export async function onRequestPost({ request, env }) {
     replyTo: f.email ? { name: f.name, email: f.email } : null,
     subject,
     html,
+    text: rows.map(([k, v]) => `${L[k] || k}: ${v || '-'}`).join('\n') + '\n\nRAINBOWNET - Rue Adrien-Lachenal 26, 1207 Geneve, Suisse - rainbownet.ch',
   };
 
   const sent = await sendMail(env, mail);
