@@ -18,11 +18,11 @@ const t = UI[lang];
 const h = HOME[lang];
 const L = (p: string) => `/${lang}${p}`;
 const title = lang === 'fr'
-  ? 'Détective privé à Genève — RAINBOWNET'
-  : 'Private Investigator in Geneva — RAINBOWNET';
+  ? 'Détective privé à Genève — RAINBOWNET | Agence'
+  : 'Private Investigator in Geneva — RAINBOWNET | Agency';
 const description = lang === 'fr'
-  ? 'Agence de détectives privés à Genève : investigations privées et corporate, due diligence et coordination européenne. Consultation confidentielle.'
-  : 'Private investigation and corporate intelligence firm in Geneva: due diligence, corporate investigations and European coordination. Confidential consultation.';
+  ? 'Détective privé à Genève : investigations privées, enquêtes corporate, due diligence et coordination européenne. Agence de détectives privés — consultation confidentielle.'
+  : 'Private investigator in Geneva: private and corporate investigations, due diligence and European coverage. Confidential consultation with a Geneva detective agency.';
 const latest = [...(insights as any[])].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 const cityPoints = (cities as any[]).map((c) => ({ slug: c.slug, city: c, lat: c.lat, lng: c.lng }));
 const svc = SERVICE_SUMMARIES[lang];

@@ -2,16 +2,16 @@ import type { Lang } from './site';
 
 export const ABOUT = {
   fr: {
-    metaTitle: 'À propos — Cabinet d’investigation privée à Genève | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Le cabinet | RAINBOWNET',
     metaDescription: 'RAINBOWNET est une agence d’investigation privée et d’intelligence corporate basée à Genève, au service des particuliers, entreprises et professionnels du droit.',
     eyebrow: 'Le cabinet',
-    title: 'Une agence d’investigation privée établie à Genève',
+    title: 'Détective privé à Genève : le cabinet RAINBOWNET',
     heroText: 'RAINBOWNET accompagne des clients exigeants qui ont besoin de faits vérifiés, d’une lecture claire d’une situation et d’une discrétion sans compromis.',
     image: 'about-geneva',
     alt: 'Architecture genevoise contemporaine et quartier institutionnel',
     sections: [
       { h2: 'Notre positionnement', body: [
-        'RAINBOWNET est une agence d’investigation privée et d’intelligence corporate établie à Genève. Nous travaillons pour des particuliers, des entreprises, des cabinets d’avocats, des family offices, des dirigeants, des institutions et des organisations internationales.',
+        'RAINBOWNET est une agence de détectives privés à Genève, spécialisée en investigation privée et intelligence corporate. Nous travaillons pour des particuliers, des entreprises, des cabinets d’avocats, des family offices, des dirigeants, des institutions et des organisations internationales.',
         'Notre approche repose sur une idée simple : une décision importante mérite des faits vérifiés, présentés avec précision et retenue. Nous ne cherchons ni l’effet, ni la visibilité. Nous cherchons la solidité de l’information.',
       ]},
       { h2: 'Une méthode, pas une promesse', body: [
@@ -32,16 +32,16 @@ export const ABOUT = {
     ctaText: 'Nous vous indiquons rapidement si votre demande relève de notre champ d’intervention, et sous quelles conditions.',
   },
   en: {
-    metaTitle: 'About — Private Investigation Firm in Geneva | RAINBOWNET',
+    metaTitle: 'Private Investigator in Geneva — About | RAINBOWNET',
     metaDescription: 'RAINBOWNET is a private investigation and corporate intelligence firm based in Geneva, serving individuals, businesses and legal professionals.',
     eyebrow: 'The firm',
-    title: 'A private investigation firm established in Geneva',
+    title: 'Private investigator in Geneva: the RAINBOWNET firm',
     heroText: 'RAINBOWNET supports demanding clients who need verified facts, a clear reading of a situation and uncompromising discretion.',
     image: 'about-geneva',
     alt: 'Contemporary Geneva architecture and institutional district',
     sections: [
       { h2: 'Our positioning', body: [
-        'RAINBOWNET is a private investigation and corporate intelligence firm established in Geneva. We work for individuals, companies, law firms, family offices, executives, institutions and international organisations.',
+        'RAINBOWNET is a private investigator agency in Geneva, specialising in private investigations and corporate intelligence. We work for individuals, companies, law firms, family offices, executives, institutions and international organisations.',
         'Our approach rests on a simple idea: an important decision deserves verified facts, presented with precision and restraint. We seek neither effect nor visibility. We seek the solidity of information.',
       ]},
       { h2: 'A method, not a promise', body: [
@@ -65,10 +65,10 @@ export const ABOUT = {
 
 export const APPROACH = {
   fr: {
-    metaTitle: 'Notre méthode — Investigation structurée et documentée | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Notre méthode | RAINBOWNET',
     metaDescription: 'Une méthode d’investigation en quatre étapes : premier échange, cadre légal, mandat écrit, restitution factuelle. Genève, Suisse et Europe.',
     eyebrow: 'Notre méthode',
-    title: 'Un cadre clair, une exécution mesurée',
+    title: 'La méthode d’un détective privé à Genève',
     heroText: 'La qualité d’une investigation ne tient pas à la quantité d’informations collectées, mais à la solidité de ce qui est établi.',
     image: 'approach-desk',
     alt: 'Documents de travail et notes sur un bureau, sans donnée confidentielle',
@@ -95,10 +95,10 @@ export const APPROACH = {
     ctaText: 'Le premier échange permet de définir un périmètre réaliste, un calendrier et un budget indicatif.',
   },
   en: {
-    metaTitle: 'Our Approach — Structured, Documented Investigation | RAINBOWNET',
+    metaTitle: 'Private Investigator Geneva — Our Approach | RAINBOWNET',
     metaDescription: 'A four-step investigation method: confidential first contact, legal review, written mandate, factual reporting. Geneva, Switzerland and Europe.',
     eyebrow: 'Our approach',
-    title: 'A clear framework, measured execution',
+    title: 'How a Geneva private investigator works',
     heroText: 'The quality of an investigation lies not in the volume of information gathered, but in the solidity of what is established.',
     image: 'approach-desk',
     alt: 'Working documents and notes on a desk, with no confidential data',
@@ -128,10 +128,10 @@ export const APPROACH = {
 
 export const CONFIDENTIALITY = {
   fr: {
-    metaTitle: 'Confidentialité et protection des données | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Confidentialité | RAINBOWNET',
     metaDescription: 'Nos engagements de confidentialité : échanges restreints, accès limité aux dossiers, collecte minimale, conservation maîtrisée. Genève, Suisse.',
     eyebrow: 'Confidentialité',
-    title: 'La discrétion est une méthode, pas un argument',
+    title: 'La confidentialité d’un détective privé à Genève',
     heroText: 'Confidentialité des échanges, accès restreint aux dossiers, collecte minimale et restitution réservée : ce que nous mettons réellement en place.',
     image: 'confidentiality',
     alt: 'Salle de réunion privée dans un bureau contemporain',
@@ -168,10 +168,10 @@ export const CONFIDENTIALITY = {
     ctaText: 'Vous pouvez nous interroger avant de transmettre la moindre information sur votre situation.',
   },
   en: {
-    metaTitle: 'Confidentiality and Data Protection | RAINBOWNET',
+    metaTitle: 'Geneva Private Investigator — Confidentiality | RAINBOWNET',
     metaDescription: 'Our confidentiality commitments: restricted communications, limited file access, minimal collection, controlled retention. Geneva, Switzerland.',
     eyebrow: 'Confidentiality',
-    title: 'Discretion is a method, not an argument',
+    title: 'Confidentiality of a Geneva private investigator',
     heroText: 'Confidential communications, restricted file access, minimal collection and reserved reporting: what we actually implement.',
     image: 'confidentiality',
     alt: 'Private meeting room in a contemporary office',
@@ -211,10 +211,10 @@ export const CONFIDENTIALITY = {
 
 export const COVERAGE = {
   fr: {
-    metaTitle: 'Couverture européenne — Investigations transfrontalières | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Couverture européenne | RAINBOWNET',
     metaDescription: 'Coordination depuis Genève et interventions dans les capitales européennes, dans le respect du droit local : Paris, Londres, Bruxelles, Berlin, Madrid, Luxembourg.',
     eyebrow: 'Couverture européenne',
-    title: 'Un centre de coordination à Genève, une exécution conforme au droit local',
+    title: 'Détective privé à Genève, couverture européenne',
     heroText: 'Les mandats transfrontaliers exigent plus qu’un réseau : une méthode constante, une lecture exacte des règles locales et un interlocuteur unique.',
     image: 'europe-coverage',
     alt: 'Quartier d’affaires européen, immeubles contemporains',
@@ -236,10 +236,10 @@ export const COVERAGE = {
     ctaText: 'Décrivez-nous le contexte et les juridictions concernées : nous vous indiquerons ce qui est réalisable et sous quelles conditions.',
   },
   en: {
-    metaTitle: 'European Coverage — Cross-Border Investigations | RAINBOWNET',
+    metaTitle: 'Geneva Private Investigator — European Coverage | RAINBOWNET',
     metaDescription: 'Coordinated from Geneva and delivered in European capitals in compliance with local law: Paris, London, Brussels, Berlin, Madrid, Luxembourg.',
     eyebrow: 'European coverage',
-    title: 'A coordination hub in Geneva, execution under local law',
+    title: 'Geneva private investigator with European coverage',
     heroText: 'Cross-border mandates require more than a network: a consistent method, an accurate reading of local rules and a single point of contact.',
     image: 'europe-coverage',
     alt: 'European business district with contemporary buildings',
@@ -264,10 +264,10 @@ export const COVERAGE = {
 
 export const SERVICES_INDEX = {
   fr: {
-    metaTitle: 'Services — Investigations privées et corporate | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Services | RAINBOWNET',
     metaDescription: 'Quatre domaines d’intervention : particuliers, entreprises, professionnels du droit et mandats internationaux. Méthode documentée, cadre légal strict.',
     eyebrow: 'Services',
-    title: 'Quatre domaines, une même exigence de rigueur',
+    title: 'Services d’un détective privé à Genève',
     heroText: 'Chaque mission est cadrée par écrit, exécutée dans le respect du droit applicable et restituée de manière factuelle.',
     image: 'corporate-investigations',
     alt: 'Quartier d’affaires avec immeubles de bureaux contemporains',
@@ -275,10 +275,10 @@ export const SERVICES_INDEX = {
     ctaText: 'Le formulaire confidentiel permet de décrire votre besoin sans avoir à choisir une catégorie.',
   },
   en: {
-    metaTitle: 'Services — Private and Corporate Investigations | RAINBOWNET',
+    metaTitle: 'Private Investigator in Geneva — Services | RAINBOWNET',
     metaDescription: 'Four areas of work: individuals, businesses, legal professionals and international mandates. Documented method, strict legal framework.',
     eyebrow: 'Services',
-    title: 'Four areas, one standard of rigour',
+    title: 'Private investigator services in Geneva',
     heroText: 'Every assignment is scoped in writing, carried out in compliance with applicable law and reported factually.',
     image: 'corporate-investigations',
     alt: 'Business district with contemporary office buildings',
@@ -289,10 +289,10 @@ export const SERVICES_INDEX = {
 
 export const CONTACT = {
   fr: {
-    metaTitle: 'Consultation confidentielle — Contact | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Consultation confidentielle | RAINBOWNET',
     metaDescription: 'Contactez RAINBOWNET de manière confidentielle. Évaluation de votre demande en six étapes, sans document sensible au premier contact.',
     eyebrow: 'Consultation confidentielle',
-    title: 'Exposez votre situation. Nous vous répondons avec discrétion.',
+    title: 'Détective privé à Genève : consultation confidentielle',
     heroText: 'Quelques informations suffisent pour un premier examen. Ne transmettez pas de documents sensibles à ce stade.',
     image: 'contact-office',
     alt: 'Bureau privé minimaliste avec vue, espace de consultation discret',
@@ -312,10 +312,10 @@ export const CONTACT = {
     formIntro: 'Six étapes, environ deux minutes. Vous pouvez revenir en arrière à tout moment.',
   },
   en: {
-    metaTitle: 'Confidential Consultation — Contact | RAINBOWNET',
+    metaTitle: 'Private Investigator in Geneva — Confidential Consultation | RAINBOWNET',
     metaDescription: 'Contact RAINBOWNET confidentially. A six-step assessment of your request, with no sensitive documents required at first contact.',
     eyebrow: 'Confidential consultation',
-    title: 'Set out your situation. We reply with discretion.',
+    title: 'Private investigator in Geneva: confidential consultation',
     heroText: 'A few details are enough for an initial review. Please do not send sensitive documents at this stage.',
     image: 'contact-office',
     alt: 'Minimalist private office with a view, discreet consultation space',
@@ -442,10 +442,10 @@ export const CREDITS = {
 
 export const PRICING = {
   fr: {
-    metaTitle: 'Tarifs — Honoraires et forfaits | RAINBOWNET',
+    metaTitle: 'Détective privé à Genève — Tarifs et forfaits | RAINBOWNET',
     metaDescription: 'Honoraires indicatifs en CHF : consultation, taux horaires, forfaits de due diligence et d’enquête corporate. Devis écrit après examen du périmètre.',
     eyebrow: 'Tarifs',
-    title: 'Des honoraires lisibles pour des mandats sensibles',
+    title: 'Tarifs d’un détective privé à Genève',
     heroText: 'Chaque mission fait l’objet d’un devis écrit. Les montants ci-dessous sont indicatifs, hors TVA, et dépendent du périmètre, des juridictions et des vérifications nécessaires.',
     introTitle: 'Trois modes de facturation',
     intro: 'Nous adaptons le mode de facturation à la nature du mandat. Aucun honoraire de résultat n’est proposé : la rémunération ne doit jamais dépendre de la conclusion.',
@@ -504,10 +504,10 @@ export const PRICING = {
     ctaText: 'Le formulaire confidentiel permet de décrire le périmètre sans transmettre de document sensible.',
   },
   en: {
-    metaTitle: 'Pricing — Fees and Fixed Packages | RAINBOWNET',
+    metaTitle: 'Private Investigator Geneva — Fees & Packages | RAINBOWNET',
     metaDescription: 'Indicative fees in CHF: consultation, hourly rates, due diligence and corporate investigation packages. Written quote after scope review.',
     eyebrow: 'Pricing',
-    title: 'Transparent fees for sensitive mandates',
+    title: 'Private investigator in Geneva: fees and packages',
     heroText: 'Every engagement is quoted in writing. The amounts below are indicative, excluding VAT, and depend on scope, jurisdictions and the verification required.',
     introTitle: 'Three fee models',
     intro: 'The fee model follows the nature of the mandate. We do not offer success fees: remuneration must never depend on the conclusion.',

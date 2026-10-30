@@ -16,12 +16,12 @@ const categories = [...new Set(list.map((a) => a.category[lang]))];
 const featured = list[0];
 const rest = list.slice(1);
 ---
-<Base lang={lang} slug="/insights/" title={lang === 'fr' ? 'Ressources — Comprendre l’investigation privée | RAINBOWNET' : 'Insights — Understanding Private Investigation | RAINBOWNET'}
-  description={lang === 'fr' ? 'Guides et analyses sur l’investigation privée, la due diligence, la confidentialité et les cadres juridiques en Suisse et en Europe.' : 'Guides and analysis on private investigation, due diligence, confidentiality and legal frameworks in Switzerland and Europe.'}
+<Base lang={lang} slug="/insights/" title={lang === 'fr' ? 'Détective privé à Genève — Ressources | RAINBOWNET' : 'Private Investigator Geneva — Insights | RAINBOWNET'}
+  description={lang === 'fr' ? 'Ressources d’un détective privé à Genève : enquêtes privées, due diligence, confidentialité et cadres juridiques en Suisse et en Europe.' : 'Insights from a Geneva private investigator: private investigations, due diligence, confidentiality and legal frameworks in Switzerland and Europe.'}
   image="insight-choosing">
   <PageHero
     eyebrow={lang === 'fr' ? 'Ressources' : 'Insights'}
-    title={lang === 'fr' ? 'Comprendre avant d’agir' : 'Understanding before acting'}
+    title={lang === 'fr' ? 'Détective privé à Genève : comprendre avant d’agir' : 'Geneva private investigator: understanding before acting'}
     text={lang === 'fr' ? 'Des textes courts et précis sur les méthodes, les cadres juridiques et les décisions que l’investigation privée permet d’éclairer.' : 'Short, precise pieces on methods, legal frameworks and the decisions private investigation can inform.'}
     image="insight-choosing" alt={lang === 'fr' ? 'Vue de Genève et de son lac' : 'View of Geneva and its lake'}
     breadcrumbs={[{ label: t.breadcrumbHome, href: L('/') }, { label: lang === 'fr' ? 'Ressources' : 'Insights' }]}

@@ -215,26 +215,26 @@ export const HOME_FAQ: Record<Lang, { q: string; a: string }[]> = {
 export const HOME = {
   fr: {
     hero: {
-      eyebrow: 'Genève · Investigations privées & intelligence corporate',
-      title: 'Vos intérêts. Notre discrétion. Votre tranquillité.',
-      text: 'Basée à Genève, RAINBOWNET accompagne particuliers, entreprises et professionnels dans leurs besoins d’investigation privée en Suisse et à travers l’Europe.',
+      eyebrow: 'Genève · Détective privé & investigations privées',
+      title: 'Détective privé à Genève. La discrétion est notre signature.',
+      text: 'Agence de détectives privés à Genève, RAINBOWNET accompagne particuliers, entreprises et professionnels dans leurs investigations privées en Suisse et à travers l’Europe.',
       cta1: 'Demander une consultation confidentielle',
       cta2: 'Découvrir nos services',
       image: 'hero-geneva',
-      alt: 'Vue du lac Léman et du Jet d’Eau à Genève, Suisse',
+      alt: 'Genève, lac Léman et Jet d’Eau — détective privé à Genève',
     },
     intro: {
       eyebrow: 'Le cabinet',
-      title: 'Une approche suisse de l’investigation privée',
+      title: 'Un détective privé à Genève, au service de vos décisions',
       text: [
-        'RAINBOWNET est une agence d’investigation privée et d’intelligence corporate établie à Genève. Nous accompagnons des clients qui ont besoin de faits vérifiés, d’une compréhension claire d’une situation et d’une discrétion sans compromis.',
+        'RAINBOWNET est une agence de détectives privés à Genève, spécialisée en investigation privée et intelligence corporate. Nous accompagnons des clients qui ont besoin de faits vérifiés, d’une compréhension claire d’une situation et d’une discrétion sans compromis.',
         'Notre travail repose sur une méthode documentée, une lecture stricte du cadre légal et une coordination internationale maîtrisée. Nous privilégions la précision à l’effet, la retenue à la visibilité.',
       ],
       link: 'En savoir plus sur le cabinet',
     },
     services: {
       eyebrow: 'Services',
-      title: 'Des mandats structurés, selon votre position',
+      title: 'Services d’un détective privé à Genève',
       text: 'Quatre domaines d’intervention, une même exigence de rigueur et de confidentialité.',
     },
     confidentiality: {
@@ -249,7 +249,7 @@ export const HOME = {
     },
     coverage: {
       eyebrow: 'Couverture européenne',
-      title: 'Genève comme centre de coordination',
+      title: 'Détective privé à Genève, présent en Europe',
       text: 'Nous structurons des mandats transfrontaliers depuis Genève, en tenant compte de la réglementation propre à chaque juridiction. Une interlocution unique, une méthode constante.',
       link: 'Voir la couverture européenne',
     },
@@ -263,7 +263,7 @@ export const HOME = {
       title: 'Des interlocuteurs différents, une même exigence',
       text: 'Nous adaptons le périmètre, le vocabulaire et la restitution à la nature de votre besoin — sans jamais transiger sur la méthode.',
     },
-    faq: { eyebrow: 'Questions fréquentes', title: 'Ce que nos clients demandent avant de commencer' },
+    faq: { eyebrow: 'Questions fréquentes', title: 'Questions fréquentes sur un détective privé à Genève' },
     cta: {
       title: 'Exposez-nous votre situation en toute confidentialité.',
       text: 'Un premier échange permet de vérifier la faisabilité, le cadre légal et la méthode adaptée. Aucun document sensible n’est requis à ce stade.',
@@ -273,26 +273,26 @@ export const HOME = {
   },
   en: {
     hero: {
-      eyebrow: 'Geneva · Private investigations & corporate intelligence',
-      title: 'Your Interests. Our Discretion. Your Peace of Mind.',
-      text: 'Based in Geneva, RAINBOWNET provides discreet private investigation services for individuals, businesses and professionals across Switzerland and Europe.',
+      eyebrow: 'Geneva · Private investigator & corporate intelligence',
+      title: 'Private Investigator in Geneva. Discretion Is Our Signature.',
+      text: 'A private investigator agency in Geneva, RAINBOWNET supports individuals, businesses and professionals with private investigations across Switzerland and Europe.',
       cta1: 'Request a confidential consultation',
       cta2: 'Explore our services',
       image: 'hero-geneva',
-      alt: 'Lake Geneva and the Jet d’Eau in Geneva, Switzerland',
+      alt: 'Geneva, Lake Geneva and the Jet d’Eau — private investigator in Geneva',
     },
     intro: {
       eyebrow: 'The firm',
-      title: 'A Swiss approach to private investigation',
+      title: 'A private investigator in Geneva, serving your decisions',
       text: [
-        'RAINBOWNET is a private investigation and corporate intelligence firm based in Geneva. We support clients who need verified facts, a clear understanding of a situation and uncompromising discretion.',
+        'RAINBOWNET is a private investigator agency in Geneva, specialising in private investigations and corporate intelligence. We support clients who need verified facts, a clear understanding of a situation and uncompromising discretion.',
         'Our work rests on a documented method, a strict reading of the legal framework and controlled international coordination. We favour precision over effect and restraint over visibility.',
       ],
       link: 'More about the firm',
     },
     services: {
       eyebrow: 'Services',
-      title: 'Structured mandates, according to your position',
+      title: 'Private investigator services in Geneva',
       text: 'Four areas of work, one standard of rigour and confidentiality.',
     },
     confidentiality: {
@@ -307,7 +307,7 @@ export const HOME = {
     },
     coverage: {
       eyebrow: 'European coverage',
-      title: 'Geneva as the coordination hub',
+      title: 'A Geneva private investigator, working across Europe',
       text: 'We structure cross-border mandates from Geneva, taking into account the regulations of each jurisdiction. One point of contact, one consistent method.',
       link: 'View European coverage',
     },
@@ -321,7 +321,7 @@ export const HOME = {
       title: 'Different counterparts, one standard',
       text: 'We adapt scope, language and reporting to the nature of your need — without ever compromising on method.',
     },
-    faq: { eyebrow: 'Frequently asked questions', title: 'What clients ask before starting' },
+    faq: { eyebrow: 'Frequently asked questions', title: 'Frequently asked questions about a private investigator in Geneva' },
     cta: {
       title: 'Set out your situation in complete confidence.',
       text: 'A first conversation establishes feasibility, the legal framework and the right method. No sensitive document is required at this stage.',
