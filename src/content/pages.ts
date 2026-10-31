@@ -364,7 +364,7 @@ export const LEGAL = {
         { h2: 'Durées de conservation', html: '<p>Les demandes non suivies d’un mandat sont conservées pour une durée limitée, nécessaire à leur examen, puis supprimées. Les dossiers de mandat sont conservés selon la durée définie au contrat et les obligations légales applicables.</p>' },
         { h2: 'Vos droits', html: '<p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation et d’opposition, ainsi que du droit de retirer votre consentement lorsque celui-ci constitue la base du traitement. Ces droits s’exercent via le formulaire de contact.</p>' },
         { h2: 'Sécurité', html: '<p>Nous mettons en œuvre des mesures techniques et organisationnelles proportionnées : accès restreint, contrôle des accès, minimisation, journalisation limitée et suppression des données devenues inutiles. Aucune mesure ne peut toutefois garantir une sécurité absolue.</p>' },
-        { h2: 'Cookies', html: '<p>Ce site ne dépose pas de cookie publicitaire ni de traceur d’audience. Voir la page Cookies pour le détail des stockages techniques.</p>' },
+        { h2: 'Cookies', html: '<p>Ce site ne dépose aucun cookie publicitaire. La mesure d’audience (Google Analytics 4) n’est chargée qu’après votre acceptation explicite : si vous refusez, aucune requête n’est adressée à Google Analytics et aucun cookie de mesure n’est créé. Voir la page Cookies pour le détail des stockages et des durées.</p>' },
       ],
     },
     cookies: {
@@ -373,10 +373,10 @@ export const LEGAL = {
       title: 'Cookies et stockages techniques',
       intro: 'Ce site a été conçu pour limiter au strict nécessaire les stockages côté navigateur.',
       body: [
-        { h2: 'Mesure d’audience', html: '<p>Ce site ne charge aucun pixel publicitaire et aucun réseau social de suivi. Une mesure d’audience agrégée, sans cookie et sans identification individuelle, peut être fournie par l’hébergeur (Cloudflare Web Analytics). Aucun consentement n’est requis pour la simple consultation des pages.</p>' },
+        { h2: 'Mesure d’audience', html: '<p>Deux mesures coexistent. (1) <strong>Cloudflare Web Analytics</strong> : mesure agrégée fournie par l’hébergeur, sans cookie et sans identification individuelle, active à la consultation des pages. (2) <strong>Google Analytics 4</strong> : chargée uniquement si vous cliquez sur « Accepter » dans le bandeau. Elle dépose les cookies <code>_ga</code> et <code>_ga_HF7E1GZHY2</code> (13 mois) et permet d’analyser la fréquentation (pages vues, source, appareil, événements de conversion). L’adresse IP est anonymisée et les signaux publicitaires sont désactivés. En cas de refus, aucun script Google Analytics n’est chargé.</p>' },
         { h2: 'Stockages techniques', html: '<p>Le formulaire peut conserver temporairement vos réponses dans votre navigateur afin de vous éviter de les ressaisir en cas d’erreur. Ces données restent sur votre appareil et ne sont pas transmises tant que vous ne validez pas l’envoi.</p>' },
         { h2: 'Services tiers', html: '<p>Lors de la soumission du formulaire, Google reCAPTCHA Enterprise est sollicité pour vérifier que la demande n’est pas automatisée. Ce service peut déposer des stockages techniques et traiter votre adresse IP. Aucun autre service tiers n’est chargé lors de la navigation.</p>' },
-        { h2: 'Gérer vos préférences', html: '<p>Vous pouvez supprimer à tout moment les stockages du site via les réglages de votre navigateur. La suppression n’empêche pas l’utilisation du site, mais peut vous obliger à ressaisir vos réponses en cas d’erreur de formulaire.</p>' },
+        { h2: 'Gérer vos préférences', html: '<p>Vous pouvez modifier votre choix à tout moment via le lien « Gérer les cookies » présent en pied de page. Le refus supprime les cookies de mesure déjà déposés. Vous pouvez également supprimer les stockages via les réglages de votre navigateur : cela n’empêche pas l’utilisation du site, mais peut vous obliger à ressaisir vos réponses en cas d’erreur de formulaire.</p>' },
       ],
     },
   },
@@ -407,7 +407,7 @@ export const LEGAL = {
         { h2: 'Retention', html: '<p>Requests that do not lead to a mandate are retained for a limited period necessary for their review, then deleted. Mandate files are retained for the duration set out in the contract and under applicable legal obligations.</p>' },
         { h2: 'Your rights', html: '<p>You have the right to access, rectify, erase, restrict and object, and to withdraw consent where consent is the basis for processing. These rights can be exercised through the contact form.</p>' },
         { h2: 'Security', html: '<p>We implement proportionate technical and organisational measures: restricted access, access control, minimisation, limited logging and deletion of data no longer needed. No measure can guarantee absolute security.</p>' },
-        { h2: 'Cookies', html: '<p>This site sets no advertising cookies and no audience trackers. See the Cookies page for technical storage details.</p>' },
+        { h2: 'Cookies', html: '<p>This site sets no advertising cookies. Audience measurement (Google Analytics 4) is loaded only after your explicit consent: if you decline, no request is sent to Google Analytics and no measurement cookie is created. See the Cookies page for storage details and durations.</p>' },
       ],
     },
     cookies: {
@@ -416,10 +416,10 @@ export const LEGAL = {
       title: 'Cookies and technical storage',
       intro: 'This site is designed to keep browser-side storage to the strict minimum.',
       body: [
-        { h2: 'Audience measurement', html: '<p>This site loads no advertising pixel and no social tracking. Aggregate audience measurement, without cookies and without individual identification, may be provided by the host (Cloudflare Web Analytics). No consent is therefore required to browse the pages.</p>' },
+        { h2: 'Audience measurement', html: '<p>Two measurements coexist. (1) <strong>Cloudflare Web Analytics</strong>: aggregate measurement provided by the host, cookie-free and without individual identification, active while browsing. (2) <strong>Google Analytics 4</strong>: loaded only if you click “Accept” in the banner. It sets the <code>_ga</code> and <code>_ga_HF7E1GZHY2</code> cookies (13 months) and analyses traffic (page views, source, device, conversion events). IP addresses are anonymised and advertising signals are disabled. If you decline, no Google Analytics script is loaded.</p>' },
         { h2: 'Technical storage', html: '<p>The form may temporarily keep your answers in your browser so you do not have to re-enter them after an error. This data stays on your device and is not transmitted until you confirm submission.</p>' },
         { h2: 'Third-party services', html: '<p>When the form is submitted, Google reCAPTCHA Enterprise is called to verify that the request is not automated. This service may set technical storage and process your IP address. No other third-party service is loaded while browsing.</p>' },
-        { h2: 'Managing preferences', html: '<p>You can delete the site’s storage at any time through your browser settings. Deletion does not prevent use of the site but may require you to re-enter your answers after a form error.</p>' },
+        { h2: 'Managing preferences', html: '<p>You can change your choice at any time through the “Manage cookies” link in the footer. Declining removes any measurement cookies already set. You can also delete the site’s storage through your browser settings: this does not prevent use of the site but may require you to re-enter your answers after a form error.</p>' },
       ],
     },
   },

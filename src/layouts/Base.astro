@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Consent from '../components/Consent.astro';
 import { SITE, type Lang } from '../content/site';
 import imageMeta from '../content/images.json';
 
@@ -106,6 +107,7 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
     <slot />
   </main>
   <Footer lang={lang} />
+  <Consent lang={lang} />
 
   <script is:inline>
     (function () {
@@ -173,6 +175,21 @@ const allSchema = [org, webSite, ...(Array.isArray(schema) ? schema : schema ? [
           if (e.propertyName === 'transform') busy = false;
         });
       }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        if (href.indexOf('/contact/') > -1 && !a.closest('form')) {
+          if (window.rnTrack) window.rnTrack('cta_click', {
+            link_text: (a.textContent || '').trim().slice(0, 60),
+            placement: a.closest('header') ? 'header' : a.closest('footer') ? 'footer' : a.closest('.hero, .page-hero') ? 'hero' : 'body'
+          });
+        }
+        if (a.closest('.lang-switch') && window.rnTrack) {
+          window.rnTrack('language_switch', { language: a.getAttribute('hreflang') || '' });
+        }
+      });
 
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {

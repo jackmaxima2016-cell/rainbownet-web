@@ -1,0 +1,105 @@
+---
+import type { Lang } from '../content/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = lang === 'fr'
+  ? {
+      title: 'Mesure d’audience',
+      text: 'Nous utilisons Google Analytics 4 pour comprendre l’usage du site. Aucun cookie publicitaire, aucune revente de données. Vous pouvez refuser sans perdre l’accès au site.',
+      accept: 'Accepter',
+      refuse: 'Refuser',
+      more: 'Politique cookies',
+      href: '/fr/legal/cookies/',
+    }
+  : {
+      title: 'Audience measurement',
+      text: 'We use Google Analytics 4 to understand how the site is used. No advertising cookies, no data resale. You can decline without losing access to the site.',
+      accept: 'Accept',
+      refuse: 'Decline',
+      more: 'Cookie policy',
+      href: '/en/legal/cookies/',
+    };
+---
+
+<div class="consent" id="consent-banner" role="region" aria-label={t.title} hidden>
+  <div class="container consent-inner">
+    <div class="consent-text">
+      <p class="consent-title">{t.title}</p>
+      <p>{t.text} <a href={t.href}>{t.more}</a></p>
+    </div>
+    <div class="consent-actions">
+      <button type="button" class="btn btn--outline consent-refuse" data-consent="denied">{t.refuse}</button>
+      <button type="button" class="btn btn--gold" data-consent="granted">{t.accept}</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ GID: 'G-HF7E1GZHY2' }}>
+  (function () {
+    var KEY = 'rn_consent_v1';
+    var banner = document.getElementById('consent-banner');
+    var stored = null;
+    try { stored = localStorage.getItem(KEY); } catch (e) {}
+
+    function push() { window.dataLayer = window.dataLayer || []; return window.dataLayer; }
+    function gtag() { push().push(arguments); }
+    window.gtag = window.gtag || gtag;
+
+    function loadGa() {
+      if (window.__rnGaLoaded) return;
+      window.__rnGaLoaded = true;
+      gtag('consent', 'default', {
+        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
+      });
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      gtag('js', new Date());
+      gtag('config', GID, { anonymize_ip: true, send_page_view: true });
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GID);
+      document.head.appendChild(s);
+    }
+
+    window.rnTrack = function (name, params) {
+      if (!window.__rnGaLoaded) return;
+      gtag('event', name, params || {});
+    };
+
+    function clearGaCookies() {
+      var names = document.cookie.split(';').map(function (c) { return c.split('=')[0].trim(); });
+      names.forEach(function (n) {
+        if (n === '_ga' || n.indexOf('_ga_') === 0 || n === '_gid') {
+          document.cookie = n + '=; Max-Age=0; path=/; domain=' + location.hostname;
+          document.cookie = n + '=; Max-Age=0; path=/';
+        }
+      });
+    }
+
+    function show() { if (banner) { banner.hidden = false; requestAnimationFrame(function () { banner.classList.add('is-visible'); }); } }
+    function hide() { if (!banner) return; banner.classList.remove('is-visible'); setTimeout(function () { banner.hidden = true; }, 220); }
+
+    function set(value) {
+      try { localStorage.setItem(KEY, value); } catch (e) {}
+      if (value === 'granted') { loadGa(); } else { clearGaCookies(); }
+      hide();
+    }
+
+    if (stored === 'granted') { loadGa(); }
+    else if (stored === 'denied') { /* rien, aucun appel à Google */ }
+    else { show(); }
+
+    if (banner) {
+      banner.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-consent]');
+        if (b) set(b.getAttribute('data-consent'));
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      var reopen = e.target.closest('[data-consent-open]');
+      if (reopen) { e.preventDefault(); show(); }
+    });
+
+    window.rnConsent = { open: show, reset: function () { try { localStorage.removeItem(KEY); } catch (e) {} clearGaCookies(); show(); } };
+  })();
+</script>

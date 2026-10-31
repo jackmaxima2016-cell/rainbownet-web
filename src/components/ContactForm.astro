@@ -267,6 +267,7 @@ const countries = lang === 'fr'
       btnNext.hidden = n === steps.length;
       btnSubmit.hidden = n !== steps.length;
       btnSubmit.disabled = n !== steps.length;
+      if (n > 1 && window.rnTrack) window.rnTrack('form_step', { form: 'confidential_contact', step: n, lang: LANG });
       if (n === steps.length) buildSummary();
       clearError();
       var h = steps[n - 1].querySelector('h2');
@@ -422,6 +423,7 @@ const countries = lang === 'fr'
         if (res.ok && data.ok) {
           form.hidden = true;
           document.getElementById('form-success').hidden = false;
+          if (window.rnTrack) window.rnTrack('generate_lead', { form: 'confidential_contact', lang: LANG });
           try { sessionStorage.removeItem(STORE); } catch (e) {}
           window.scrollTo({ top: document.getElementById('confidential-form').offsetTop - 100, behavior: 'smooth' });
           return;
@@ -436,6 +438,13 @@ const countries = lang === 'fr'
         btnSubmit.textContent = original;
       }
     }
+
+    var started = false;
+    form.addEventListener('input', function () {
+      if (started) return;
+      started = true;
+      if (window.rnTrack) window.rnTrack('form_start', { form: 'confidential_contact', lang: LANG });
+    }, { passive: true });
 
     restoreDraft();
     bars[0].classList.add('done');
